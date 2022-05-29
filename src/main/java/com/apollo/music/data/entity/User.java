@@ -18,6 +18,8 @@ import java.util.Set;
 @Table(name = EntityConfiguration.USER_TABLE_NAME)
 public class User extends AbstractEntity {
 
+    private static final long serialVersionUID = 1L;
+
     @Column(name = EntityConfiguration.USERNAME_COLUMN_NAME, nullable = false, unique = true)
     private String username;
 

@@ -1,16 +1,16 @@
 package com.apollo.music.data.entity;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import java.util.UUID;
+import javax.persistence.PrePersist;
+import java.io.Serializable;
 
 @MappedSuperclass
-public abstract class AbstractEntity {
+public abstract class AbstractEntity implements EntityWithId, Serializable {
 
     @Id
     @GeneratedValue(generator = "uuid")
@@ -18,6 +18,7 @@ public abstract class AbstractEntity {
     @Column(updatable = false, nullable = false)
     private String id;
 
+    @Override
     public String getId() {
         return id;
     }
@@ -46,4 +47,11 @@ public abstract class AbstractEntity {
         }
         return super.equals(other);
     }
+
+    @PrePersist
+    protected void beforePersist() {
+        // do nothing
+    }
+
+
 }

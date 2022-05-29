@@ -11,6 +11,8 @@ import javax.persistence.Table;
 @Table(name = EntityConfiguration.ARTIST_TABLE_NAME)
 public class Artist extends AbstractEntity {
 
+    private static final long serialVersionUID = 1L;
+
     @Column(name = EntityConfiguration.NAME_COLUMN_NAME)
     private String name;
 
