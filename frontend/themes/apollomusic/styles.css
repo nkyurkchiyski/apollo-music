@@ -22,3 +22,31 @@
       --lumo-base-color: hsl(241, 35%, 21%);
 
     }
+
+    .play-button{
+        border-radius: 50%;
+        width: 70px;
+        height: 50px;
+    }
+
+    .img-cover{
+        height: 125px;
+        object-fit: cover;
+    }
+
+    .play-button-big{
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        background-color: hsl(169, 49%, 51%);
+    }
+
+    .pos-abr{
+        position: absolute;
+        bottom: 0;
+        right: 25px;
+    }
+
+    .pos-r{
+        position: relative;
+    }
