@@ -15,4 +15,20 @@ public class SongPlaylistKey implements Serializable {
 
     @Column(name = EntityConfiguration.PLAYLIST_ID_COLUMN_NAME)
     private String playlistId;
+
+    public String getSongId() {
+        return songId;
+    }
+
+    public void setSongId(final String songId) {
+        this.songId = songId;
+    }
+
+    public String getPlaylistId() {
+        return playlistId;
+    }
+
+    public void setPlaylistId(final String playlistId) {
+        this.playlistId = playlistId;
+    }
 }

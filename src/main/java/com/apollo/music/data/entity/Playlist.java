@@ -5,6 +5,7 @@ import com.apollo.music.data.commons.EntityConfiguration;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -25,7 +26,7 @@ public class Playlist extends AbstractEntity {
     private Date createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = EntityConfiguration.USER_ID_COLUMN_NAME)
+    @JoinColumn(name = EntityConfiguration.USER_ID_COLUMN_NAME, foreignKey = @ForeignKey(name = EntityConfiguration.PLAYLIST_USER_FK_NAME))
     private User user;
 
     @OneToMany(mappedBy = EntityConfiguration.PLAYLIST_FIELD_NAME)

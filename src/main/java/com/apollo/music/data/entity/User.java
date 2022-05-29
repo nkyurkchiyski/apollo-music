@@ -10,17 +10,20 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.Set;
 
 @Entity
-@Table(name = EntityConfiguration.USER_TABLE_NAME)
+@Table(name = EntityConfiguration.USER_TABLE_NAME,
+        uniqueConstraints = {@UniqueConstraint(name = EntityConfiguration.USER_USERNAME_UQ_NAME, columnNames = {EntityConfiguration.USERNAME_COLUMN_NAME})})
 public class User extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = EntityConfiguration.USERNAME_COLUMN_NAME, nullable = false, unique = true)
+    @Column(name = EntityConfiguration.USERNAME_COLUMN_NAME, nullable = false)
     private String username;
 
     @Column(name = EntityConfiguration.NAME_COLUMN_NAME)
@@ -31,7 +34,7 @@ public class User extends AbstractEntity {
     private String password;
 
     @Column(name = EntityConfiguration.ROLE_COLUMN_NAME)
-    @CollectionTable(name = EntityConfiguration.USER_ROLE_TABLE_NAME)
+    @CollectionTable(name = EntityConfiguration.USER_ROLE_TABLE_NAME, foreignKey = @ForeignKey(name = EntityConfiguration.USER_ROLE_FK_NAME))
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
