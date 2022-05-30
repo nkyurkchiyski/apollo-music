@@ -62,4 +62,7 @@ public class EntityConfiguration {
 
     //Fields - END
 
+    public static final String ADMIN = "admin";
+    public static final String USER = "user";
+
 }

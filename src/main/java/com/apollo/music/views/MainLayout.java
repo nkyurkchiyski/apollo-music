@@ -2,18 +2,19 @@ package com.apollo.music.views;
 
 import com.apollo.music.data.entity.User;
 import com.apollo.music.security.AuthenticatedUser;
+import com.apollo.music.views.commons.components.MenuItemDrawer;
+import com.apollo.music.views.commons.components.MenuItemInfo;
 import com.apollo.music.views.explore.ExploreView;
-import com.apollo.music.views.managecontent.ManageContentView;
+import com.apollo.music.views.managecontent.genre.GenreContentManagerView;
 import com.apollo.music.views.myaccount.MyAccountView;
 import com.apollo.music.views.search.SearchView;
-import com.apollo.music.views.song.likedsongs.LikedSongsView;
+import com.apollo.music.views.song.SongLikedView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
-import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H1;
@@ -24,8 +25,9 @@ import com.vaadin.flow.component.html.Nav;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
+
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -33,53 +35,10 @@ import java.util.Optional;
  */
 public class MainLayout extends AppLayout {
 
-    /**
-     * A simple navigation item component, based on ListItem element.
-     */
-    public static class MenuItemInfo extends ListItem {
-
-        private final Class<? extends Component> view;
-
-        public MenuItemInfo(String menuTitle, String iconClass, Class<? extends Component> view) {
-            this.view = view;
-            RouterLink link = new RouterLink();
-            // Use Lumo classnames for various styling
-            link.addClassNames("flex", "mx-s", "p-s", "relative", "text-secondary");
-            link.setRoute(view);
-
-            Span text = new Span(menuTitle);
-            // Use Lumo classnames for various styling
-            text.addClassNames("font-medium", "text-s");
-
-            link.add(new LineAwesomeIcon(iconClass), text);
-            add(link);
-        }
-
-        public Class<?> getView() {
-            return view;
-        }
-
-        /**
-         * Simple wrapper to create icons using LineAwesome iconset. See
-         * https://icons8.com/line-awesome
-         */
-        @NpmPackage(value = "line-awesome", version = "1.3.0")
-        public static class LineAwesomeIcon extends Span {
-            public LineAwesomeIcon(String lineawesomeClassnames) {
-                // Use Lumo classnames for suitable font size and margin
-                addClassNames("me-s", "text-l");
-                if (!lineawesomeClassnames.isEmpty()) {
-                    addClassNames(lineawesomeClassnames);
-                }
-            }
-        }
-
-    }
-
     private H1 viewTitle;
 
-    private AuthenticatedUser authenticatedUser;
-    private AccessAnnotationChecker accessChecker;
+    private final AuthenticatedUser authenticatedUser;
+    private final AccessAnnotationChecker accessChecker;
 
     public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker) {
         this.authenticatedUser = authenticatedUser;
@@ -125,26 +84,36 @@ public class MainLayout extends AppLayout {
         list.addClassNames("list-none", "m-0", "p-0");
         nav.add(list);
 
-        for (MenuItemInfo menuItem : createMenuItems()) {
-            if (accessChecker.hasAccess(menuItem.getView())) {
-                list.add(menuItem);
+        for (final ListItem listItem : createMenuItems()) {
+            if (listItem instanceof MenuItemInfo && accessChecker.hasAccess(((MenuItemInfo) listItem).getView())) {
+                list.add(listItem);
+            } else if (listItem instanceof MenuItemDrawer) {
+                final MenuItemDrawer drawer = (MenuItemDrawer) listItem;
+                if (Arrays.stream(drawer.getSubMenus()).allMatch(subMenu -> accessChecker.hasAccess(subMenu.getView()))) {
+                    list.add(drawer);
+                }
             }
-
         }
+
         return nav;
     }
 
-    private MenuItemInfo[] createMenuItems() {
-        return new MenuItemInfo[]{ //
+    private ListItem[] createMenuItems() {
+        return new ListItem[]{ //
                 new MenuItemInfo("Search", "la la-search", SearchView.class), //
 
                 new MenuItemInfo("Explore", "la la-compass", ExploreView.class), //
 
-                new MenuItemInfo("Liked Songs", "la la-th-list", LikedSongsView.class), //
+                new MenuItemInfo("Liked Songs", "la la-th-list", SongLikedView.class), //
 
                 new MenuItemInfo("My Account", "la la-user", MyAccountView.class), //
 
-                new MenuItemInfo("Manage Content", "la la-pencil-ruler", ManageContentView.class), //
+                //TODO: change to correct views
+                new MenuItemDrawer("Manage Content", "la la-pencil-ruler",
+                        new MenuItemInfo("Genres", "la la-drum", GenreContentManagerView.class),
+                        new MenuItemInfo("Artists", "la la-microphone-alt", GenreContentManagerView.class),
+                        new MenuItemInfo("Album", "la la-record-vinyl", GenreContentManagerView.class),
+                        new MenuItemInfo("Songs", "la la-music", GenreContentManagerView.class)), //
 
         };
     }

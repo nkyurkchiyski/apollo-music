@@ -1,41 +1,23 @@
 package com.apollo.music.data.service;
 
 import com.apollo.music.data.entity.User;
-
-import java.util.Optional;
-import java.util.UUID;
+import com.apollo.music.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService extends AbstractEntityService<User> {
 
-    private UserRepository repository;
+    private final UserRepository repo;
 
-    public UserService(@Autowired UserRepository repository) {
-        this.repository = repository;
+    @Autowired
+    public UserService(final UserRepository repo) {
+        this.repo = repo;
     }
 
-    public Optional<User> get(UUID id) {
-        return repository.findById(id);
+    @Override
+    protected JpaRepository<User, String> getRepository() {
+        return repo;
     }
-
-    public User update(User entity) {
-        return repository.save(entity);
-    }
-
-    public void delete(UUID id) {
-        repository.deleteById(id);
-    }
-
-    public Page<User> list(Pageable pageable) {
-        return repository.findAll(pageable);
-    }
-
-    public int count() {
-        return (int) repository.count();
-    }
-
 }

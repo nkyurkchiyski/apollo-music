@@ -1,7 +1,8 @@
 package com.apollo.music.security;
 
 import com.apollo.music.data.entity.User;
-import com.apollo.music.data.service.UserRepository;
+import com.apollo.music.data.repository.UserRepository;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("No user present with username: " + username);
@@ -29,8 +30,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
     }
 
-    private static List<GrantedAuthority> getAuthorities(User user) {
-        return user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+    private static List<GrantedAuthority> getAuthorities(final User user) {
+        return user.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRoleName()))
                 .collect(Collectors.toList());
 
     }

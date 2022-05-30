@@ -1,5 +1,6 @@
-package com.apollo.music.views.song.likedsongs;
+package com.apollo.music.views.song;
 
+import com.apollo.music.data.commons.EntityConfiguration;
 import com.apollo.music.views.MainLayout;
 import com.apollo.music.views.explore.SongCard;
 import com.vaadin.flow.component.HasComponents;
@@ -15,13 +16,13 @@ import com.vaadin.flow.router.Route;
 import javax.annotation.security.RolesAllowed;
 
 @PageTitle("Liked Songs")
-@Route(value = "liked-songs", layout = MainLayout.class)
-@RolesAllowed("user")
-public class LikedSongsView extends Main implements HasComponents, HasStyle {
+@Route(value = "song/liked", layout = MainLayout.class)
+@RolesAllowed(EntityConfiguration.USER)
+public class SongLikedView extends Main implements HasComponents, HasStyle {
 
     private OrderedList imageContainer;
 
-    public LikedSongsView() {
+    public SongLikedView() {
         constructUI();
 
         imageContainer.add(new SongCard("Lay Wit Ya", "Isaiah Rashad",

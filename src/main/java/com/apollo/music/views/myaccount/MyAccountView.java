@@ -1,5 +1,6 @@
 package com.apollo.music.views.myaccount;
 
+import com.apollo.music.data.commons.EntityConfiguration;
 import com.apollo.music.data.entity.Artist;
 import com.apollo.music.data.service.ArtistService;
 import com.apollo.music.views.MainLayout;
@@ -25,22 +26,22 @@ import javax.annotation.security.RolesAllowed;
 
 @PageTitle("My Account")
 @Route(value = "my-account", layout = MainLayout.class)
-@RolesAllowed("user")
+@RolesAllowed(EntityConfiguration.USER)
 @Uses(Icon.class)
 public class MyAccountView extends Div {
 
-    private TextField firstName = new TextField("First name");
-    private TextField lastName = new TextField("Last name");
-    private EmailField email = new EmailField("Email address");
-    private DatePicker dateOfBirth = new DatePicker("Birthday");
-    private PhoneNumberField phone = new PhoneNumberField("Phone number");
-    private TextField country = new TextField("Country");
+    private final TextField firstName = new TextField("First name");
+    private final TextField lastName = new TextField("Last name");
+    private final EmailField email = new EmailField("Email address");
+    private final DatePicker dateOfBirth = new DatePicker("Birthday");
+    private final PhoneNumberField phone = new PhoneNumberField("Phone number");
+    private final TextField country = new TextField("Country");
 
-    private Button cancel = new Button("Cancel");
-    private Button save = new Button("Save");
-    private Button delete = new Button("Delete Account");
+    private final Button cancel = new Button("Cancel");
+    private final Button save = new Button("Save");
+    private final Button delete = new Button("Delete Account");
 
-    private Binder<Artist> binder = new Binder(Artist.class);
+    private final Binder<Artist> binder = new Binder(Artist.class);
 
     public MyAccountView(ArtistService personService) {
         addClassName("my-account-view");
@@ -87,8 +88,8 @@ public class MyAccountView extends Div {
     }
 
     private static class PhoneNumberField extends CustomField<String> {
-        private ComboBox<String> countryCode = new ComboBox<>();
-        private TextField number = new TextField();
+        private final ComboBox<String> countryCode = new ComboBox<>();
+        private final TextField number = new TextField();
 
         public PhoneNumberField(String label) {
             setLabel(label);

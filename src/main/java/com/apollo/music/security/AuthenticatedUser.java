@@ -1,7 +1,7 @@
 package com.apollo.music.security;
 
 import com.apollo.music.data.entity.User;
-import com.apollo.music.data.service.UserRepository;
+import com.apollo.music.data.repository.UserRepository;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
 import java.util.Optional;

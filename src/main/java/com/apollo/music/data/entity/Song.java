@@ -52,7 +52,7 @@ public class Song extends AbstractEntity {
     @Column(name = EntityConfiguration.ONTO_HASH_COLUMN_NAME, nullable = false)
     private String ontoHash;
 
-    //TODO: add featuredArtists fields/relations
+    //TODO: add featuredArtists fields/relations if necessary
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = EntityConfiguration.ALBUM_ID_COLUMN_NAME, foreignKey = @ForeignKey(name = EntityConfiguration.SONG_ALBUM_FK_NAME))
     private Album album;

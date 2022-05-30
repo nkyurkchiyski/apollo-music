@@ -1,5 +1,6 @@
 package com.apollo.music.views.managecontent;
 
+import com.apollo.music.data.commons.EntityConfiguration;
 import com.apollo.music.data.entity.Artist;
 import com.apollo.music.data.service.ArtistService;
 import com.apollo.music.views.MainLayout;
@@ -27,21 +28,21 @@ import java.util.Collections;
 
 @PageTitle("Manage Content")
 @Route(value = "manage-content", layout = MainLayout.class)
-@RolesAllowed("admin")
+@RolesAllowed(EntityConfiguration.ADMIN)
 @Uses(Icon.class)
 public class ManageContentView extends Div {
 
-    private TextField songName = new TextField("Name");
-    private TextField performers = new TextField("Performers");
-    private TextField composers = new TextField("Composers");
-    private ComboBox<String> genre = new ComboBox<>("Genre");
-    private TextField album = new TextField("Album");
-    private TextField source = new TextField("Audio Source URL");
+    private final TextField songName = new TextField("Name");
+    private final TextField performers = new TextField("Performers");
+    private final TextField composers = new TextField("Composers");
+    private final ComboBox<String> genre = new ComboBox<>("Genre");
+    private final TextField album = new TextField("Album");
+    private final TextField source = new TextField("Audio Source URL");
 
-    private Button cancel = new Button("Cancel");
-    private Button save = new Button("Save");
+    private final Button cancel = new Button("Cancel");
+    private final Button save = new Button("Save");
 
-    private Binder<Artist> binder = new Binder(Artist.class);
+    private final Binder<Artist> binder = new Binder(Artist.class);
 
     public ManageContentView(ArtistService personService) {
         addClassName("manage-content-view");
@@ -101,8 +102,8 @@ public class ManageContentView extends Div {
     }
 
     private static class PhoneNumberField extends CustomField<String> {
-        private ComboBox<String> countryCode = new ComboBox<>();
-        private TextField number = new TextField();
+        private final ComboBox<String> countryCode = new ComboBox<>();
+        private final TextField number = new TextField();
 
         public PhoneNumberField(String label) {
             setLabel(label);
