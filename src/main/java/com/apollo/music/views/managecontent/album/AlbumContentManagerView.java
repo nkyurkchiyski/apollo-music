@@ -1,9 +1,10 @@
-package com.apollo.music.views.managecontent.genre;
+package com.apollo.music.views.managecontent.album;
 
 import com.apollo.music.data.commons.EntityConfiguration;
-import com.apollo.music.data.entity.Genre;
+import com.apollo.music.data.entity.Album;
 import com.apollo.music.data.filter.ContentManagerFilter;
-import com.apollo.music.data.service.GenreService;
+import com.apollo.music.data.service.AlbumService;
+import com.apollo.music.data.service.ArtistService;
 import com.apollo.music.views.MainLayout;
 import com.apollo.music.views.commons.ViewConstants;
 import com.apollo.music.views.commons.components.EntityForm;
@@ -19,30 +20,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
 
-
-@PageTitle(ViewConstants.Title.MANAGE_GENRE)
-@Route(value = ViewConstants.Route.MANAGE_GENRE, layout = MainLayout.class)
+@PageTitle(ViewConstants.Title.MANAGE_ALBUM)
+@Route(value = ViewConstants.Route.MANAGE_ALBUM, layout = MainLayout.class)
 @RolesAllowed(EntityConfiguration.ADMIN)
 @Uses(Icon.class)
-public class GenreContentManagerView extends AbstractContentManagerView<Genre, GenreService, ContentManagerFilter> {
+public class AlbumContentManagerView extends AbstractContentManagerView<Album, AlbumService, ContentManagerFilter> {
     private static final long serialVersionUID = 1L;
 
     private TextField idField;
     private TextField nameField;
+    private final ArtistService artistService;
 
     @Autowired
-    public GenreContentManagerView(final GenreService genreService) {
-        super(genreService);
+    public AlbumContentManagerView(final AlbumService entityService, final ArtistService artistService) {
+        super(entityService);
+        this.artistService = artistService;
     }
 
     @Override
-    protected Class<Genre> getEntityClass() {
-        return Genre.class;
+    protected Class<Album> getEntityClass() {
+        return Album.class;
     }
 
     @Override
-    protected EntityForm<Genre> createEntityForm(final Genre entity) {
-        return new GenreForm(entity);
+    protected EntityForm<Album> createEntityForm(final Album entity) {
+        return new AlbumForm(entity, artistService);
     }
 
     @Override
@@ -58,7 +60,7 @@ public class GenreContentManagerView extends AbstractContentManagerView<Genre, G
     }
 
     @Override
-    protected EntityManagerGrid<Genre, GenreService, ContentManagerFilter> createGrid() {
-        return new GenreManagerGrid(entityService, this::openEntityForm);
+    protected EntityManagerGrid<Album, AlbumService, ContentManagerFilter> createGrid() {
+        return new AlbumManagerGrid(entityService, this::openEntityForm);
     }
 }

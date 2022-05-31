@@ -3,7 +3,7 @@ package com.apollo.music.data.entity;
 import com.apollo.music.data.commons.EntityConfiguration;
 
 public enum Role {
-    USER(EntityConfiguration.USER), ADMIN(EntityConfiguration.ADMIN);
+    USER(EntityConfiguration.USER), ADMIN(EntityConfiguration.ADMIN), SYSTEM(EntityConfiguration.SYSTEM);
 
     private final String roleName;
 
@@ -14,4 +14,5 @@ public enum Role {
     public String getRoleName() {
         return roleName;
     }
+
 }

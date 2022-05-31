@@ -6,7 +6,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
@@ -28,7 +31,11 @@ public class Album extends AbstractEntity {
     @Column(name = EntityConfiguration.IMAGE_URL_COLUMN_NAME)
     private String imageUrl;
 
-    @OneToMany(mappedBy = EntityConfiguration.ALBUM_FIELD_NAME, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = EntityConfiguration.ARTIST_ID_COLUMN_NAME, foreignKey = @ForeignKey(name = EntityConfiguration.ALBUM_ARTIST_FK_NAME))
+    private Artist artist;
+
+    @OneToMany(mappedBy = EntityConfiguration.ALBUM_FIELD_NAME, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Song> songs = new ArrayList<>();
 
 
@@ -62,5 +69,13 @@ public class Album extends AbstractEntity {
 
     public void setSongs(final List<Song> songs) {
         this.songs = songs;
+    }
+
+    public Artist getArtist() {
+        return artist;
+    }
+
+    public void setArtist(final Artist artist) {
+        this.artist = artist;
     }
 }

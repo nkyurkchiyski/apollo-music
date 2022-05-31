@@ -21,6 +21,7 @@ public class EntityConfiguration {
     public static final String IMAGE_URL_COLUMN_NAME = "image_url";
     public static final String ROLE_COLUMN_NAME = "role";
     public static final String CREATED_AT_COLUMN_NAME = "created_at";
+    public static final String CREATED_BY_COLUMN_NAME = "created_by";
     public static final String RELEASED_ON_COLUMN_NAME = "released_on";
     public static final String SOURCE_URL_COLUMN_NAME = "source_url";
     public static final String PLAYED_COUNT_COLUMN_NAME = "played_count";
@@ -44,7 +45,7 @@ public class EntityConfiguration {
     public static final String SONG_GENRE_SONG_FK_NAME = "FK_SongGenre_Song";
     public static final String SONG_GENRE_GENRE_FK_NAME = "FK_SongGenre_Genre";
     public static final String SONG_ALBUM_FK_NAME = "FK_Song_Album";
-    public static final String SONG_ARTIST_FK_NAME = "FK_Song_Artist";
+    public static final String ALBUM_ARTIST_FK_NAME = "FK_Album_Artist";
 
     public static final String USER_USERNAME_UQ_NAME = "UQ_User_Username";
     public static final String SONG_ONTO_HASH_UQ_NAME = "UQ_Song_OntoHash";
@@ -64,5 +65,6 @@ public class EntityConfiguration {
 
     public static final String ADMIN = "admin";
     public static final String USER = "user";
+    public static final String SYSTEM = "system";
 
 }

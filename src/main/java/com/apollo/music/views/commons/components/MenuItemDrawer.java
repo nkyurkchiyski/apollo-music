@@ -6,7 +6,6 @@ import com.vaadin.flow.component.details.DetailsVariant;
 import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.RouterLink;
 
 public class MenuItemDrawer extends ListItem {
     private final MenuItemInfo[] subMenus;
@@ -29,6 +28,7 @@ public class MenuItemDrawer extends ListItem {
 
         final AccordionPanel panel = new AccordionPanel(parentMenuItem, subMenuItems);
         panel.addThemeVariants(DetailsVariant.REVERSE);
+        panel.addClassName("hide-arrow");
         accordion.add(panel);
         add(accordion);
     }

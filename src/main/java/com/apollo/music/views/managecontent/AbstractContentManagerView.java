@@ -23,10 +23,10 @@ public abstract class AbstractContentManagerView<T extends EntityWithId, S exten
     private final FormLayout filterForm = new FormLayout();
     private final Button addEntityButton = new Button(new Icon(VaadinIcon.PLUS));
 
-    protected final AbstractEntityService<T> entityService;
+    protected final S entityService;
     protected EntityManagerGrid<T, S, F> grid;
 
-    public AbstractContentManagerView(final AbstractEntityService<T> entityService) {
+    public AbstractContentManagerView(final S entityService) {
         this.entityService = entityService;
         grid = createGrid();
         initFilterForm();
@@ -55,7 +55,7 @@ public abstract class AbstractContentManagerView<T extends EntityWithId, S exten
 
         resetButton.addClickListener(e -> {
             clearFilterForm();
-            refreshGrid();
+            grid.filterGrid(createFilter());
         });
 
         addEntityButton.addClickListener(x -> openEntityForm(null));

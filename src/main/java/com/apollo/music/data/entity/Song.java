@@ -53,20 +53,16 @@ public class Song extends AbstractEntity {
     private String ontoHash;
 
     //TODO: add featuredArtists fields/relations if necessary
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = EntityConfiguration.ALBUM_ID_COLUMN_NAME, foreignKey = @ForeignKey(name = EntityConfiguration.SONG_ALBUM_FK_NAME))
     private Album album;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = EntityConfiguration.SONG_GENRE_TABLE_NAME,
             joinColumns = {@JoinColumn(name = EntityConfiguration.SONG_ID_COLUMN_NAME, foreignKey = @ForeignKey(name = EntityConfiguration.SONG_GENRE_SONG_FK_NAME))},
             inverseJoinColumns = {@JoinColumn(name = EntityConfiguration.GENRE_ID_COLUMN_NAME, foreignKey = @ForeignKey(name = EntityConfiguration.SONG_GENRE_GENRE_FK_NAME))}
     )
     private Set<Genre> genres;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = EntityConfiguration.ARTIST_ID_COLUMN_NAME, foreignKey = @ForeignKey(name = EntityConfiguration.SONG_ARTIST_FK_NAME))
-    private Artist artist;
 
 
     @Override
@@ -158,13 +154,5 @@ public class Song extends AbstractEntity {
 
     public void setGenres(final Set<Genre> genres) {
         this.genres = genres;
-    }
-
-    public Artist getArtist() {
-        return artist;
-    }
-
-    public void setArtist(final Artist artist) {
-        this.artist = artist;
     }
 }

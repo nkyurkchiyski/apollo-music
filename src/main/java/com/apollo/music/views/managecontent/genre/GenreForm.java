@@ -6,6 +6,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.textfield.TextField;
 
 public class GenreForm extends EntityForm<Genre> {
+    private static final long serialVersionUID = 1L;
 
     private TextField name;
 

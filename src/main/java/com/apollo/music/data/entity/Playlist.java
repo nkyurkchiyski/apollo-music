@@ -25,7 +25,7 @@ public class Playlist extends AbstractEntity {
     @Column(name = EntityConfiguration.CREATED_AT_COLUMN_NAME, nullable = false)
     private Date createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = EntityConfiguration.USER_ID_COLUMN_NAME, foreignKey = @ForeignKey(name = EntityConfiguration.PLAYLIST_USER_FK_NAME))
     private User user;
 
