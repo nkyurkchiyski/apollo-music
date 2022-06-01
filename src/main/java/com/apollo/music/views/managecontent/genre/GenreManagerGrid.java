@@ -16,7 +16,7 @@ public class GenreManagerGrid extends EntityManagerGrid<Genre, GenreService, Con
 
     public GenreManagerGrid(final GenreService genreService,
                             final Consumer<Genre> editConsumer) {
-        super(Genre.class, genreService, editConsumer);
+        super(Genre.class, genreService, editConsumer, false);
     }
 
     @Override

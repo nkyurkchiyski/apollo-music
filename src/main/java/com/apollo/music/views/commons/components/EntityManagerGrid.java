@@ -4,6 +4,7 @@ import com.apollo.music.data.entity.EntityWithId;
 import com.apollo.music.data.service.AbstractEntityService;
 import com.apollo.music.views.commons.ViewConstants;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -23,18 +24,27 @@ public abstract class EntityManagerGrid<T extends EntityWithId, S extends Abstra
     private final ConfigurableFilterDataProvider<T, Void, F> dataProvider;
     protected final S entityService;
     private final Consumer<T> editConsumer;
+    private final boolean viewActionEnabled;
 
     public EntityManagerGrid(final Class<T> entityClass,
                              final S entityService,
-                             final Consumer<T> editConsumer) {
+                             final Consumer<T> editConsumer,
+                             final boolean viewActionEnabled) {
         super(entityClass, false);
         this.entityService = entityService;
         this.editConsumer = editConsumer;
+        this.viewActionEnabled = viewActionEnabled;
 
         this.dataProvider = createdDataProvider();
         setItems(dataProvider);
         setSelectionMode(SelectionMode.SINGLE);
         initContent();
+    }
+
+    public EntityManagerGrid(final Class<T> entityClass,
+                             final S entityService,
+                             final Consumer<T> editConsumer) {
+        this(entityClass, entityService, editConsumer, true);
     }
 
     protected abstract ConfigurableFilterDataProvider<T, Void, F> createdDataProvider();
@@ -43,7 +53,7 @@ public abstract class EntityManagerGrid<T extends EntityWithId, S extends Abstra
         removeAllColumns();
         addColumn(new ComponentRenderer<>(e -> new Label(e.getId()))).setWidth("22em").setFlexGrow(0).setKey("id").setHeader("Id");
         configureEntityColumns();
-        addColumn(new ComponentRenderer<>(this::createActions)).setKey("actions").setHeader("Actions").setFlexGrow(0).setWidth("140px");
+        addColumn(new ComponentRenderer<>(this::createActions)).setWidth("12em").setFlexGrow(0).setKey("actions").setHeader("Actions");
         this.addItemClickListener(listener -> {
             if (!listener.getColumn().getKey().equals("actions")) {
                 edit(listener.getItem());
@@ -62,7 +72,17 @@ public abstract class EntityManagerGrid<T extends EntityWithId, S extends Abstra
             getDataProvider().refreshAll();
         });
         final Button edit = new Button(new Icon(VaadinIcon.EDIT), l -> edit(entity));
-        return new HorizontalLayout(edit, remove);
+
+        final HorizontalLayout layout = new HorizontalLayout();
+        if (viewActionEnabled) {
+            final Button details = new Button(
+                    new Icon(VaadinIcon.VIEWPORT),
+                    e -> UI.getCurrent().navigate(String.format(ViewConstants.Route.ROUTE_FORMAT, entity.getClass().getSimpleName().toLowerCase(), entity.getId()))
+            );
+            layout.add(details);
+        }
+        layout.add(edit, remove);
+        return layout;
     }
 
     private void edit(final T entity) {

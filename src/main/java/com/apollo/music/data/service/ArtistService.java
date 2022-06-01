@@ -67,7 +67,7 @@ public class ArtistService extends AbstractEntityService<Artist> {
             final Album album = new Album();
             album.setName("Singles");
             album.setArtist(entity);
-            entity.setAlbums(Collections.singletonList(album));
+            entity.setAlbums(Collections.singleton(album));
         }
         return super.update(entity);
     }

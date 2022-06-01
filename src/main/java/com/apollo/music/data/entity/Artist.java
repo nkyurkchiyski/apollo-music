@@ -12,8 +12,8 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @DynamicInsert
@@ -32,7 +32,7 @@ public class Artist extends AbstractEntity {
     private String imageUrl;
 
     @OneToMany(mappedBy = EntityConfiguration.ARTIST_FIELD_NAME, fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
-    private List<Album> albums = new ArrayList<>();
+    private Set<Album> albums = new LinkedHashSet<>();
 
     public String getName() {
         return name;
@@ -50,11 +50,11 @@ public class Artist extends AbstractEntity {
         this.imageUrl = imageUrl;
     }
 
-    public List<Album> getAlbums() {
+    public Set<Album> getAlbums() {
         return albums;
     }
 
-    public void setAlbums(final List<Album> albums) {
+    public void setAlbums(final Set<Album> albums) {
         this.albums = albums;
     }
 
