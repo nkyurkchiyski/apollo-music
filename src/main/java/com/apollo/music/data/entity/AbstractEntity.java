@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
 import java.io.Serializable;
 
 @MappedSuperclass
@@ -50,6 +51,11 @@ public abstract class AbstractEntity implements EntityWithId, Serializable {
 
     @PrePersist
     protected void beforePersist() {
+        // do nothing
+    }
+
+    @PreRemove
+    protected void beforeRemove() {
         // do nothing
     }
 

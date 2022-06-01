@@ -17,6 +17,7 @@ public class EntityConfiguration {
     //DB Columns - START
     public static final String NAME_COLUMN_NAME = "name";
     public static final String USERNAME_COLUMN_NAME = "username";
+    public static final String EMAIL_COLUMN_NAME = "email";
     public static final String PASSWORD_COLUMN_NAME = "password";
     public static final String IMAGE_URL_COLUMN_NAME = "image_url";
     public static final String ROLE_COLUMN_NAME = "role";
@@ -42,12 +43,12 @@ public class EntityConfiguration {
     public static final String USER_ROLE_FK_NAME = "FK_User_Role";
     public static final String SONG_PLAYLIST_PLAYLIST_FK_NAME = "FK_SongPlaylist_Playlist";
     public static final String SONG_PLAYLIST_SONG_FK_NAME = "FK_SongPlaylist_Song";
-    public static final String SONG_GENRE_SONG_FK_NAME = "FK_SongGenre_Song";
-    public static final String SONG_GENRE_GENRE_FK_NAME = "FK_SongGenre_Genre";
+    public static final String SONG_GENRE_FK_NAME = "FK_Song_Genre";
     public static final String SONG_ALBUM_FK_NAME = "FK_Song_Album";
     public static final String ALBUM_ARTIST_FK_NAME = "FK_Album_Artist";
 
     public static final String USER_USERNAME_UQ_NAME = "UQ_User_Username";
+    public static final String USER_EMAIL_UQ_NAME = "UQ_User_Email";
     public static final String SONG_ONTO_HASH_UQ_NAME = "UQ_Song_OntoHash";
     //DB Constraints - END
 
@@ -59,6 +60,7 @@ public class EntityConfiguration {
     public static final String PLAYLIST_ID_FIELD_NAME = "playlistId";
     public static final String PLAYLIST_FIELD_NAME = "playlist";
     public static final String USERNAME_FIELD_NAME = "username";
+    public static final String EMAIL_FIELD_NAME = "email";
     public static final String ONTO_HASH_FIELD_NAME = "ontoHash";
 
     //Fields - END
@@ -66,5 +68,8 @@ public class EntityConfiguration {
     public static final String ADMIN = "admin";
     public static final String USER = "user";
     public static final String SYSTEM = "system";
+
+
+    public static final String ONTO_HASH_FORMAT = "Song:%s;Genre:%s;Artist:%s;Album:%s";
 
 }

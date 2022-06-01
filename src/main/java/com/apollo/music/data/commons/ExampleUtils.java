@@ -9,7 +9,9 @@ public class ExampleUtils {
             .withIgnoreNullValues();
 
 
-    public final static ExampleMatcher NAME_EXAMPLE_MATCHER_ALL = ExampleMatcher.matchingAll()
-            .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-            .withIgnoreNullValues();
+    public static ExampleMatcher getExactIgnoreCaseExampleMatcher(final String property) {
+        return ExampleMatcher.matching()
+                .withMatcher(property, ExampleMatcher.GenericPropertyMatchers.exact().ignoreCase())
+                .withIgnoreNullValues();
+    }
 }

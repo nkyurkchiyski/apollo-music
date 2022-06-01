@@ -3,6 +3,7 @@ package com.apollo.music.views.managecontent.album;
 import com.apollo.music.data.entity.Album;
 import com.apollo.music.data.entity.Artist;
 import com.apollo.music.data.service.ArtistService;
+import com.apollo.music.views.commons.ViewConstants;
 import com.apollo.music.views.commons.components.EntityForm;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -10,6 +11,8 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.converter.LocalDateToDateConverter;
 import org.springframework.data.domain.PageRequest;
+
+import java.util.Objects;
 
 public class AlbumForm extends EntityForm<Album> {
     private static final long serialVersionUID = 1L;
@@ -40,7 +43,9 @@ public class AlbumForm extends EntityForm<Album> {
                 (query) -> artistService.countByName(query.getFilter())
         );
         artistCombo.setItemLabelGenerator(Artist::getName);
-        binder.bind(artistCombo, Album::getArtist, Album::setArtist);
+        binder.forField(artistCombo)
+                .withValidator(Objects::nonNull, String.format(ViewConstants.Validation.EMPTY_FIELD_FORMAT, "artist"))
+                .bind(Album::getArtist, Album::setArtist);
 
         return new Component[]{name, artistCombo, imageUrl, releasedOn};
     }

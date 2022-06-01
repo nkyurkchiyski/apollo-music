@@ -1,9 +1,7 @@
 package com.apollo.music.data.generator;
 
-import com.apollo.music.data.entity.Genre;
 import com.apollo.music.data.entity.Role;
 import com.apollo.music.data.entity.User;
-import com.apollo.music.data.repository.GenreRepository;
 import com.apollo.music.data.repository.UserRepository;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.slf4j.Logger;
@@ -21,29 +19,15 @@ public class DataGenerator {
 
     @Bean
     public CommandLineRunner loadData(final PasswordEncoder passwordEncoder,
-                                      final UserRepository userRepository,
-                                      final GenreRepository genreRepository) {
+                                      final UserRepository userRepository) {
         return args -> {
             final Logger logger = LoggerFactory.getLogger(getClass());
 
             logger.info("Generating demo data");
-            createDefaultGenre(genreRepository, logger);
             createDefaultUsers(passwordEncoder, userRepository, logger);
 
             logger.info("Generated demo data");
         };
-    }
-
-    private void createDefaultGenre(final GenreRepository genreRepository,
-                                    final Logger logger) {
-        if (genreRepository.count() != 0L) {
-            logger.info("Using existing database");
-            return;
-        }
-        logger.info("... generating Default Genre entities...");
-        final Genre genre = new Genre();
-        genre.setName("DEFAULT");
-        genreRepository.save(genre);
     }
 
     private void createDefaultUsers(final PasswordEncoder passwordEncoder,
@@ -58,6 +42,7 @@ public class DataGenerator {
         User user = new User();
         user.setName("John Normal");
         user.setUsername("user");
+        user.setEmail("user@abv.bg");
         user.setPassword(passwordEncoder.encode("user"));
         user.setImageUrl(
                 "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80");
@@ -66,6 +51,7 @@ public class DataGenerator {
         User admin = new User();
         admin.setName("Emma Powerful");
         admin.setUsername("admin");
+        user.setEmail("admin@abv.bg");
         admin.setPassword(passwordEncoder.encode("admin"));
         admin.setImageUrl(
                 "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80");

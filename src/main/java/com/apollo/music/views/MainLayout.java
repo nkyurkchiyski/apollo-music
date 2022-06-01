@@ -8,6 +8,7 @@ import com.apollo.music.views.explore.ExploreView;
 import com.apollo.music.views.managecontent.album.AlbumContentManagerView;
 import com.apollo.music.views.managecontent.artist.ArtistContentManagerView;
 import com.apollo.music.views.managecontent.genre.GenreContentManagerView;
+import com.apollo.music.views.managecontent.song.SongContentManagerView;
 import com.apollo.music.views.myaccount.MyAccountView;
 import com.apollo.music.views.search.SearchView;
 import com.apollo.music.views.song.SongLikedView;
@@ -110,12 +111,11 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("My Account", "la la-user", MyAccountView.class), //
 
-                //TODO: change to correct views
                 new MenuItemDrawer("Manage Content", "la la-pencil-ruler",
                         new MenuItemInfo("Genres", "la la-drum", GenreContentManagerView.class),
                         new MenuItemInfo("Artists", "la la-microphone-alt", ArtistContentManagerView.class),
                         new MenuItemInfo("Album", "la la-record-vinyl", AlbumContentManagerView.class),
-                        new MenuItemInfo("Songs", "la la-music", GenreContentManagerView.class)), //
+                        new MenuItemInfo("Songs", "la la-music", SongContentManagerView.class)), //
 
         };
     }

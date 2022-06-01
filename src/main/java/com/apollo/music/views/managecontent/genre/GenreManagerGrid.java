@@ -21,7 +21,7 @@ public class GenreManagerGrid extends EntityManagerGrid<Genre, GenreService, Con
 
     @Override
     protected ConfigurableFilterDataProvider<Genre, Void, ContentManagerFilter> createdDataProvider() {
-        return SpringDataProviderBuilder.forFunctions(entityService::fetch, entityService::count).buildFilterable();
+        return SpringDataProviderBuilder.forFunctions(entityService::fetchByFilter, entityService::countByFilter).buildFilterable();
     }
 
     @Override

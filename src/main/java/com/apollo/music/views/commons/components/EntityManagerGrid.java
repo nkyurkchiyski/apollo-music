@@ -2,6 +2,7 @@ package com.apollo.music.views.commons.components;
 
 import com.apollo.music.data.entity.EntityWithId;
 import com.apollo.music.data.service.AbstractEntityService;
+import com.apollo.music.views.commons.ViewConstants;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -74,11 +75,8 @@ public abstract class EntityManagerGrid<T extends EntityWithId, S extends Abstra
     }
 
     protected Component createImage(final String imageUrl) {
-        if (Strings.isBlank(imageUrl)) {
-            return new Label("N/A");
-        }
-
-        final Image img = new Image(imageUrl, "img");
+        final String imgToUse = Strings.isBlank(imageUrl) ? ViewConstants.DEFAULT_COVER : imageUrl;
+        final Image img = new Image(imgToUse, "img");
         img.setClassName("img-grid");
         return img;
     }

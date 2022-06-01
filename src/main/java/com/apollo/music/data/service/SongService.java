@@ -1,9 +1,9 @@
 package com.apollo.music.data.service;
 
 import com.apollo.music.data.commons.ExampleUtils;
-import com.apollo.music.data.entity.Album;
+import com.apollo.music.data.entity.Song;
 import com.apollo.music.data.filter.ContentManagerFilter;
-import com.apollo.music.data.repository.AlbumRepository;
+import com.apollo.music.data.repository.SongRepository;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -13,33 +13,33 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AlbumService extends AbstractEntityService<Album> {
-
-    private final AlbumRepository repo;
+public class SongService extends AbstractEntityService<Song> {
+    private final SongRepository repo;
 
     @Autowired
-    public AlbumService(final AlbumRepository repo) {
+    public SongService(final SongRepository repo) {
         this.repo = repo;
     }
 
-    public Page<Album> fetch(final Pageable pageable, final ContentManagerFilter filter) {
-        final Example<Album> example = createExample(filter);
+
+    @Override
+    protected JpaRepository<Song, String> getRepository() {
+        return repo;
+    }
+
+    public Page<Song> fetch(final Pageable pageable, final ContentManagerFilter filter) {
+        final Example<Song> example = createExample(filter);
         return repo.findAll(example, pageable);
     }
 
     public long count(final ContentManagerFilter filter) {
-        final Example<Album> example = createExample(filter);
+        final Example<Song> example = createExample(filter);
         return repo.count(example);
     }
 
-    @Override
-    protected JpaRepository<Album, String> getRepository() {
-        return repo;
-    }
-
-    private Example<Album> createExample(final ContentManagerFilter filter) {
+    private Example<Song> createExample(final ContentManagerFilter filter) {
         final ContentManagerFilter filterToUse = ObjectUtils.firstNonNull(filter, new ContentManagerFilter());
-        final Album probe = new Album();
+        final Song probe = new Song();
         probe.setId(filterToUse.getId());
         probe.setName(filterToUse.getName());
         return Example.of(probe, ExampleUtils.CONTENT_MANAGER_EXAMPLE_MATCHER);

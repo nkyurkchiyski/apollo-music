@@ -12,6 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 @Service
 public class GenreService extends AbstractEntityService<Genre> {
     private final GenreRepository repo;
@@ -26,12 +29,12 @@ public class GenreService extends AbstractEntityService<Genre> {
         return repo;
     }
 
-    public long count(final ContentManagerFilter filter) {
+    public long countByFilter(final ContentManagerFilter filter) {
         final Example<Genre> example = createExample(filter);
         return repo.count(example);
     }
 
-    public Page<Genre> fetch(final Pageable paging, final ContentManagerFilter filter) {
+    public Page<Genre> fetchByFilter(final Pageable paging, final ContentManagerFilter filter) {
         final Example<Genre> example = createExample(filter);
         return repo.findAll(example, paging);
     }
@@ -42,5 +45,15 @@ public class GenreService extends AbstractEntityService<Genre> {
         probe.setId(filterToUse.getId());
         probe.setName(filterToUse.getName());
         return Example.of(probe, ExampleUtils.CONTENT_MANAGER_EXAMPLE_MATCHER);
+    }
+
+    public Stream<Genre> fetchByName(final Pageable paging, final Optional<String> filter) {
+        final ContentManagerFilter filterToUse = new ContentManagerFilter(null, filter.orElse(null));
+        return fetchByFilter(paging, filterToUse).stream();
+    }
+
+    public int countByName(final Optional<String> filter) {
+        final ContentManagerFilter filterToUse = new ContentManagerFilter(null, filter.orElse(null));
+        return (int) countByFilter(filterToUse);
     }
 }

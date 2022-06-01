@@ -2,6 +2,8 @@ package com.apollo.music.data.entity;
 
 import com.apollo.music.data.commons.EntityConfiguration;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -14,17 +16,29 @@ import javax.persistence.ForeignKey;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = EntityConfiguration.USER_TABLE_NAME,
-        uniqueConstraints = {@UniqueConstraint(name = EntityConfiguration.USER_USERNAME_UQ_NAME, columnNames = {EntityConfiguration.USERNAME_COLUMN_NAME})})
+        uniqueConstraints = {
+                @UniqueConstraint(name = EntityConfiguration.USER_USERNAME_UQ_NAME, columnNames = {EntityConfiguration.USERNAME_COLUMN_NAME}),
+                @UniqueConstraint(name = EntityConfiguration.USER_EMAIL_UQ_NAME, columnNames = {EntityConfiguration.EMAIL_COLUMN_NAME})})
 public class User extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @NotEmpty
     @Column(name = EntityConfiguration.USERNAME_COLUMN_NAME, nullable = false)
     private String username;
+
+    @NotEmpty
+    @Email
+    @Column(name = EntityConfiguration.EMAIL_COLUMN_NAME, nullable = false)
+    private String email;
 
     @Column(name = EntityConfiguration.NAME_COLUMN_NAME)
     private String name;
@@ -83,4 +97,11 @@ public class User extends AbstractEntity {
         this.imageUrl = imageUrl;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(final String email) {
+        this.email = email;
+    }
 }

@@ -12,6 +12,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
 public class Album extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
+    @NotEmpty
     @Column(name = EntityConfiguration.NAME_COLUMN_NAME, nullable = false)
     private String name;
 
@@ -35,7 +37,7 @@ public class Album extends AbstractEntity {
     @JoinColumn(name = EntityConfiguration.ARTIST_ID_COLUMN_NAME, foreignKey = @ForeignKey(name = EntityConfiguration.ALBUM_ARTIST_FK_NAME))
     private Artist artist;
 
-    @OneToMany(mappedBy = EntityConfiguration.ALBUM_FIELD_NAME, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = EntityConfiguration.ALBUM_FIELD_NAME, fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     private List<Song> songs = new ArrayList<>();
 
 
@@ -69,6 +71,11 @@ public class Album extends AbstractEntity {
 
     public void setSongs(final List<Song> songs) {
         this.songs = songs;
+    }
+
+
+    public void removeSong(final Song song) {
+        getSongs().remove(song);
     }
 
     public Artist getArtist() {

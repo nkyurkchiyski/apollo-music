@@ -53,14 +53,12 @@ public class ArtistService extends AbstractEntityService<Artist> {
 
     public Stream<Artist> fetchByName(final Pageable pageable, final Optional<String> filter) {
         final ContentManagerFilter filterToUse = new ContentManagerFilter(null, filter.orElse(null));
-        final Example<Artist> example = createExample(filterToUse);
-        return repo.findAll(example, pageable).stream();
+        return fetchByFilter(pageable, filterToUse).stream();
     }
 
     public int countByName(final Optional<String> filter) {
         final ContentManagerFilter filterToUse = new ContentManagerFilter(null, filter.orElse(null));
-        final Example<Artist> example = createExample(filterToUse);
-        return (int) repo.count(example);
+        return (int) countByFilter(filterToUse);
     }
 
     @Override
