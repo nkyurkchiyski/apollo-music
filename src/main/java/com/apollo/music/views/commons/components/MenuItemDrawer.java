@@ -8,11 +8,13 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class MenuItemDrawer extends ListItem {
-    private final MenuItemInfo[] subMenus;
+    private final ListItem[] subMenus;
+
+    private final AccordionPanel panel;
 
     public MenuItemDrawer(final String menuTitle,
                           final String iconClass,
-                          final MenuItemInfo... subMenus) {
+                          final ListItem... subMenus) {
         this.subMenus = subMenus;
         final Accordion accordion = new Accordion();
         final VerticalLayout subMenuItems = new VerticalLayout(subMenus);
@@ -26,14 +28,21 @@ public class MenuItemDrawer extends ListItem {
         text.addClassNames("font-medium", "text-s");
         parentMenuItem.add(new LineAwesomeIcon(iconClass), text);
 
-        final AccordionPanel panel = new AccordionPanel(parentMenuItem, subMenuItems);
+        panel = new AccordionPanel(parentMenuItem, subMenuItems);
         panel.addThemeVariants(DetailsVariant.REVERSE);
         panel.addClassName("hide-arrow");
         accordion.add(panel);
         add(accordion);
     }
 
-    public MenuItemInfo[] getSubMenus() {
+    public ListItem[] getSubMenus() {
         return subMenus;
+    }
+
+    public void setSubMenus(final ListItem... subMenus) {
+        final VerticalLayout subMenuItems = new VerticalLayout(subMenus);
+        subMenuItems.setSpacing(false);
+        subMenuItems.setPadding(false);
+        panel.setContent(subMenuItems);
     }
 }

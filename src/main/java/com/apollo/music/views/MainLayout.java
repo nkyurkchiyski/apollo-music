@@ -1,9 +1,17 @@
 package com.apollo.music.views;
 
+import com.apollo.music.data.entity.Playlist;
+import com.apollo.music.data.entity.Role;
 import com.apollo.music.data.entity.User;
+import com.apollo.music.data.service.PlaylistService;
 import com.apollo.music.security.AuthenticatedUser;
+import com.apollo.music.security.MainLayoutBus;
+import com.apollo.music.views.commons.ComponentFactory;
+import com.apollo.music.views.commons.components.MenuItemAction;
 import com.apollo.music.views.commons.components.MenuItemDrawer;
 import com.apollo.music.views.commons.components.MenuItemInfo;
+import com.apollo.music.views.details.PlaylistDetailsView;
+import com.apollo.music.views.details.PlaylistForm;
 import com.apollo.music.views.explore.ExploreView;
 import com.apollo.music.views.managecontent.album.AlbumContentManagerView;
 import com.apollo.music.views.managecontent.artist.ArtistContentManagerView;
@@ -18,6 +26,7 @@ import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Footer;
 import com.vaadin.flow.component.html.H1;
@@ -29,8 +38,11 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -39,14 +51,22 @@ import java.util.Optional;
 public class MainLayout extends AppLayout {
 
     private H1 viewTitle;
+    private MenuItemDrawer playlistsMenu;
 
     private final AuthenticatedUser authenticatedUser;
+    private MainLayoutBus mainLayoutBus;
+    private final PlaylistService playlistService;
     private final AccessAnnotationChecker accessChecker;
 
+    @Autowired
     public MainLayout(final AuthenticatedUser authenticatedUser,
+                      final MainLayoutBus mainLayoutBus,
+                      final PlaylistService playlistService,
                       final AccessAnnotationChecker accessChecker) {
         this.authenticatedUser = authenticatedUser;
+        this.playlistService = playlistService;
         this.accessChecker = accessChecker;
+        mainLayoutBus.setMainLayout(this);
 
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
@@ -93,7 +113,7 @@ public class MainLayout extends AppLayout {
                 list.add(listItem);
             } else if (listItem instanceof MenuItemDrawer) {
                 final MenuItemDrawer drawer = (MenuItemDrawer) listItem;
-                if (Arrays.stream(drawer.getSubMenus()).allMatch(subMenu -> accessChecker.hasAccess(subMenu.getView()))) {
+                if (hasAccessToAllMenuItems(drawer)) {
                     list.add(drawer);
                 }
             }
@@ -102,7 +122,24 @@ public class MainLayout extends AppLayout {
         return nav;
     }
 
+    private boolean hasAccessToAllMenuItems(final MenuItemDrawer drawer) {
+        return Arrays.stream(drawer.getSubMenus()).allMatch(this::hasAccessToMenuItem);
+    }
+
+    private boolean hasAccessToMenuItem(final ListItem subMenu) {
+        if (subMenu instanceof MenuItemInfo) {
+            return accessChecker.hasAccess(((MenuItemInfo) subMenu).getView());
+        } else if (subMenu instanceof MenuItemAction) {
+            return ((MenuItemAction) subMenu).isAccessibleWithoutAuthentication() || authenticatedUser.get().isPresent();
+        } else {
+            return true;
+        }
+    }
+
     private ListItem[] createMenuItems() {
+        playlistsMenu = new MenuItemDrawer("My Playlists", "la la-file-audio", createPlaylistMenuItems());
+
+
         return new ListItem[]{ //
                 new MenuItemInfo("Search", "la la-search", SearchView.class), //
 
@@ -112,6 +149,8 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("My Account", "la la-user", MyAccountView.class), //
 
+                playlistsMenu,//
+
                 new MenuItemDrawer("Manage Content", "la la-pencil-ruler",
                         new MenuItemInfo("Genres", "la la-drum", GenreContentManagerView.class),
                         new MenuItemInfo("Artists", "la la-microphone-alt", ArtistContentManagerView.class),
@@ -119,6 +158,41 @@ public class MainLayout extends AppLayout {
                         new MenuItemInfo("Songs", "la la-music", SongContentManagerView.class)), //
 
         };
+    }
+
+    private ListItem[] createPlaylistMenuItems() {
+        final List<ListItem> listItems = new ArrayList<>();
+        listItems.add(new MenuItemAction("Create Playlist", "la la-plus", false, e -> createPlaylistDialog().open()));
+        if (authenticatedUser.get().isPresent()) {
+            final User user = authenticatedUser.get().get();
+            playlistService.findByUser(user)
+                    .forEach(playlist -> listItems.add(new MenuItemInfo(playlist.getName(), "la ", PlaylistDetailsView.class, playlist.getId())));
+        }
+        return listItems.toArray(new ListItem[0]);
+    }
+
+    private Dialog createPlaylistDialog() {
+        final Dialog dialog = ComponentFactory.createDialog();
+        final PlaylistForm form = new PlaylistForm(null);
+        form.addCancelClickListener(e -> dialog.close());
+        form.addSaveClickListener(e -> {
+            if (form.isSaved()) {
+                final User user = authenticatedUser.get().get();
+                final Playlist bean = form.getBean();
+                bean.setCreatedBy(Role.getHighestRole(user));
+                bean.setUser(user);
+                playlistService.update(bean);
+                form.clearForm();
+                refreshPlaylistSideMenu();
+            }
+            dialog.close();
+        });
+        dialog.add(form);
+        return dialog;
+    }
+
+    public void refreshPlaylistSideMenu() {
+        playlistsMenu.setSubMenus(createPlaylistMenuItems());
     }
 
     private Footer createFooter() {

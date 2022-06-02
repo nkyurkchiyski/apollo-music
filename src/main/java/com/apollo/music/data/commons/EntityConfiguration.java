@@ -69,7 +69,7 @@ public class EntityConfiguration {
     public static final String ADMIN = "admin";
     public static final String USER = "user";
     public static final String SYSTEM = "system";
-
+    public static final String ANON = "anon";
 
     public static final String ONTO_HASH_FORMAT = "Song:%s;Genre:%s;Artist:%s;Album:%s";
 

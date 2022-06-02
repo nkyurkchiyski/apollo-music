@@ -12,6 +12,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.ValidationException;
+import org.apache.commons.lang3.ObjectUtils;
 
 public abstract class EntityForm<T extends EntityWithId> extends VerticalLayout {
     private static final long serialVersionUID = 1L;
@@ -24,7 +25,7 @@ public abstract class EntityForm<T extends EntityWithId> extends VerticalLayout 
     protected final BeanValidationBinder<T> binder;
 
     public EntityForm(final Class<T> beanType, final T bean) {
-        this.bean = bean == null ? createBean() : bean;
+        this.bean = ObjectUtils.firstNonNull(bean, createBean());
         setId(beanType.getSimpleName() + "-editor-layout".toLowerCase());
         binder = new BeanValidationBinder<>(beanType);
         initContent();

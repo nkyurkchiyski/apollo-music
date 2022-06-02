@@ -7,6 +7,7 @@ import com.apollo.music.data.entity.Song;
 import com.apollo.music.data.entity.SongPlaylist;
 import com.apollo.music.data.entity.User;
 import com.apollo.music.data.repository.PlaylistRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,10 +25,12 @@ import java.util.stream.Stream;
 @Service
 public class PlaylistService extends AbstractEntityService<Playlist> {
     private final PlaylistRepository playlistRepository;
+    private final SongService songService;
 
     @Autowired
-    public PlaylistService(final PlaylistRepository playlistRepository) {
+    public PlaylistService(final PlaylistRepository playlistRepository, final SongService songService) {
         this.playlistRepository = playlistRepository;
+        this.songService = songService;
     }
 
     @Override
@@ -46,6 +49,13 @@ public class PlaylistService extends AbstractEntityService<Playlist> {
             removeSongFromPlaylist(likedSongsPlaylist, sp);
             result.set(LikeActionResult.DISLIKED);
         });
+
+        if (result.get().equals(LikeActionResult.DISLIKED)) {
+            songService.dislike(song);
+        } else {
+            songService.like(song);
+        }
+
         return result.get();
     }
 
@@ -94,13 +104,15 @@ public class PlaylistService extends AbstractEntityService<Playlist> {
     }
 
 
-    public Stream<Playlist> fetchByUserAndName(final Pageable paging, final User user, final String name) {
-        return playlistRepository.findAllByUserId(paging, user.getId(), name).stream();
+    public Stream<Playlist> fetchByUserAndName(final Pageable paging, final User user, final Optional<String> name) {
+        final String filterToUse = name.isEmpty() ? null : StringUtils.firstNonBlank(name.get(), null);
+        return playlistRepository.findAllByUserId(paging, user.getId(), filterToUse).stream();
     }
 
 
-    public int countByUserAndName(final User user, final String name) {
-        return (int) playlistRepository.countByUserId(user.getId(), name);
+    public int countByUserAndName(final User user, final Optional<String> name) {
+        final String filterToUse = name.isEmpty() ? null : StringUtils.firstNonBlank(name.get(), null);
+        return (int) playlistRepository.countByUserId(user.getId(), filterToUse);
     }
 
     public List<Song> getAllLikedSongs(final User user) {
@@ -110,5 +122,9 @@ public class PlaylistService extends AbstractEntityService<Playlist> {
         }
 
         return playlistOpt.get().getSongs().stream().map(SongPlaylist::getSong).collect(Collectors.toList());
+    }
+
+    public List<Playlist> findByUser(final User user) {
+        return playlistRepository.findAllByUserId(user.getId());
     }
 }

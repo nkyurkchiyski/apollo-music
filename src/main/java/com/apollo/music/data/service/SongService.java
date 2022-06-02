@@ -44,4 +44,19 @@ public class SongService extends AbstractEntityService<Song> {
         probe.setName(filterToUse.getName());
         return Example.of(probe, ExampleUtils.CONTENT_MANAGER_EXAMPLE_MATCHER);
     }
+
+    public void play(final Song song) {
+        song.incrementPlayedCount();
+        update(song);
+    }
+
+    public void like(final Song song) {
+        song.incrementLikesCount();
+        update(song);
+    }
+
+    public void dislike(final Song song) {
+        song.decrementLikesCount();
+        update(song);
+    }
 }

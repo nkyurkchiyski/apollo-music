@@ -2,6 +2,7 @@ package com.apollo.music.views.managecontent;
 
 import com.apollo.music.data.entity.EntityWithId;
 import com.apollo.music.data.service.AbstractEntityService;
+import com.apollo.music.views.commons.ComponentFactory;
 import com.apollo.music.views.commons.components.EntityForm;
 import com.apollo.music.views.commons.components.EntityManagerGrid;
 import com.vaadin.flow.component.Component;
@@ -71,8 +72,7 @@ public abstract class AbstractContentManagerView<T extends EntityWithId, S exten
     }
 
     protected void openEntityForm(final T entity) {
-        final Dialog dialog = new Dialog();
-        dialog.setWidth("600px");
+        final Dialog dialog = ComponentFactory.createDialog();
         final EntityForm<T> form = createEntityForm(entity);
         form.addCancelClickListener(e -> dialog.close());
         form.addSaveClickListener(e ->

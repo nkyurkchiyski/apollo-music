@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PlaylistRepository extends JpaRepository<Playlist, String>, ExtendedPlaylistRepository {
@@ -23,4 +24,8 @@ public interface PlaylistRepository extends JpaRepository<Playlist, String>, Ext
     @Query("SELECT COUNT(DISTINCT p) FROM Playlist p LEFT JOIN p.songs s LEFT JOIN p.user u " +
             "WHERE u.id = :userId AND (:name IS NULL OR p.name = :name) AND p.createdBy != 'SYSTEM'")
     long countByUserId(final String userId, final String name);
+
+    @Query("SELECT DISTINCT p FROM Playlist p LEFT JOIN p.songs s LEFT JOIN p.user u " +
+            "WHERE u.id = :userId AND p.createdBy != 'SYSTEM' ORDER BY p.createdAt")
+    List<Playlist> findAllByUserId(final String userId);
 }

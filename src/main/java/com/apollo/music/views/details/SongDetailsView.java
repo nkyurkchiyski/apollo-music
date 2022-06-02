@@ -11,6 +11,7 @@ import com.apollo.music.data.service.PlaylistService;
 import com.apollo.music.data.service.SongService;
 import com.apollo.music.security.AuthenticatedUser;
 import com.apollo.music.views.MainLayout;
+import com.apollo.music.views.commons.ComponentFactory;
 import com.apollo.music.views.commons.ViewConstants;
 import com.apollo.music.views.commons.components.DefaultForm;
 import com.apollo.music.views.commons.components.card.SongCardListItem;
@@ -31,7 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.Date;
-import java.util.Set;
 import java.util.function.Consumer;
 
 @PageTitle(ViewConstants.Title.SONG_DETAILS)
@@ -84,7 +84,7 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
 
     @Override
     protected String getSubTitleText(final Song entity) {
-        return entity.getAlbum().getName();
+        return entity.getAlbum().getArtist().getName();
     }
 
     @Override
@@ -106,7 +106,6 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
     protected Component[] createTitleComponents(final Song entity) {
         if (authenticatedUser.get().isPresent()) {
             final User user = authenticatedUser.get().get();
-            final Set<Playlist> playlists = user.getPlaylists();
             final Playlist likedSongsPlaylist = user.getPlaylists()
                     .stream()
                     .filter(pl -> pl.getName().equals("Liked Songs") && pl.getCreatedBy().equals(Role.SYSTEM))
@@ -127,12 +126,12 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
             });
 
             addToPlaylistButton.addClickListener(event -> {
-                final Dialog dialog = new Dialog();
+                final Dialog dialog = ComponentFactory.createDialog();
                 final ComboBox<Playlist> playlistCombo = new ComboBox<>("Playlist");
                 playlistCombo.setItemLabelGenerator(Playlist::getName);
                 playlistCombo.setItems((query) -> playlistService.fetchByUserAndName(PageRequest.of(query.getPage(), query.getPageSize()), user,
-                        query.getFilter().orElse(null)),
-                        (query) -> playlistService.countByUserAndName(user, query.getFilter().orElse(null)));
+                        query.getFilter()),
+                        (query) -> playlistService.countByUserAndName(user, query.getFilter()));
                 final Component[] formComponents = new Component[]{playlistCombo};
                 final DefaultForm form = new DefaultForm(formComponents,
                         e -> {
@@ -162,5 +161,10 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
         } catch (final GeneralServiceException ex) {
             Notification.show(ex.getMessage());
         }
+    }
+
+    @Override
+    protected void onPlayButtonClicked(final Song entity) {
+        entityService.play(entity);
     }
 }

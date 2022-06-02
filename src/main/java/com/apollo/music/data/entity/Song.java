@@ -94,6 +94,14 @@ public class Song extends AbstractEntity {
         this.likesCount = likesCount;
     }
 
+    public void incrementLikesCount() {
+        this.likesCount++;
+    }
+
+    public void decrementLikesCount() {
+        this.likesCount--;
+    }
+
     public Integer getPlayedCount() {
         return playedCount;
     }
@@ -101,6 +109,11 @@ public class Song extends AbstractEntity {
     public void setPlayedCount(final Integer playedCount) {
         this.playedCount = playedCount;
     }
+
+    public void incrementPlayedCount() {
+        this.playedCount++;
+    }
+
 
     public Date getCreatedAt() {
         return createdAt;

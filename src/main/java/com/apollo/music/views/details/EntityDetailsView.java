@@ -3,7 +3,6 @@ package com.apollo.music.views.details;
 import com.apollo.music.data.entity.EntityWithId;
 import com.apollo.music.data.service.AbstractEntityService;
 import com.apollo.music.views.commons.ViewConstants;
-import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
@@ -76,7 +75,7 @@ public abstract class EntityDetailsView<T extends EntityWithId, S extends Abstra
             final Button playButton = new Button(new Icon(VaadinIcon.PLAY));
             playButton.addClassNames("play-button-big", "pos-abr");
             playButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-            playButton.addClickListener(this::createPlayButtonClickListener);
+            playButton.addClickListener(e -> onPlayButtonClicked(entity));
             div.add(playButton);
         }
         container.add(songInfo, div);
@@ -96,13 +95,15 @@ public abstract class EntityDetailsView<T extends EntityWithId, S extends Abstra
 
     protected abstract String getSubMainComponentTitle(final T entity);
 
-    protected void createPlayButtonClickListener(final ClickEvent<Button> buttonClickEvent) {
+    protected void onPlayButtonClicked(final T entity) {
         //do nothing
     }
 
     protected abstract Component createSubMainComponent(final T entity);
 
-    protected abstract String getImageUrl(final T entity);
+    protected String getImageUrl(final T entity) {
+        return null;
+    }
 
     protected abstract Component[] createMoreInfoComponents(final T entity);
 
