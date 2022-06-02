@@ -42,8 +42,14 @@ public abstract class EntityDetailsView<T extends EntityWithId, S extends Abstra
         final HorizontalLayout container = new HorizontalLayout();
         final VerticalLayout songInfo = new VerticalLayout();
 
+        final HorizontalLayout titleLayout = new HorizontalLayout();
         final H1 mainTitle = new H1(getMainTitleText(entity));
         mainTitle.addClassNames("mb-0", "mt-l");
+        titleLayout.add(mainTitle);
+
+        final Component[] titleComponents = createTitleComponents(entity);
+        titleLayout.add(titleComponents);
+        titleLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
 
         final H2 subTitle = new H2(getSubTitleText(entity));
         subTitle.addClassNames("mb-0", "mt-0", "text-l");
@@ -61,7 +67,7 @@ public abstract class EntityDetailsView<T extends EntityWithId, S extends Abstra
         div.add(coverImg);
         div.addClassName("pos-r");
 
-        songInfo.add(mainTitle, subTitle, moreInfoTitle);
+        songInfo.add(titleLayout, subTitle, moreInfoTitle);
         songInfo.add(moreInfoComponents);
         container.setWidthFull();
         container.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
@@ -81,6 +87,11 @@ public abstract class EntityDetailsView<T extends EntityWithId, S extends Abstra
         final Component subMainComponent = createSubMainComponent(entity);
         add(container, similarSongsTitle, subMainComponent);
 
+    }
+
+    protected Component[] createTitleComponents(final T entity) {
+        // do nothing
+        return new Component[0];
     }
 
     protected abstract String getSubMainComponentTitle(final T entity);

@@ -18,6 +18,7 @@ public class ViewConstants {
         public static final String MANAGE_ALBUM = "manage/album";
         public static final String MANAGE_SONG = "manage/song";
 
+        public static final String LIKES = "likes";
     }
 
     public static final class Title {
@@ -30,6 +31,7 @@ public class ViewConstants {
         public static final String SONG_DETAILS = "Song Details";
         public static final String ALBUM_DETAILS = "Album Details";
         public static final String ARTIST_DETAILS = "Artist Details";
+        public static final String LIKED_SONGS = "Liked Songs";
     }
 
     public static final class Validation {

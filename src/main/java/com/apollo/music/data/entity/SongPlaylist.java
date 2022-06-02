@@ -1,6 +1,8 @@
 package com.apollo.music.data.entity;
 
 import com.apollo.music.data.commons.EntityConfiguration;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -12,11 +14,13 @@ import javax.persistence.MapsId;
 import java.io.Serializable;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 public class SongPlaylist implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private SongPlaylistKey id;
+    private SongPlaylistKey id = new SongPlaylistKey();
 
     @ManyToOne
     @MapsId(EntityConfiguration.SONG_ID_FIELD_NAME)
@@ -31,6 +35,15 @@ public class SongPlaylist implements Serializable {
     @Column(name = EntityConfiguration.TRACK_NUMBER_COLUMN_NAME)
     private Integer trackNumber;
 
+    public SongPlaylist() {
+    }
+
+    public SongPlaylist(final Song song, final Playlist playlist, final Integer trackNumber) {
+        this.song = song;
+        this.playlist = playlist;
+        this.trackNumber = trackNumber;
+    }
+
     public Song getSong() {
         return song;
     }
@@ -41,5 +54,25 @@ public class SongPlaylist implements Serializable {
 
     public Integer getTrackNumber() {
         return trackNumber;
+    }
+
+    public void setTrackNumber(final Integer trackNumber) {
+        this.trackNumber = trackNumber;
+    }
+
+    public SongPlaylistKey getId() {
+        return id;
+    }
+
+    public void setId(final SongPlaylistKey id) {
+        this.id = id;
+    }
+
+    public void setSong(final Song song) {
+        this.song = song;
+    }
+
+    public void setPlaylist(final Playlist playlist) {
+        this.playlist = playlist;
     }
 }

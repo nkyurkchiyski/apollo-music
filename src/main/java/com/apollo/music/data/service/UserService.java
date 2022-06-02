@@ -2,12 +2,16 @@ package com.apollo.music.data.service;
 
 import com.apollo.music.data.commons.EntityConfiguration;
 import com.apollo.music.data.commons.ExampleUtils;
+import com.apollo.music.data.entity.Playlist;
+import com.apollo.music.data.entity.Role;
 import com.apollo.music.data.entity.User;
 import com.apollo.music.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 @Service
 public class UserService extends AbstractEntityService<User> {
@@ -37,5 +41,16 @@ public class UserService extends AbstractEntityService<User> {
         probe.setEmail(email);
         final Example<User> example = Example.of(probe, ExampleUtils.getExactIgnoreCaseExampleMatcher(EntityConfiguration.EMAIL_FIELD_NAME));
         return getRepository().exists(example);
+    }
+
+    @Override
+    public User update(final User entity) {
+        if (entity.getId() != null) {
+            final Playlist likedSongsPlaylist = new Playlist();
+            likedSongsPlaylist.setName("Liked Songs");
+            likedSongsPlaylist.setCreatedBy(Role.SYSTEM);
+            entity.setPlaylists(Collections.singleton(likedSongsPlaylist));
+        }
+        return super.update(entity);
     }
 }

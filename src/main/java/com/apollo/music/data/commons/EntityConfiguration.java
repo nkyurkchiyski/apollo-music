@@ -62,6 +62,7 @@ public class EntityConfiguration {
     public static final String USERNAME_FIELD_NAME = "username";
     public static final String EMAIL_FIELD_NAME = "email";
     public static final String ONTO_HASH_FIELD_NAME = "ontoHash";
+    public static final String USER_FIELD_NAME = "user";
 
     //Fields - END
 

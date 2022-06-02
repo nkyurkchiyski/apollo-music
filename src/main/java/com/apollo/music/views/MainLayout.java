@@ -11,7 +11,7 @@ import com.apollo.music.views.managecontent.genre.GenreContentManagerView;
 import com.apollo.music.views.managecontent.song.SongContentManagerView;
 import com.apollo.music.views.myaccount.MyAccountView;
 import com.apollo.music.views.search.SearchView;
-import com.apollo.music.views.song.SongLikedView;
+import com.apollo.music.views.song.SongLikesView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -43,7 +43,8 @@ public class MainLayout extends AppLayout {
     private final AuthenticatedUser authenticatedUser;
     private final AccessAnnotationChecker accessChecker;
 
-    public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker) {
+    public MainLayout(final AuthenticatedUser authenticatedUser,
+                      final AccessAnnotationChecker accessChecker) {
         this.authenticatedUser = authenticatedUser;
         this.accessChecker = accessChecker;
 
@@ -107,7 +108,7 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("Explore", "la la-compass", ExploreView.class), //
 
-                new MenuItemInfo("Liked Songs", "la la-th-list", SongLikedView.class), //
+                new MenuItemInfo("Liked Songs", "la la-th-list", SongLikesView.class), //
 
                 new MenuItemInfo("My Account", "la la-user", MyAccountView.class), //
 
@@ -133,9 +134,7 @@ public class MainLayout extends AppLayout {
 
             ContextMenu userMenu = new ContextMenu(avatar);
             userMenu.setOpenOnClick(true);
-            userMenu.addItem("Logout", e -> {
-                authenticatedUser.logout();
-            });
+            userMenu.addItem("Logout", e -> authenticatedUser.logout());
 
             Span name = new Span(user.getName());
             name.addClassNames("font-medium", "text-s", "text-secondary");

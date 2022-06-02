@@ -1,0 +1,114 @@
+package com.apollo.music.data.service;
+
+import com.apollo.music.data.commons.GeneralServiceException;
+import com.apollo.music.data.entity.Playlist;
+import com.apollo.music.data.entity.Role;
+import com.apollo.music.data.entity.Song;
+import com.apollo.music.data.entity.SongPlaylist;
+import com.apollo.music.data.entity.User;
+import com.apollo.music.data.repository.PlaylistRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+@Service
+public class PlaylistService extends AbstractEntityService<Playlist> {
+    private final PlaylistRepository playlistRepository;
+
+    @Autowired
+    public PlaylistService(final PlaylistRepository playlistRepository) {
+        this.playlistRepository = playlistRepository;
+    }
+
+    @Override
+    protected JpaRepository<Playlist, String> getRepository() {
+        return playlistRepository;
+    }
+
+    public LikeActionResult likeSong(final User user, final Song song) {
+        final AtomicReference<LikeActionResult> result = new AtomicReference<>(LikeActionResult.LIKED);
+        final Playlist probe = new Playlist();
+        probe.setName("Liked Songs");
+        probe.setCreatedBy(Role.SYSTEM);
+        probe.setUser(user);
+        final Playlist likedSongsPlaylist = playlistRepository.getLikedSongsPlaylist(user.getId()).orElse(probe);
+        addSongToPlaylist(likedSongsPlaylist, song, sp -> {
+            removeSongFromPlaylist(likedSongsPlaylist, sp);
+            result.set(LikeActionResult.DISLIKED);
+        });
+        return result.get();
+    }
+
+    public void addSongToPlaylist(final Playlist playlist, final Song song) {
+        addSongToPlaylist(playlist, song, pl -> {
+            throw new GeneralServiceException("Song is already part of the playlist!");
+        });
+    }
+
+    private void addSongToPlaylist(final Playlist playlist, final Song song, Consumer<SongPlaylist> alreadyExistsConsumer) {
+        final SongPlaylist alreadyExistingEntry = playlist.getSongs()
+                .stream()
+                .filter(sp -> sp.getSong().equals(song))
+                .findFirst()
+                .orElse(null);
+        if (alreadyExistingEntry != null) {
+            alreadyExistsConsumer.accept(alreadyExistingEntry);
+            return;
+        }
+        final SongPlaylist songPlaylist = new SongPlaylist(song, playlist, playlist.getSongs().size() + 1);
+        playlist.addSong(songPlaylist);
+        update(playlist);
+    }
+
+    public void removeSongFromPlaylist(final Playlist playlist, final Song song) {
+        final SongPlaylist songPlaylist = playlist.getSongs()
+                .stream()
+                .filter(sp -> sp.getSong().equals(song))
+                .findFirst().orElseThrow(() -> new GeneralServiceException("Song is not part of the playlist!"));
+
+        removeSongFromPlaylist(playlist, songPlaylist);
+    }
+
+    private void removeSongFromPlaylist(final Playlist playlist, final SongPlaylist songPlaylist) {
+        if (playlist.getSongs().contains(songPlaylist)) {
+            playlist.removeSong(songPlaylist);
+            playlistRepository.deleteSongPlaylist(songPlaylist);
+            recalculateTrackNumbers(playlist);
+            update(playlist);
+        }
+    }
+
+    private void recalculateTrackNumbers(final Playlist playlist) {
+        final AtomicInteger currentNum = new AtomicInteger(1);
+        playlist.getSongs().forEach(sp -> sp.setTrackNumber(currentNum.getAndIncrement()));
+    }
+
+
+    public Stream<Playlist> fetchByUserAndName(final Pageable paging, final User user, final String name) {
+        return playlistRepository.findAllByUserId(paging, user.getId(), name).stream();
+    }
+
+
+    public int countByUserAndName(final User user, final String name) {
+        return (int) playlistRepository.countByUserId(user.getId(), name);
+    }
+
+    public List<Song> getAllLikedSongs(final User user) {
+        final Optional<Playlist> playlistOpt = playlistRepository.getLikedSongsPlaylist(user.getId());
+        if (playlistOpt.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return playlistOpt.get().getSongs().stream().map(SongPlaylist::getSong).collect(Collectors.toList());
+    }
+}
