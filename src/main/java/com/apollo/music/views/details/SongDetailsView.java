@@ -1,6 +1,8 @@
 package com.apollo.music.views.details;
 
+import com.apollo.music.data.commons.EntityConfiguration;
 import com.apollo.music.data.commons.GeneralServiceException;
+import com.apollo.music.data.commons.GeneralUtils;
 import com.apollo.music.data.entity.Album;
 import com.apollo.music.data.entity.Playlist;
 import com.apollo.music.data.entity.Role;
@@ -32,13 +34,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @PageTitle(ViewConstants.Title.SONG_DETAILS)
 @Route(value = ViewConstants.Route.SONG, layout = MainLayout.class)
 @AnonymousAllowed
 public class SongDetailsView extends EntityDetailsView<Song, SongService> {
-
     private final AuthenticatedUser authenticatedUser;
     private final PlaylistService playlistService;
 
@@ -106,57 +108,64 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
     protected Component[] createTitleComponents(final Song entity) {
         if (authenticatedUser.get().isPresent()) {
             final User user = authenticatedUser.get().get();
-            final Playlist likedSongsPlaylist = user.getPlaylists()
-                    .stream()
-                    .filter(pl -> pl.getName().equals("Liked Songs") && pl.getCreatedBy().equals(Role.SYSTEM))
-                    .findFirst()
-                    .orElse(null);
+            final Playlist likedSongsPlaylist = getLikedSongsPlaylist(user);
 
             final VaadinIcon likeIcon = isSongAlreadyLiked(entity, likedSongsPlaylist) ? VaadinIcon.THUMBS_DOWN : VaadinIcon.THUMBS_UP;
             final Button addToPlaylistButton = new Button(new Icon(VaadinIcon.PLUS));
             final Button likeButton = new Button(new Icon(likeIcon));
             likeButton.addThemeVariants(ButtonVariant.LUMO_ICON);
 
-            likeButton.addClickListener(event -> {
-                final boolean isResultLiked = LikeActionResult.LIKED.equals(playlistService.likeSong(user, entity));
-                final String action = isResultLiked ? "added to" : "removed from";
-                final Icon newIcon = isResultLiked ? new Icon(VaadinIcon.THUMBS_DOWN) : new Icon(VaadinIcon.THUMBS_UP);
-                likeButton.setIcon(newIcon);
-                Notification.show("Song " + action + " Liked Songs");
-            });
+            likeButton.addClickListener(event -> performLikeOperation(entity, user, likeButton));
 
-            addToPlaylistButton.addClickListener(event -> {
-                final Dialog dialog = ComponentFactory.createDialog();
-                final ComboBox<Playlist> playlistCombo = new ComboBox<>("Playlist");
-                playlistCombo.setItemLabelGenerator(Playlist::getName);
-                playlistCombo.setItems((query) -> playlistService.fetchByUserAndName(PageRequest.of(query.getPage(), query.getPageSize()), user,
-                        query.getFilter()),
-                        (query) -> playlistService.countByUserAndName(user, query.getFilter()));
-                final Component[] formComponents = new Component[]{playlistCombo};
-                final DefaultForm form = new DefaultForm(formComponents,
-                        e -> {
-                            if (playlistCombo.getValue() != null) {
-                                performAddToPlaylistAction(playlistCombo.getValue(), entity, song -> dialog.close());
-                            }
-                        },
-                        e -> dialog.close());
-                dialog.add(form);
-                dialog.open();
-            });
+            addToPlaylistButton.addClickListener(event -> openPlaylistSelectionDialog(entity, user));
             return new Component[]{likeButton, addToPlaylistButton};
         }
         return super.createTitleComponents(entity);
+    }
+
+    private Playlist getLikedSongsPlaylist(final User user) {
+        return user.getPlaylists()
+                .stream()
+                .filter(pl -> pl.getName().equals(EntityConfiguration.LIKED_SONGS) && pl.getCreatedBy().equals(Role.SYSTEM))
+                .findFirst()
+                .orElse(null);
+    }
+
+    private void performLikeOperation(final Song entity, final User user, final Button likeButton) {
+        final LikeActionResult result = playlistService.likeSong(user, entity);
+        likeButton.setIcon(new Icon(result.getOppositeIcon()));
+        Notification.show(String.format(ViewConstants.Notification.SONG_LIKED_FORMAT, result.getActionText()));
+    }
+
+    private void openPlaylistSelectionDialog(final Song entity, final User user) {
+        final Dialog dialog = ComponentFactory.createDialog();
+        final ComboBox<Playlist> playlistCombo = new ComboBox<>("Playlist");
+        playlistCombo.setItemLabelGenerator(Playlist::getName);
+        playlistCombo.setItems((query) -> playlistService.fetchByUserAndName(PageRequest.of(query.getPage(), query.getPageSize()), user,
+                query.getFilter()),
+                (query) -> playlistService.countByUserAndName(user, query.getFilter()));
+        final Component[] formComponents = new Component[]{playlistCombo};
+        final DefaultForm form = new DefaultForm(formComponents,
+                e -> GeneralUtils.performConditionalConsumer(
+                        playlistCombo.getValue(),
+                        Objects::nonNull,
+                        playlist -> performAddToPlaylistOperation(playlist, entity, song -> dialog.close())
+                ),
+                e -> dialog.close());
+        dialog.add(form);
+        dialog.open();
     }
 
     private boolean isSongAlreadyLiked(final Song entity, final Playlist likedSongsPlaylist) {
         return likedSongsPlaylist != null && likedSongsPlaylist.getSongs().stream().anyMatch(sp -> sp.getSong().equals(entity));
     }
 
-    private void performAddToPlaylistAction(final Playlist playlist,
-                                            final Song song,
-                                            final Consumer<Song> afterActionConsumer) {
+    private void performAddToPlaylistOperation(final Playlist playlist,
+                                               final Song song,
+                                               final Consumer<Song> afterActionConsumer) {
         try {
             playlistService.addSongToPlaylist(playlist, song);
+            Notification.show(ViewConstants.Notification.ADDED_TO_PLAYLIST);
             afterActionConsumer.accept(song);
         } catch (final GeneralServiceException ex) {
             Notification.show(ex.getMessage());

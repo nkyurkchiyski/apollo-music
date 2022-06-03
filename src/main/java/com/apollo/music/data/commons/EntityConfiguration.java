@@ -73,4 +73,5 @@ public class EntityConfiguration {
 
     public static final String ONTO_HASH_FORMAT = "Song:%s;Genre:%s;Artist:%s;Album:%s";
 
+    public static final String LIKED_SONGS = "Liked Songs";
 }

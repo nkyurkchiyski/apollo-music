@@ -1,5 +1,6 @@
 package com.apollo.music.data.service;
 
+import com.apollo.music.data.commons.EntityConfiguration;
 import com.apollo.music.data.commons.GeneralServiceException;
 import com.apollo.music.data.entity.Playlist;
 import com.apollo.music.data.entity.Role;
@@ -41,7 +42,7 @@ public class PlaylistService extends AbstractEntityService<Playlist> {
     public LikeActionResult likeSong(final User user, final Song song) {
         final AtomicReference<LikeActionResult> result = new AtomicReference<>(LikeActionResult.LIKED);
         final Playlist probe = new Playlist();
-        probe.setName("Liked Songs");
+        probe.setName(EntityConfiguration.LIKED_SONGS);
         probe.setCreatedBy(Role.SYSTEM);
         probe.setUser(user);
         final Playlist likedSongsPlaylist = playlistRepository.getLikedSongsPlaylist(user.getId()).orElse(probe);

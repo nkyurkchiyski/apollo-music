@@ -54,7 +54,6 @@ public class MainLayout extends AppLayout {
     private MenuItemDrawer playlistsMenu;
 
     private final AuthenticatedUser authenticatedUser;
-    private MainLayoutBus mainLayoutBus;
     private final PlaylistService playlistService;
     private final AccessAnnotationChecker accessChecker;
 

@@ -76,7 +76,7 @@ public abstract class EntityManagerGrid<T extends EntityWithId, S extends Abstra
         final HorizontalLayout layout = new HorizontalLayout();
         if (viewActionEnabled) {
             final Button details = new Button(
-                    new Icon(VaadinIcon.VIEWPORT),
+                    new Icon(VaadinIcon.EYE),
                     e -> UI.getCurrent().navigate(String.format(ViewConstants.Route.ROUTE_FORMAT, entity.getClass().getSimpleName().toLowerCase(), entity.getId()))
             );
             layout.add(details);

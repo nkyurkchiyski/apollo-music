@@ -47,7 +47,7 @@ public class UserService extends AbstractEntityService<User> {
     public User update(final User entity) {
         if (entity.getId() != null) {
             final Playlist likedSongsPlaylist = new Playlist();
-            likedSongsPlaylist.setName("Liked Songs");
+            likedSongsPlaylist.setName(EntityConfiguration.LIKED_SONGS);
             likedSongsPlaylist.setCreatedBy(Role.SYSTEM);
             entity.setPlaylists(Collections.singleton(likedSongsPlaylist));
         }

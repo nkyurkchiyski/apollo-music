@@ -34,3 +34,44 @@
   align-items: center;
   display: flex;
 }
+
+
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: grey;
+      border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #777777;
+    }
+
+    html::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    /* Track */
+    html::-webkit-scrollbar-track {
+      border-radius: 10px;
+    }
+
+    /* Handle */
+    html::-webkit-scrollbar-thumb {
+      background: grey;
+      border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    html::-webkit-scrollbar-thumb:hover {
+      background: #777777;
+    }

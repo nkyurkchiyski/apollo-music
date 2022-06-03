@@ -60,7 +60,7 @@ public class AlbumDetailsView extends EntityDetailsView<Album, AlbumService> {
 
     private Button createViewButton(final Song song) {
         return new Button(
-                new Icon(VaadinIcon.VIEWPORT),
+                new Icon(VaadinIcon.EYE),
                 e -> UI.getCurrent().navigate(String.format(ViewConstants.Route.ROUTE_FORMAT, song.getClass().getSimpleName().toLowerCase(), song.getId()))
         );
     }

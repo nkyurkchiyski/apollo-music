@@ -11,7 +11,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -38,19 +37,11 @@ public abstract class AbstractContentManagerView<T extends EntityWithId, S exten
         filterForm.setSizeFull();
         final Component[] formComponents = createFilterFormComponents();
         filterForm.setResponsiveSteps(
-                new FormLayout.ResponsiveStep("0", 1)
+                new FormLayout.ResponsiveStep("0", 3)
         );
 
-        filterForm.setWidth("70%");
+        filterForm.setWidth("100%");
         filterForm.add(formComponents);
-    }
-
-    private void initContent() {
-        setId(getEntityClass().getSimpleName() + "-view".toLowerCase());
-        setSizeFull();
-
-        final VerticalLayout layout = new VerticalLayout(new H4("Filter"), filterForm);
-
         searchButton.addThemeVariants(ButtonVariant.LUMO_ICON);
         searchButton.addClickListener(e -> grid.filterGrid(createFilter()));
 
@@ -61,9 +52,15 @@ public abstract class AbstractContentManagerView<T extends EntityWithId, S exten
 
         addEntityButton.addClickListener(x -> openEntityForm(null));
         final HorizontalLayout buttonsLayout = new HorizontalLayout(searchButton, resetButton, addEntityButton);
+        filterForm.add(buttonsLayout);
+    }
 
+    private void initContent() {
+        setId(getEntityClass().getSimpleName() + "-view".toLowerCase());
+        setSizeFull();
+
+        final VerticalLayout layout = new VerticalLayout(filterForm);
         grid.addItemDoubleClickListener(e -> openEntityForm(e.getItem()));
-        layout.add(buttonsLayout);
         add(layout, grid);
     }
 
