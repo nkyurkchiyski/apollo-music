@@ -7,6 +7,7 @@ import com.apollo.music.data.service.PlaylistService;
 import com.apollo.music.security.AuthenticatedUser;
 import com.apollo.music.security.MainLayoutBus;
 import com.apollo.music.views.commons.ComponentFactory;
+import com.apollo.music.views.commons.ViewConstants;
 import com.apollo.music.views.commons.components.MenuItemAction;
 import com.apollo.music.views.commons.components.MenuItemDrawer;
 import com.apollo.music.views.commons.components.MenuItemInfo;
@@ -36,6 +37,7 @@ import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.Nav;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,6 +185,7 @@ public class MainLayout extends AppLayout {
                 playlistService.update(bean);
                 form.clearForm();
                 refreshPlaylistSideMenu();
+                Notification.show(ViewConstants.Notification.PLAYLIST_SAVED);
             }
             dialog.close();
         });

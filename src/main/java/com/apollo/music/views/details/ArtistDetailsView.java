@@ -6,6 +6,7 @@ import com.apollo.music.views.MainLayout;
 import com.apollo.music.views.commons.ViewConstants;
 import com.apollo.music.views.commons.components.card.AlbumCardListItem;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.OrderedList;
 import com.vaadin.flow.router.PageTitle;
@@ -52,8 +53,8 @@ public class ArtistDetailsView extends EntityDetailsView<Artist, ArtistService> 
     }
 
     @Override
-    protected String getSubTitleText(final Artist entity) {
-        return "";
+    protected Component createSubTitle(final Artist entity) {
+        return new Div();
     }
 
     @Override

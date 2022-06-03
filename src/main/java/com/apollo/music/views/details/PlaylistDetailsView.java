@@ -101,8 +101,8 @@ public class PlaylistDetailsView extends EntityDetailsView<Playlist, PlaylistSer
     }
 
     @Override
-    protected String getSubTitleText(final Playlist entity) {
-        return entity.getUser().getName();
+    protected Component createSubTitle(final Playlist entity) {
+        return ComponentFactory.createH2Title(entity.getUser().getName());
     }
 
     @Override

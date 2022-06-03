@@ -4,6 +4,7 @@ import com.apollo.music.data.commons.EntityConfiguration;
 import com.apollo.music.data.commons.GeneralServiceException;
 import com.apollo.music.data.commons.GeneralUtils;
 import com.apollo.music.data.entity.Album;
+import com.apollo.music.data.entity.Artist;
 import com.apollo.music.data.entity.Playlist;
 import com.apollo.music.data.entity.Role;
 import com.apollo.music.data.entity.Song;
@@ -22,8 +23,10 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.OrderedList;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -71,7 +74,8 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
     @Override
     protected Component[] createMoreInfoComponents(final Song entity) {
         final Album album = entity.getAlbum();
-        final Label albumLabel = new Label("Album: " + album.getName());
+        final Anchor anchor = new Anchor(String.format(ViewConstants.Route.ROUTE_FORMAT, ViewConstants.Route.ALBUM, album.getId()), album.getName());
+        final Span albumLabel = new Span(new Label("Album: "), anchor);
         albumLabel.addClassNames("mb-0", "mt-0", "text-m");
 
         final Label genreLabel = new Label("Genre: " + entity.getGenre().getName());
@@ -85,8 +89,9 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
     }
 
     @Override
-    protected String getSubTitleText(final Song entity) {
-        return entity.getAlbum().getArtist().getName();
+    protected Component createSubTitle(final Song entity) {
+        final Artist artist = entity.getAlbum().getArtist();
+        return new Anchor(String.format(ViewConstants.Route.ROUTE_FORMAT, ViewConstants.Route.ARTIST, artist.getId()), artist.getName());
     }
 
     @Override

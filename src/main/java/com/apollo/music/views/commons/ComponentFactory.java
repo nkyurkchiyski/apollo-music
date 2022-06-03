@@ -2,6 +2,7 @@ package com.apollo.music.views.commons;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -38,5 +39,11 @@ public class ComponentFactory {
                     }
                 }
         );
+    }
+
+    public static H2 createH2Title(final String text) {
+        final H2 subTitle = new H2(text);
+        subTitle.addClassNames("mb-0", "mt-0", "text-l");
+        return subTitle;
     }
 }

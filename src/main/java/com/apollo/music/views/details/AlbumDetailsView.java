@@ -1,6 +1,7 @@
 package com.apollo.music.views.details;
 
 import com.apollo.music.data.entity.Album;
+import com.apollo.music.data.entity.Artist;
 import com.apollo.music.data.entity.Song;
 import com.apollo.music.data.service.AlbumService;
 import com.apollo.music.views.MainLayout;
@@ -9,6 +10,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -75,8 +77,9 @@ public class AlbumDetailsView extends EntityDetailsView<Album, AlbumService> {
     }
 
     @Override
-    protected String getSubTitleText(final Album entity) {
-        return entity.getArtist().getName();
+    protected Component createSubTitle(final Album entity) {
+        final Artist artist = entity.getArtist();
+        return new Anchor(String.format(ViewConstants.Route.ROUTE_FORMAT, ViewConstants.Route.ARTIST, artist.getId()), artist.getName());
     }
 
     @Override

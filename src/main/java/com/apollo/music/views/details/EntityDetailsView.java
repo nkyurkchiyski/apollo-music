@@ -50,8 +50,8 @@ public abstract class EntityDetailsView<T extends EntityWithId, S extends Abstra
         titleLayout.add(titleComponents);
         titleLayout.setAlignItems(FlexComponent.Alignment.BASELINE);
 
-        final H2 subTitle = new H2(getSubTitleText(entity));
-        subTitle.addClassNames("mb-0", "mt-0", "text-l");
+        final Component subTitle = createSubTitle(entity);
+
 
         final H2 moreInfoTitle = new H2("More Information");
         moreInfoTitle.addClassNames("mb-0", "mt-0", "text-m");
@@ -107,7 +107,7 @@ public abstract class EntityDetailsView<T extends EntityWithId, S extends Abstra
 
     protected abstract Component[] createMoreInfoComponents(final T entity);
 
-    protected abstract String getSubTitleText(final T entity);
+    protected abstract Component createSubTitle(final T entity);
 
     protected abstract String getMainTitleText(final T entity);
 
