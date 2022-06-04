@@ -46,6 +46,7 @@ public class User extends AbstractEntity {
     @Column(name = EntityConfiguration.NAME_COLUMN_NAME)
     private String name;
 
+    @NotEmpty
     @JsonIgnore
     @Column(name = EntityConfiguration.PASSWORD_COLUMN_NAME, nullable = false)
     private String password;

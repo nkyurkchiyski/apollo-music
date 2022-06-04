@@ -60,9 +60,9 @@ public abstract class EntityForm<T extends EntityWithId> extends VerticalLayout 
         buttonLayout.setWidthFull();
         buttonLayout.setSpacing(true);
         buttonLayout.add(save, cancel);
-        buttonLayout.getStyle().set("marginRight", "10px");
+//        buttonLayout.getStyle().set("marginRight", "10px");
+        buttonLayout.setJustifyContentMode(JustifyContentMode.END);
         add(buttonLayout);
-        setHorizontalComponentAlignment(Alignment.END, buttonLayout);
         binder.readBean(bean);
     }
 

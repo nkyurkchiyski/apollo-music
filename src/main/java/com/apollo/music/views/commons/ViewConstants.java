@@ -20,6 +20,8 @@ public class ViewConstants {
         public static final String MANAGE_SONG = "manage/song";
 
         public static final String LIKES = "likes";
+        public static final String LOGIN = "login";
+        public static final String REGISTER = "register";
     }
 
     public static final class Title {
@@ -34,11 +36,14 @@ public class ViewConstants {
         public static final String ARTIST_DETAILS = "Artist Details";
         public static final String LIKED_SONGS = "Liked Songs";
         public static final String PLAYLIST_DETAILS = "Playlist Details";
+        public static final String LOGIN = "Login";
+        public static final String REGISTER = "Register";
     }
 
     public static final class Validation {
         public static final String EMPTY_FIELD_FORMAT = "Field cannot be empty, please select %s.";
         public static final String USER_ALREADY_EXISTS = "User with the specified %s already exist!";
+        public static final String PASSWORDS_NOT_MATCH = "The confirm password does not match!";
     }
 
     public static final class Notification {
@@ -48,6 +53,7 @@ public class ViewConstants {
         public static final String PLAYLIST_DELETED = "Playlist was successfully deleted!";
         public static final String PLAYLIST_SAVED = "Playlist was saved!";
         public static final String SONG_LIKED_FORMAT = "Song %s Liked Songs";
+        public static final String REGISTER_SUCCESS = "User successfully registered!";
     }
 
     public static final String DEFAULT_COVER = "http://developer-assets.ws.sonos.com/doc-assets/portalDocs-sonosApp-defaultArtAlone.png";

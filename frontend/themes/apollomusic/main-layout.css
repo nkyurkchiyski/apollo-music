@@ -75,3 +75,8 @@
     html::-webkit-scrollbar-thumb:hover {
       background: #777777;
     }
+
+    a:hover {
+      text-decoration: none;
+      color: #3cae9a;
+    }

@@ -58,4 +58,13 @@ public class DefaultForm extends VerticalLayout {
         getChildren().filter(c -> c instanceof HasValue).map(HasValue.class::cast).forEach(f -> f.setValue(""));
     }
 
+    public void setSaveButtonText(final String text) {
+        save.setText(text);
+    }
+
+
+    public void setCancelButtonText(final String text) {
+        cancel.setText(text);
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.apollo.music.security;
 
-import com.apollo.music.views.login.LoginView;
+import com.apollo.music.views.auth.LoginView;
 import com.vaadin.flow.spring.security.VaadinWebSecurityConfigurerAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -9,6 +9,7 @@ import com.apollo.music.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -16,10 +17,13 @@ import java.util.Collections;
 @Service
 public class UserService extends AbstractEntityService<User> {
 
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository repo;
 
     @Autowired
-    public UserService(final UserRepository repo) {
+    public UserService(final PasswordEncoder passwordEncoder,
+                       final UserRepository repo) {
+        this.passwordEncoder = passwordEncoder;
         this.repo = repo;
     }
 
@@ -45,11 +49,14 @@ public class UserService extends AbstractEntityService<User> {
 
     @Override
     public User update(final User entity) {
-        if (entity.getId() != null) {
+        if (entity.getId() == null) {
+            final String encodedPass = passwordEncoder.encode(entity.getPassword());
+            entity.setPassword(encodedPass);
             final Playlist likedSongsPlaylist = new Playlist();
             likedSongsPlaylist.setName(EntityConfiguration.LIKED_SONGS);
             likedSongsPlaylist.setCreatedBy(Role.SYSTEM);
             entity.setPlaylists(Collections.singleton(likedSongsPlaylist));
+            entity.setRoles(Collections.singleton(Role.USER));
         }
         return super.update(entity);
     }

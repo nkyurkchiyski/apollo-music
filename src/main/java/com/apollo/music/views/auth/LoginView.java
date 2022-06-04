@@ -1,12 +1,13 @@
-package com.apollo.music.views.login;
+package com.apollo.music.views.auth;
 
+import com.apollo.music.views.commons.ViewConstants;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@PageTitle("Login")
-@Route(value = "login")
+@PageTitle(ViewConstants.Title.LOGIN)
+@Route(value = ViewConstants.Route.LOGIN)
 public class LoginView extends LoginOverlay {
     public LoginView() {
         setAction("login");
