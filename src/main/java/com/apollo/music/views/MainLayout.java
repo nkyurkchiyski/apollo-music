@@ -38,6 +38,8 @@ import com.vaadin.flow.component.html.Nav;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.html.UnorderedList;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -217,8 +219,13 @@ public class MainLayout extends AppLayout {
 
             layout.add(avatar, name);
         } else {
-            Anchor loginLink = new Anchor("login", "Sign in");
-            layout.add(loginLink);
+            final HorizontalLayout footerLayout = new HorizontalLayout();
+            final Anchor loginLink = new Anchor("login", "Sign in");
+            final Anchor registerLink = new Anchor("register", "Sign up");
+            footerLayout.add(loginLink, registerLink);
+            footerLayout.setWidthFull();
+            footerLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+            layout.add(footerLayout);
         }
 
         return layout;

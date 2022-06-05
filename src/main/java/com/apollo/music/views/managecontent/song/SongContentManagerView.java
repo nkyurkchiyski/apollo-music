@@ -3,6 +3,7 @@ package com.apollo.music.views.managecontent.song;
 import com.apollo.music.data.commons.EntityConfiguration;
 import com.apollo.music.data.entity.Song;
 import com.apollo.music.data.filter.ContentManagerFilter;
+import com.apollo.music.data.service.AlbumService;
 import com.apollo.music.data.service.ArtistService;
 import com.apollo.music.data.service.GenreService;
 import com.apollo.music.data.service.SongService;
@@ -31,14 +32,17 @@ public class SongContentManagerView extends AbstractContentManagerView<Song, Son
     private TextField idField;
     private TextField nameField;
     private final ArtistService artistService;
+    private final AlbumService albumService;
     private final GenreService genreService;
 
     @Autowired
     public SongContentManagerView(final SongService entityService,
                                   final ArtistService artistService,
+                                  final AlbumService albumService,
                                   final GenreService genreService) {
         super(entityService);
         this.artistService = artistService;
+        this.albumService = albumService;
         this.genreService = genreService;
     }
 
@@ -49,7 +53,7 @@ public class SongContentManagerView extends AbstractContentManagerView<Song, Son
 
     @Override
     protected EntityForm<Song> createEntityForm(final Song entity) {
-        return new SongForm(entity, artistService, genreService);
+        return new SongForm(entity, artistService, albumService, genreService);
     }
 
     @Override

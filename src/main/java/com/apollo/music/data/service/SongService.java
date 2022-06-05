@@ -72,4 +72,12 @@ public class SongService extends AbstractEntityService<Song> {
     public Page<Song> getAllBySearchFilter(final PageRequest paging, final SearchFilter filter) {
         return repo.findAllBySearchFilter(paging, filter.getSong(), filter.getArtist(), filter.getAlbum(), filter.getGenre());
     }
+
+    public Page<Song> getAllByReleaseDate(final Pageable pageable) {
+        return repo.findAllByReleaseDate(pageable);
+    }
+
+    public Page<Song> getAllByLikes(final Pageable pageable) {
+        return repo.findAllByLikes(pageable);
+    }
 }

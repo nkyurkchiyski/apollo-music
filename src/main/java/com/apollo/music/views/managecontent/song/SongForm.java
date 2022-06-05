@@ -4,6 +4,7 @@ import com.apollo.music.data.entity.Album;
 import com.apollo.music.data.entity.Artist;
 import com.apollo.music.data.entity.Genre;
 import com.apollo.music.data.entity.Song;
+import com.apollo.music.data.service.AlbumService;
 import com.apollo.music.data.service.ArtistService;
 import com.apollo.music.data.service.GenreService;
 import com.apollo.music.views.commons.ViewConstants;
@@ -30,11 +31,16 @@ public class SongForm extends EntityForm<Song> {
     private DatePicker releasedOn;
 
     private final ArtistService artistService;
+    private final AlbumService albumService;
     private final GenreService genreService;
 
-    public SongForm(final Song bean, final ArtistService artistService, final GenreService genreService) {
+    public SongForm(final Song bean,
+                    final ArtistService artistService,
+                    final AlbumService albumService,
+                    final GenreService genreService) {
         super(Song.class, bean);
         this.artistService = artistService;
+        this.albumService = albumService;
         this.genreService = genreService;
     }
 
@@ -56,21 +62,31 @@ public class SongForm extends EntityForm<Song> {
         binder.forField(genreCombo).withValidator(Objects::nonNull, String.format(ViewConstants.Validation.EMPTY_FIELD_FORMAT, "genre"))
                 .bind(Song::getGenre, Song::setGenre);
 
-        albumCombo = new ComboBox<>("Album");
-        albumCombo.setItemLabelGenerator(Album::getName);
-        binder.forField(albumCombo)
-                .withValidator(Objects::nonNull, String.format(ViewConstants.Validation.EMPTY_FIELD_FORMAT, "album"))
-                .bind(Song::getAlbum, Song::setAlbum);
-
-
         artistCombo = new ComboBox<>("Artist");
         artistCombo.setItems(
                 (query) -> artistService.fetchByName(PageRequest.of(query.getPage(), query.getPageSize()),
                         query.getFilter()),
                 (query) -> artistService.countByName(query.getFilter())
         );
+
+        //TODO: issue with VCL
         artistCombo.addValueChangeListener(event -> albumCombo.setItems(event.getValue().getAlbums()));
         artistCombo.setItemLabelGenerator(Artist::getName);
+
+        albumCombo = new ComboBox<>("Album");
+        albumCombo.setItems(
+                (query) -> albumService.fetchByName(PageRequest.of(query.getPage(), query.getPageSize()), query.getFilter()),
+                (query) -> albumService.countByName(query.getFilter()));
+        albumCombo.setItemLabelGenerator(Album::getName);
+        //TODO: issue with VCL
+//        albumCombo.addValueChangeListener(event -> GeneralUtils.performConditionalConsumer(
+//                event,
+//                e -> e != null && e.getValue() != null,
+//                e -> artistCombo.setValue(e.getValue().getArtist()))
+//        );
+        binder.forField(albumCombo)
+                .withValidator(Objects::nonNull, String.format(ViewConstants.Validation.EMPTY_FIELD_FORMAT, "album"))
+                .bind(Song::getAlbum, Song::setAlbum);
 
         trackNumber = new IntegerField("Track Number");
         return new Component[]{name, sourceUrl, genreCombo, artistCombo, albumCombo, trackNumber, releasedOn};

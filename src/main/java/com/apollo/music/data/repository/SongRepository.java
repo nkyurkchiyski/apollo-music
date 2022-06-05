@@ -21,4 +21,11 @@ public interface SongRepository extends JpaRepository<Song, String> {
                                      final String artistName,
                                      final String albumName,
                                      final String genreName);
+
+
+    @Query("SELECT DISTINCT s FROM Song s ORDER BY s.releasedOn DESC")
+    Page<Song> findAllByReleaseDate(final Pageable pageable);
+
+    @Query("SELECT DISTINCT s FROM Song s ORDER BY s.likesCount DESC")
+    Page<Song> findAllByLikes(final Pageable pageable);
 }

@@ -12,6 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 @Service
 public class AlbumService extends AbstractEntityService<Album> {
 
@@ -30,6 +33,16 @@ public class AlbumService extends AbstractEntityService<Album> {
     public long count(final ContentManagerFilter filter) {
         final Example<Album> example = createExample(filter);
         return repo.count(example);
+    }
+
+    public Stream<Album> fetchByName(final Pageable pageable, final Optional<String> filter) {
+        final ContentManagerFilter filterToUse = new ContentManagerFilter(null, filter.orElse(null));
+        return fetch(pageable, filterToUse).stream();
+    }
+
+    public int countByName(final Optional<String> filter) {
+        final ContentManagerFilter filterToUse = new ContentManagerFilter(null, filter.orElse(null));
+        return (int) count(filterToUse);
     }
 
     @Override
