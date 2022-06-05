@@ -56,8 +56,6 @@ public class SongLikesView extends Main implements HasComponents, HasStyle {
             }
         }
         imageContainer.addClassNames("gap-m", "grid", "list-none", "m-0", "p-0");
-
         add(imageContainer);
-
     }
 }

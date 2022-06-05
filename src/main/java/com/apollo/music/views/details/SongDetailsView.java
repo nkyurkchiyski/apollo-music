@@ -12,6 +12,7 @@ import com.apollo.music.data.entity.User;
 import com.apollo.music.data.service.LikeActionResult;
 import com.apollo.music.data.service.PlaylistService;
 import com.apollo.music.data.service.SongService;
+import com.apollo.music.jade.AgentManager;
 import com.apollo.music.security.AuthenticatedUser;
 import com.apollo.music.views.MainLayout;
 import com.apollo.music.views.commons.ComponentFactory;
@@ -37,6 +38,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -58,7 +60,7 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
 
     @Override
     protected String getSubMainComponentTitle(final Song entity) {
-        return "Similar Songs to " + entity.getName();
+        return authenticatedUser.get().isPresent() ? "Recommended for you" : "Check out also";
     }
 
     @Override
@@ -66,9 +68,18 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
         final OrderedList imageContainer = new OrderedList();
         imageContainer.addClassNames("gap-m", "grid", "list-none", "m-0", "p-0");
 
-        //TODO: use suggestion service when ready
-        entityService.list(PageRequest.of(0, 10)).stream().forEach(song -> imageContainer.add(new SongCardListItem(song)));
+        if (authenticatedUser.get().isPresent()) {
+            AgentManager.retrieveSongRecommendation(authenticatedUser.get().get().getEmail(),
+                    entity.getOntoHash(),
+                    songs -> showRecommendations(songs, imageContainer));
+        } else {
+            entityService.list(PageRequest.of(0, 10)).stream().forEach(song -> imageContainer.add(new SongCardListItem(song)));
+        }
         return imageContainer;
+    }
+
+    private void showRecommendations(final List<String> songsOntoHash, final OrderedList imageContainer) {
+        entityService.getAllByOntoHash(PageRequest.of(0, 10), songsOntoHash).forEach(song -> imageContainer.add(new SongCardListItem(song)));
     }
 
     @Override

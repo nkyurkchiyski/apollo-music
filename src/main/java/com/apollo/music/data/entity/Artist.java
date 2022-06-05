@@ -31,7 +31,7 @@ public class Artist extends AbstractEntity {
     @Column(name = EntityConfiguration.IMAGE_URL_COLUMN_NAME)
     private String imageUrl;
 
-    @OneToMany(mappedBy = EntityConfiguration.ARTIST_FIELD_NAME, fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = EntityConfiguration.ARTIST_FIELD_NAME, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Set<Album> albums = new LinkedHashSet<>();
 
     public String getName() {

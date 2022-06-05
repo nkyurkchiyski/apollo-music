@@ -70,6 +70,17 @@ public class Song extends AbstractEntity {
         ontoHash = Hashing.sha256().hashString(valueForHash, StandardCharsets.UTF_8).toString();
     }
 
+
+    @Override
+    protected void beforeUpdate() {
+        final String valueForHash = String.format(EntityConfiguration.ONTO_HASH_FORMAT,
+                getName(),
+                getGenre().getName(),
+                getAlbum().getArtist().getName(),
+                getAlbum().getName());
+        ontoHash = Hashing.sha256().hashString(valueForHash, StandardCharsets.UTF_8).toString();
+    }
+
     public String getName() {
         return name;
     }

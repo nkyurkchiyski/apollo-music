@@ -2,9 +2,8 @@ package com.apollo.music.security;
 
 import com.apollo.music.data.entity.User;
 import com.apollo.music.data.repository.UserRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import com.apollo.music.data.service.SongService;
+import com.apollo.music.jade.AgentManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,18 +12,28 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+    private final UserRepository userRepository;
+    private final SongService songService;
 
     @Autowired
-    private UserRepository userRepository;
+    public UserDetailsServiceImpl(final UserRepository userRepository,
+                                  final SongService songService) {
+        this.userRepository = userRepository;
+        this.songService = songService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        final User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("No user present with username: " + username);
         } else {
+            AgentManager.createNewAgent(user.getEmail());
             return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                     getAuthorities(user));
         }

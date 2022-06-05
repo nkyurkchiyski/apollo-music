@@ -4,13 +4,18 @@ import com.apollo.music.data.commons.ExampleUtils;
 import com.apollo.music.data.entity.Song;
 import com.apollo.music.data.filter.ContentManagerFilter;
 import com.apollo.music.data.repository.SongRepository;
+import com.apollo.music.views.search.SearchFilter;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class SongService extends AbstractEntityService<Song> {
@@ -25,6 +30,10 @@ public class SongService extends AbstractEntityService<Song> {
     @Override
     protected JpaRepository<Song, String> getRepository() {
         return repo;
+    }
+
+    public Stream<Song> getAllByOntoHash(final Pageable pageable, final List<String> songsOntoHash) {
+        return repo.findAllByOntoHash(pageable, songsOntoHash).stream();
     }
 
     public Page<Song> fetch(final Pageable pageable, final ContentManagerFilter filter) {
@@ -58,5 +67,9 @@ public class SongService extends AbstractEntityService<Song> {
     public void dislike(final Song song) {
         song.decrementLikesCount();
         update(song);
+    }
+
+    public Page<Song> getAllBySearchFilter(final PageRequest paging, final SearchFilter filter) {
+        return repo.findAllBySearchFilter(paging, filter.getSong(), filter.getArtist(), filter.getAlbum(), filter.getGenre());
     }
 }

@@ -43,12 +43,15 @@ public abstract class EntityForm<T extends EntityWithId> extends VerticalLayout 
         save.addClickListener(e ->
         {
             try {
-                if (this.bean == null) {
-                    this.bean = createBean();
+                if (binder.isValid()) {
+                    if (this.bean == null) {
+                        this.bean = createBean();
+                    }
+                    binder.writeBean(this.bean);
+                    isSaved = true;
+                } else {
+                    Notification.show("There are errors present in the form!");
                 }
-
-                binder.writeBean(this.bean);
-                isSaved = true;
             } catch (final ValidationException validationException) {
                 Notification.show("An has occurred while performing the save operation. No changes were made!");
             }
@@ -60,7 +63,6 @@ public abstract class EntityForm<T extends EntityWithId> extends VerticalLayout 
         buttonLayout.setWidthFull();
         buttonLayout.setSpacing(true);
         buttonLayout.add(save, cancel);
-//        buttonLayout.getStyle().set("marginRight", "10px");
         buttonLayout.setJustifyContentMode(JustifyContentMode.END);
         add(buttonLayout);
         binder.readBean(bean);

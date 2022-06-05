@@ -13,6 +13,7 @@ public class ViewConstants {
         public static final String GENRE = "genre";
         public static final String ACCOUNT = "account";
         public static final String EXPLORE = "explore";
+        public static final String SEARCH = "search";
 
         public static final String MANAGE_GENRE = "manage/genre";
         public static final String MANAGE_ARTIST = "manage/artist";
@@ -38,6 +39,9 @@ public class ViewConstants {
         public static final String PLAYLIST_DETAILS = "Playlist Details";
         public static final String LOGIN = "Login";
         public static final String REGISTER = "Register";
+        public static final String EXPLORE = "Explore";
+        public static final String SEARCH = "Search";
+
     }
 
     public static final class Validation {

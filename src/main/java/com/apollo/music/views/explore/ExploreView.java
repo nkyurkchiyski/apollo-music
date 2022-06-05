@@ -10,10 +10,10 @@ import com.vaadin.flow.component.html.OrderedList;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+
 
 @PageTitle("Explore")
 @Route(value = "explore", layout = MainLayout.class)
@@ -55,15 +55,10 @@ public class ExploreView extends Main implements HasComponents, HasStyle {
         description.addClassNames("mb-xl", "mt-0", "text-secondary");
         headerContainer.add(header, description);
 
-        Select<String> sortBy = new Select<>();
-        sortBy.setLabel("Sort by");
-        sortBy.setItems("Popularity", "Newest first", "Oldest first");
-        sortBy.setValue("Popularity");
-
         imageContainer = new OrderedList();
         imageContainer.addClassNames("gap-m", "grid", "list-none", "m-0", "p-0");
 
-        container.add(header, sortBy);
+        container.add(header);
         add(container, imageContainer);
 
     }

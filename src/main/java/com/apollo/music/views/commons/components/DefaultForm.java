@@ -18,9 +18,16 @@ public class DefaultForm extends VerticalLayout {
     protected final Button cancel = new Button("Cancel");
     protected final Button save = new Button("Save");
 
+    private final FormLayout formLayout = new FormLayout();
     private final Component[] formComponents;
     private final ComponentEventListener<ClickEvent<Button>> onSaveListener;
     private final Consumer<ClickEvent<Button>> onCancelListener;
+
+    public DefaultForm(final Component[] formComponents,
+                       final ComponentEventListener<ClickEvent<Button>> onSaveListener) {
+        this(formComponents, onSaveListener, e -> {
+        });
+    }
 
     public DefaultForm(final Component[] formComponents,
                        final ComponentEventListener<ClickEvent<Button>> onSaveListener,
@@ -32,7 +39,6 @@ public class DefaultForm extends VerticalLayout {
     }
 
     private void initContent() {
-        final FormLayout formLayout = new FormLayout();
         formLayout.add(formComponents);
 
         add(formLayout);
@@ -49,9 +55,8 @@ public class DefaultForm extends VerticalLayout {
         buttonLayout.setWidthFull();
         buttonLayout.setSpacing(true);
         buttonLayout.add(save, cancel);
-        buttonLayout.getStyle().set("marginRight", "10px");
+        buttonLayout.setJustifyContentMode(JustifyContentMode.END);
         add(buttonLayout);
-        setHorizontalComponentAlignment(Alignment.END, buttonLayout);
     }
 
     public void clearForm() {
@@ -67,4 +72,7 @@ public class DefaultForm extends VerticalLayout {
         cancel.setText(text);
     }
 
+    public FormLayout getFormLayout() {
+        return formLayout;
+    }
 }
