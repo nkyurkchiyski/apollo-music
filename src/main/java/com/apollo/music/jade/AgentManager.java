@@ -1,9 +1,9 @@
 package com.apollo.music.jade;
 
-import com.apollo.music.jade.agent.UserSongSeekerAgent;
 import com.apollo.music.jade.behaviour.CreateAgentBehaviour;
 import com.apollo.music.jade.behaviour.KillAgentBehaviour;
 import com.apollo.music.jade.behaviour.RequestSongsBehaviour;
+import jade.core.Agent;
 import jade.core.Profile;
 import jade.util.leap.Properties;
 import jade.wrapper.ControllerException;
@@ -20,9 +20,9 @@ public class AgentManager {
         JadeGateway.init(null, props);
     }
 
-    public static void createNewAgent(final String name) {
+    public static <T extends Agent> void createNewAgent(final String name, final Class<T> classType) {
         try {
-            final CreateAgentBehaviour<UserSongSeekerAgent> createAgentBehaviour = new CreateAgentBehaviour<>(name, UserSongSeekerAgent.class);
+            final CreateAgentBehaviour<T> createAgentBehaviour = new CreateAgentBehaviour<>(name, classType);
             JadeGateway.execute(createAgentBehaviour);
         } catch (final ControllerException | InterruptedException e) {
             e.printStackTrace();

@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface SongRepository extends JpaRepository<Song, String> {
 
-    @Query("SELECT DISTINCT s FROM Song s WHERE s.ontoHash IN :songsOntoHash")
-    Page<Song> findAllByOntoHash(final Pageable pageable, final List<String> songsOntoHash);
+    @Query("SELECT DISTINCT s FROM Song s WHERE s.ontoDescriptor IN :songsOntoDesc")
+    Page<Song> findAllByOntoDesc(final Pageable pageable, final List<String> songsOntoDesc);
 
     @Query("SELECT DISTINCT s FROM Song s JOIN s.album a JOIN s.genre g JOIN a.artist at " +
             "WHERE (:songName IS NULL OR s.name LIKE %:songName%) AND (:artistName IS NULL OR at.name LIKE %:artistName%) " +//AND (:artistName IS NULL OR at.artist.name LIKE %:artistName%)
@@ -28,4 +28,7 @@ public interface SongRepository extends JpaRepository<Song, String> {
 
     @Query("SELECT DISTINCT s FROM Song s ORDER BY s.likesCount DESC")
     Page<Song> findAllByLikes(final Pageable pageable);
+
+    @Query("SELECT count(s) > 0 FROM Song s WHERE s.ontoDescriptor=:ontoDesc AND (:id IS NULL OR s.id!=:id)")
+    boolean existsWithOntoDesc(final String id, final String ontoDesc);
 }

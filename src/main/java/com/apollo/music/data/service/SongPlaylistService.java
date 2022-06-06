@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.vaadin.artur.helpers.CrudService;
 
+import java.util.Set;
+
 @Service
 public class SongPlaylistService extends CrudService<SongPlaylist, SongPlaylistKey> {
     private final SongPlaylistRepository repo;
@@ -20,5 +22,10 @@ public class SongPlaylistService extends CrudService<SongPlaylist, SongPlaylistK
     @Override
     protected JpaRepository<SongPlaylist, SongPlaylistKey> getRepository() {
         return repo;
+    }
+
+
+    public void deleteAllWithSongs(final Set<String> songIds) {
+        repo.removeAllWithSongIds(songIds);
     }
 }

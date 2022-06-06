@@ -13,17 +13,23 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
 @Service
 public class SongService extends AbstractEntityService<Song> {
     private final SongRepository repo;
+    private final SongPlaylistService songPlaylistService;
+
 
     @Autowired
-    public SongService(final SongRepository repo) {
+    public SongService(final SongRepository repo,
+                       final SongPlaylistService songPlaylistService) {
         this.repo = repo;
+        this.songPlaylistService = songPlaylistService;
     }
 
 
@@ -32,8 +38,8 @@ public class SongService extends AbstractEntityService<Song> {
         return repo;
     }
 
-    public Stream<Song> getAllByOntoHash(final Pageable pageable, final List<String> songsOntoHash) {
-        return repo.findAllByOntoHash(pageable, songsOntoHash).stream();
+    public Stream<Song> getAllByOntoDesc(final Pageable pageable, final List<String> songsOntoDesc) {
+        return repo.findAllByOntoDesc(pageable, songsOntoDesc).stream();
     }
 
     public Page<Song> fetch(final Pageable pageable, final ContentManagerFilter filter) {
@@ -79,5 +85,22 @@ public class SongService extends AbstractEntityService<Song> {
 
     public Page<Song> getAllByLikes(final Pageable pageable) {
         return repo.findAllByLikes(pageable);
+    }
+
+    public boolean existsWithOntoDesc(final Song song) {
+        return repo.existsWithOntoDesc(song.getId(), Song.createOntoDescriptor(song));
+    }
+
+    @Transactional
+    @Override
+    public void delete(final String s) {
+        songPlaylistService.deleteAllWithSongs(Collections.singleton(s));
+        super.delete(s);
+    }
+
+    @Override
+    public Song update(final Song entity) {
+        entity.setOntoDescriptor(Song.createOntoDescriptor(entity));
+        return super.update(entity);
     }
 }

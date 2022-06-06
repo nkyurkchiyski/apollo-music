@@ -1,9 +1,7 @@
 package com.apollo.music.data.entity;
 
 import com.apollo.music.data.commons.EntityConfiguration;
-import com.google.common.hash.Hashing;
 import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,14 +13,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Entity
 @DynamicInsert
-@DynamicUpdate
 @Table(name = EntityConfiguration.SONG_TABLE_NAME,
-        uniqueConstraints = {@UniqueConstraint(name = EntityConfiguration.SONG_ONTO_HASH_UQ_NAME, columnNames = {EntityConfiguration.ONTO_HASH_COLUMN_NAME})})
+        uniqueConstraints = {@UniqueConstraint(name = EntityConfiguration.SONG_ONTO_DESC_UQ_NAME, columnNames = {EntityConfiguration.ONTO_DESC_COLUMN_NAME})})
 public class Song extends AbstractEntity {
     private static final long serialVersionUID = 1L;
 
@@ -49,8 +45,8 @@ public class Song extends AbstractEntity {
     @Column(name = EntityConfiguration.TRACK_NUMBER_COLUMN_NAME)
     private Integer trackNumber;
 
-    @Column(name = EntityConfiguration.ONTO_HASH_COLUMN_NAME, nullable = false)
-    private String ontoHash;
+    @Column(name = EntityConfiguration.ONTO_DESC_COLUMN_NAME, nullable = false)
+    private String ontoDescriptor;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = EntityConfiguration.ALBUM_ID_COLUMN_NAME, foreignKey = @ForeignKey(name = EntityConfiguration.SONG_ALBUM_FK_NAME))
@@ -66,19 +62,15 @@ public class Song extends AbstractEntity {
         createdAt = new Date();
         playedCount = 0;
         likesCount = 0;
-        final String valueForHash = String.format(EntityConfiguration.ONTO_HASH_FORMAT, getName(), getGenre().getName(), getAlbum().getArtist().getName(), getAlbum().getName());
-        ontoHash = Hashing.sha256().hashString(valueForHash, StandardCharsets.UTF_8).toString();
     }
 
 
-    @Override
-    protected void beforeUpdate() {
-        final String valueForHash = String.format(EntityConfiguration.ONTO_HASH_FORMAT,
-                getName(),
-                getGenre().getName(),
-                getAlbum().getArtist().getName(),
-                getAlbum().getName());
-        ontoHash = Hashing.sha256().hashString(valueForHash, StandardCharsets.UTF_8).toString();
+    public static String createOntoDescriptor(final Song song) {
+        return String.format(EntityConfiguration.ONTO_DESC_FORMAT,
+                song.getName(),
+                song.getGenre().getName(),
+                song.getAlbum().getArtist().getName(),
+                song.getAlbum().getName());
     }
 
     public String getName() {
@@ -146,12 +138,12 @@ public class Song extends AbstractEntity {
         this.trackNumber = trackNumber;
     }
 
-    public String getOntoHash() {
-        return ontoHash;
+    public String getOntoDescriptor() {
+        return ontoDescriptor;
     }
 
-    public void setOntoHash(final String ontoHash) {
-        this.ontoHash = ontoHash;
+    public void setOntoDescriptor(final String ontoDescriptor) {
+        this.ontoDescriptor = ontoDescriptor;
     }
 
     public Album getAlbum() {

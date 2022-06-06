@@ -74,7 +74,7 @@ public abstract class AbstractContentManagerView<T extends EntityWithId, S exten
         form.addCancelClickListener(e -> dialog.close());
         form.addSaveClickListener(e ->
         {
-            if (form.isSaved()) {
+            if (form.isSaved() && validate(form.getBean())) {
                 final T bean = form.getBean();
                 updateEntity(bean);
                 form.clearForm();
@@ -84,6 +84,10 @@ public abstract class AbstractContentManagerView<T extends EntityWithId, S exten
         });
         dialog.add(form);
         dialog.open();
+    }
+
+    protected boolean validate(final T bean) {
+        return true;
     }
 
     private void refreshGrid() {

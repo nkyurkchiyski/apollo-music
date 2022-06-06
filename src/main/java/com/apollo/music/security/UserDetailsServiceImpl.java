@@ -4,6 +4,7 @@ import com.apollo.music.data.entity.User;
 import com.apollo.music.data.repository.UserRepository;
 import com.apollo.music.data.service.SongService;
 import com.apollo.music.jade.AgentManager;
+import com.apollo.music.jade.agent.UserSongSeekerAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("No user present with username: " + username);
         } else {
-            AgentManager.createNewAgent(user.getEmail());
+            AgentManager.createNewAgent(user.getEmail(), UserSongSeekerAgent.class);
             return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
                     getAuthorities(user));
         }

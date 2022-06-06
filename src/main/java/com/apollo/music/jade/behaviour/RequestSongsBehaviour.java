@@ -1,5 +1,6 @@
 package com.apollo.music.jade.behaviour;
 
+import com.apollo.music.jade.commons.AgentConstants;
 import jade.core.AID;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.DFService;
@@ -19,15 +20,15 @@ import java.util.stream.Collectors;
 
 public class RequestSongsBehaviour extends SimpleBehaviour {
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestSongsBehaviour.class);
-    private final String[] songsOntoHash;
+    private final String[] songsOntoDesc;
     private final String agentName;
 
     private final List<String> songs = new ArrayList<>();
     private int currentStep;
     private MessageTemplate mt;
 
-    public RequestSongsBehaviour(final String agentName, final String... songsOntoHash) {
-        this.songsOntoHash = songsOntoHash;
+    public RequestSongsBehaviour(final String agentName, final String... songsOntoDesc) {
+        this.songsOntoDesc = songsOntoDesc;
         this.agentName = agentName;
     }
 
@@ -50,9 +51,11 @@ public class RequestSongsBehaviour extends SimpleBehaviour {
 
     private void requestSong() throws FIPAException {
         final DFAgentDescription searchedDesc = new DFAgentDescription();
-        ServiceDescription sd = new ServiceDescription();
-        sd.setName(agentName + "@songSeeker");
-        sd.setType(agentName + "@songSeeker");
+        final ServiceDescription sd = new ServiceDescription();
+
+        final String serviceDescName = String.format(AgentConstants.SONG_SEEKER_AGENT_NAME_FORMAT, agentName);
+        sd.setName(serviceDescName);
+        sd.setType(serviceDescName);
 
         searchedDesc.addServices(sd);
 
@@ -65,10 +68,10 @@ public class RequestSongsBehaviour extends SimpleBehaviour {
         final ACLMessage cfp = new ACLMessage(ACLMessage.CFP);
         agents.forEach(cfp::addReceiver);
 
-        cfp.setContent(String.join("#", songsOntoHash));
-        cfp.setConversationId("Song Recommendation");
-        cfp.setReplyWith("cfp" + System.currentTimeMillis());
-        mt = MessageTemplate.and(MessageTemplate.MatchConversationId("Song Recommendation"),
+        cfp.setContent(String.join(AgentConstants.SONG_ONTO_DESC_SPLITTER, songsOntoDesc));
+        cfp.setConversationId(AgentConstants.SONG_REQ_CONVO_ID);
+        cfp.setReplyWith(AgentConstants.CFP + System.currentTimeMillis());
+        mt = MessageTemplate.and(MessageTemplate.MatchConversationId(AgentConstants.SONG_REQ_CONVO_ID),
                 MessageTemplate.MatchInReplyTo(cfp.getReplyWith()));
         myAgent.send(cfp);
     }
@@ -79,7 +82,7 @@ public class RequestSongsBehaviour extends SimpleBehaviour {
         if (msg != null) {
             if (msg.getPerformative() == ACLMessage.PROPOSE) {
                 final String receivedSongs = msg.getContent();
-                songs.addAll(Arrays.asList(receivedSongs.split("#")));
+                songs.addAll(Arrays.asList(receivedSongs.split(AgentConstants.SONG_ONTO_DESC_SPLITTER)));
             }
             currentStep++;
         }

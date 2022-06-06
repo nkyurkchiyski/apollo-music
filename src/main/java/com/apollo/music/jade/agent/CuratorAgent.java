@@ -1,6 +1,6 @@
 package com.apollo.music.jade.agent;
 
-import com.apollo.music.jade.behaviour.SearchSongsBehaviour;
+import com.apollo.music.jade.OntologyManager;
 import com.apollo.music.jade.commons.AgentConstants;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -10,8 +10,8 @@ import jade.domain.FIPAException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UserSongSeekerAgent extends Agent {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserSongSeekerAgent.class);
+public class CuratorAgent extends Agent {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CuratorAgent.class);
 
     @Override
     protected void setup() {
@@ -21,7 +21,7 @@ public class UserSongSeekerAgent extends Agent {
         final String agentName = getAID().getLocalName();
         final ServiceDescription sd = new ServiceDescription();
 
-        final String serviceDescName = String.format(AgentConstants.SONG_SEEKER_AGENT_NAME_FORMAT, agentName);
+        final String serviceDescName = String.format(AgentConstants.SONG_CURATOR_AGENT_NAME_FORMAT, agentName);
         sd.setName(serviceDescName);
         sd.setType(serviceDescName);
 
@@ -32,7 +32,8 @@ public class UserSongSeekerAgent extends Agent {
         } catch (final FIPAException e) {
             LOGGER.error(e.getMessage());
         }
-        addBehaviour(new SearchSongsBehaviour());
-    }
+//        addBehaviour(new SearchSongsBehaviour());
 
+        final OntologyManager ontologyManager = new OntologyManager();
+    }
 }

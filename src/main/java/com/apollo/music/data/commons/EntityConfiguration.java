@@ -34,7 +34,7 @@ public class EntityConfiguration {
     public static final String SONG_ID_COLUMN_NAME = "song_id";
     public static final String USER_ID_COLUMN_NAME = "user_id";
     public static final String PLAYLIST_ID_COLUMN_NAME = "playlist_id";
-    public static final String ONTO_HASH_COLUMN_NAME = "onto_hash";
+    public static final String ONTO_DESC_COLUMN_NAME = "onto_desc";
 
     //DB Columns - END
 
@@ -49,7 +49,7 @@ public class EntityConfiguration {
 
     public static final String USER_USERNAME_UQ_NAME = "UQ_User_Username";
     public static final String USER_EMAIL_UQ_NAME = "UQ_User_Email";
-    public static final String SONG_ONTO_HASH_UQ_NAME = "UQ_Song_OntoHash";
+    public static final String SONG_ONTO_DESC_UQ_NAME = "UQ_Song_OntoDesc";
     //DB Constraints - END
 
     //Fields - START
@@ -61,7 +61,7 @@ public class EntityConfiguration {
     public static final String PLAYLIST_FIELD_NAME = "playlist";
     public static final String USERNAME_FIELD_NAME = "username";
     public static final String EMAIL_FIELD_NAME = "email";
-    public static final String ONTO_HASH_FIELD_NAME = "ontoHash";
+    public static final String ONTO_DESC_FIELD_NAME = "ontoDesc";
     public static final String USER_FIELD_NAME = "user";
 
     //Fields - END
@@ -71,7 +71,7 @@ public class EntityConfiguration {
     public static final String SYSTEM = "system";
     public static final String ANON = "anon";
 
-    public static final String ONTO_HASH_FORMAT = "Song:%s;Genre:%s;Artist:%s;Album:%s";
+    public static final String ONTO_DESC_FORMAT = "Song:%s;Genre:%s;Artist:%s;Album:%s";
 
     public static final String LIKED_SONGS = "Liked Songs";
 }

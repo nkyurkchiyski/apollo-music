@@ -70,7 +70,7 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
 
         if (authenticatedUser.get().isPresent()) {
             AgentManager.retrieveSongRecommendation(authenticatedUser.get().get().getEmail(),
-                    entity.getOntoHash(),
+                    entity.getOntoDescriptor(),
                     songs -> showRecommendations(songs, imageContainer));
         } else {
             entityService.list(PageRequest.of(0, 10)).stream().forEach(song -> imageContainer.add(new SongCardListItem(song)));
@@ -78,8 +78,8 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
         return imageContainer;
     }
 
-    private void showRecommendations(final List<String> songsOntoHash, final OrderedList imageContainer) {
-        entityService.getAllByOntoHash(PageRequest.of(0, 10), songsOntoHash).forEach(song -> imageContainer.add(new SongCardListItem(song)));
+    private void showRecommendations(final List<String> songsOntoDesc, final OrderedList imageContainer) {
+        entityService.getAllByOntoDesc(PageRequest.of(0, 10), songsOntoDesc).forEach(song -> imageContainer.add(new SongCardListItem(song)));
     }
 
     @Override
