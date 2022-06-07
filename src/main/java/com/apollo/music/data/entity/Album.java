@@ -85,4 +85,11 @@ public class Album extends AbstractEntity {
     public void setArtist(final Artist artist) {
         this.artist = artist;
     }
+
+    @Override
+    public String toString() {
+        return "name=" + name +
+                ", releasedOn=" + releasedOn +
+                ", artist=" + getArtist().getName();
+    }
 }

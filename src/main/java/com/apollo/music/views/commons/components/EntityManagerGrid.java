@@ -2,6 +2,8 @@ package com.apollo.music.views.commons.components;
 
 import com.apollo.music.data.entity.EntityWithId;
 import com.apollo.music.data.service.AbstractEntityService;
+import com.apollo.music.jade.AgentManager;
+import com.apollo.music.jade.agent.editor.EntityEditorAgent;
 import com.apollo.music.views.commons.ViewConstants;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
@@ -69,6 +71,9 @@ public abstract class EntityManagerGrid<T extends EntityWithId, S extends Abstra
         final Button remove = new Button(new Icon(VaadinIcon.TRASH), x ->
         {
             entityService.delete(entity.getId());
+            AgentManager.createNewAgent(entity.getClass().getSimpleName() + "Remover",
+                    getEditorAgentClassType(),
+                    new Object[]{"remove", entity.toString()});
             getDataProvider().refreshAll();
         });
         final Button edit = new Button(new Icon(VaadinIcon.EDIT), l -> edit(entity));
@@ -84,6 +89,8 @@ public abstract class EntityManagerGrid<T extends EntityWithId, S extends Abstra
         layout.add(edit, remove);
         return layout;
     }
+
+    protected abstract Class<? extends EntityEditorAgent<T>> getEditorAgentClassType();
 
     private void edit(final T entity) {
         editConsumer.accept(entity);

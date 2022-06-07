@@ -61,4 +61,9 @@ public class Artist extends AbstractEntity {
     public void removeAlbum(final Album album) {
         getAlbums().remove(album);
     }
+
+    @Override
+    public String toString() {
+        return "name=" + name;
+    }
 }

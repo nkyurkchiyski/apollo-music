@@ -31,6 +31,17 @@ public class AgentManager {
     }
 
 
+    public static <T extends Agent> void createNewAgent(final String name, final Class<T> classType, final Object[] args) {
+        try {
+            final CreateAgentBehaviour<T> createAgentBehaviour = new CreateAgentBehaviour<>(name, classType, args);
+            JadeGateway.execute(createAgentBehaviour);
+        } catch (final ControllerException | InterruptedException e) {
+            e.printStackTrace();
+            JadeGateway.shutdown();
+        }
+    }
+
+
     public static void stopAgent(final String name) {
         try {
             final KillAgentBehaviour killAgentBehaviour = new KillAgentBehaviour(name);

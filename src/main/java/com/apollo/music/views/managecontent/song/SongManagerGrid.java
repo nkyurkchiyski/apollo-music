@@ -4,6 +4,8 @@ import com.apollo.music.data.entity.Album;
 import com.apollo.music.data.entity.Song;
 import com.apollo.music.data.filter.ContentManagerFilter;
 import com.apollo.music.data.service.SongService;
+import com.apollo.music.jade.agent.editor.EntityEditorAgent;
+import com.apollo.music.jade.agent.editor.SongEditorAgent;
 import com.apollo.music.views.commons.components.EntityManagerGrid;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
@@ -18,7 +20,6 @@ public class SongManagerGrid extends EntityManagerGrid<Song, SongService, Conten
         super(Song.class, entityService, editConsumer);
     }
 
-    //TODO: switch to song specific filter containing genre, artist and album
     @Override
     protected ConfigurableFilterDataProvider<Song, Void, ContentManagerFilter> createdDataProvider() {
         return SpringDataProviderBuilder.forFunctions(entityService::fetch, entityService::count).buildFilterable();
@@ -27,6 +28,11 @@ public class SongManagerGrid extends EntityManagerGrid<Song, SongService, Conten
     @Override
     protected void configureEntityColumns() {
         addColumn(new ComponentRenderer<>(this::createSongInfo)).setKey("info").setHeader("Info");
+    }
+
+    @Override
+    protected Class<? extends EntityEditorAgent<Song>> getEditorAgentClassType() {
+        return SongEditorAgent.class;
     }
 
     private Component createSongInfo(final Song song) {

@@ -3,6 +3,8 @@ package com.apollo.music.views.managecontent.album;
 import com.apollo.music.data.entity.Album;
 import com.apollo.music.data.filter.ContentManagerFilter;
 import com.apollo.music.data.service.AlbumService;
+import com.apollo.music.jade.agent.editor.AlbumEditorAgent;
+import com.apollo.music.jade.agent.editor.EntityEditorAgent;
 import com.apollo.music.views.commons.components.EntityManagerGrid;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Label;
@@ -28,6 +30,11 @@ public class AlbumManagerGrid extends EntityManagerGrid<Album, AlbumService, Con
     protected void configureEntityColumns() {
         addColumn(new ComponentRenderer<>(e -> createImage(e.getImageUrl()))).setWidth("10em").setFlexGrow(0).setKey("img").setHeader("Image");
         addColumn(new ComponentRenderer<>(this::createAlbumInfo)).setKey("info").setHeader("Info");
+    }
+
+    @Override
+    protected Class<? extends EntityEditorAgent<Album>> getEditorAgentClassType() {
+        return AlbumEditorAgent.class;
     }
 
     private Component createAlbumInfo(final Album album) {

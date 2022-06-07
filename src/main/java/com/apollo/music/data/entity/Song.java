@@ -161,4 +161,12 @@ public class Song extends AbstractEntity {
     public void setGenre(final Genre genre) {
         this.genre = genre;
     }
+
+    @Override
+    public String toString() {
+        return "name=" + name +
+                ", releasedOn=" + releasedOn +
+                ", trackNumber=" + trackNumber +
+                ", ontoDescriptor=" + ontoDescriptor;
+    }
 }

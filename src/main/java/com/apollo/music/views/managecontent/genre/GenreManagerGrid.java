@@ -3,6 +3,8 @@ package com.apollo.music.views.managecontent.genre;
 import com.apollo.music.data.entity.Genre;
 import com.apollo.music.data.filter.ContentManagerFilter;
 import com.apollo.music.data.service.GenreService;
+import com.apollo.music.jade.agent.editor.EntityEditorAgent;
+import com.apollo.music.jade.agent.editor.GenreEditorAgent;
 import com.apollo.music.views.commons.components.EntityManagerGrid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
@@ -27,5 +29,10 @@ public class GenreManagerGrid extends EntityManagerGrid<Genre, GenreService, Con
     @Override
     protected void configureEntityColumns() {
         addColumn(new ComponentRenderer<>(entity -> new Label(entity.getName()))).setKey("info").setHeader("Info");
+    }
+
+    @Override
+    protected Class<? extends EntityEditorAgent<Genre>> getEditorAgentClassType() {
+        return GenreEditorAgent.class;
     }
 }

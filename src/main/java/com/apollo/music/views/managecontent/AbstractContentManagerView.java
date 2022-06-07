@@ -2,6 +2,8 @@ package com.apollo.music.views.managecontent;
 
 import com.apollo.music.data.entity.EntityWithId;
 import com.apollo.music.data.service.AbstractEntityService;
+import com.apollo.music.jade.AgentManager;
+import com.apollo.music.jade.agent.editor.EntityEditorAgent;
 import com.apollo.music.views.commons.ComponentFactory;
 import com.apollo.music.views.commons.components.EntityForm;
 import com.apollo.music.views.commons.components.EntityManagerGrid;
@@ -76,15 +78,25 @@ public abstract class AbstractContentManagerView<T extends EntityWithId, S exten
         {
             if (form.isSaved() && validate(form.getBean())) {
                 final T bean = form.getBean();
+                final boolean isCreate = bean.getId() == null;
                 updateEntity(bean);
+
                 form.clearForm();
                 dialog.close();
                 refreshGrid();
+
+                if (isCreate) {
+                    AgentManager.createNewAgent(bean.getClass().getSimpleName() + "Creator",
+                            getEditorAgentClassType(),
+                            new Object[]{"add", bean.toString()});
+                }
             }
         });
         dialog.add(form);
         dialog.open();
     }
+
+    protected abstract Class<? extends EntityEditorAgent<T>> getEditorAgentClassType();
 
     protected boolean validate(final T bean) {
         return true;

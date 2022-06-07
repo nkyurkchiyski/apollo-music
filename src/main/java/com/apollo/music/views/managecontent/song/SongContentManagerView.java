@@ -7,6 +7,8 @@ import com.apollo.music.data.service.AlbumService;
 import com.apollo.music.data.service.ArtistService;
 import com.apollo.music.data.service.GenreService;
 import com.apollo.music.data.service.SongService;
+import com.apollo.music.jade.agent.editor.EntityEditorAgent;
+import com.apollo.music.jade.agent.editor.SongEditorAgent;
 import com.apollo.music.views.MainLayout;
 import com.apollo.music.views.commons.ViewConstants;
 import com.apollo.music.views.commons.components.EntityForm;
@@ -74,6 +76,10 @@ public class SongContentManagerView extends AbstractContentManagerView<Song, Son
         return new SongManagerGrid(entityService, this::openEntityForm);
     }
 
+    @Override
+    protected Class<? extends EntityEditorAgent<Song>> getEditorAgentClassType() {
+        return SongEditorAgent.class;
+    }
 
     @Override
     protected boolean validate(final Song bean) {

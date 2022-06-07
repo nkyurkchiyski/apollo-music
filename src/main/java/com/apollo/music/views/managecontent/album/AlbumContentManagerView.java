@@ -5,6 +5,8 @@ import com.apollo.music.data.entity.Album;
 import com.apollo.music.data.filter.ContentManagerFilter;
 import com.apollo.music.data.service.AlbumService;
 import com.apollo.music.data.service.ArtistService;
+import com.apollo.music.jade.agent.editor.AlbumEditorAgent;
+import com.apollo.music.jade.agent.editor.EntityEditorAgent;
 import com.apollo.music.views.MainLayout;
 import com.apollo.music.views.commons.ViewConstants;
 import com.apollo.music.views.commons.components.EntityForm;
@@ -35,6 +37,11 @@ public class AlbumContentManagerView extends AbstractContentManagerView<Album, A
     public AlbumContentManagerView(final AlbumService entityService, final ArtistService artistService) {
         super(entityService);
         this.artistService = artistService;
+    }
+
+    @Override
+    protected Class<? extends EntityEditorAgent<Album>> getEditorAgentClassType() {
+        return AlbumEditorAgent.class;
     }
 
     @Override

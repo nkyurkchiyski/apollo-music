@@ -1,6 +1,6 @@
 package com.apollo.music.jade.agent;
 
-import com.apollo.music.jade.OntologyManager;
+import com.apollo.music.jade.OntologyConfigurator;
 import com.apollo.music.jade.commons.AgentConstants;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -34,6 +34,8 @@ public class CuratorAgent extends Agent {
         }
 //        addBehaviour(new SearchSongsBehaviour());
 
-        final OntologyManager ontologyManager = new OntologyManager();
+        //TODO just for testing
+        final OntologyConfigurator ontologyConfigurator = new OntologyConfigurator();
+//        ontologyManager.insertGenre();
     }
 }
