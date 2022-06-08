@@ -88,7 +88,7 @@ public abstract class AbstractContentManagerView<T extends EntityWithId, S exten
                 if (isCreate) {
                     AgentManager.createNewAgent(bean.getClass().getSimpleName() + "Creator",
                             getEditorAgentClassType(),
-                            new Object[]{"add", bean.toString()});
+                            new Object[]{"add", bean.createFieldValueMap()});
                 }
             }
         });

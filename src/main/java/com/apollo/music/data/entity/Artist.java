@@ -12,7 +12,9 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -62,8 +64,11 @@ public class Artist extends AbstractEntity {
         getAlbums().remove(album);
     }
 
+
     @Override
-    public String toString() {
-        return "name=" + name;
+    public Map<String, Object> createFieldValueMap() {
+        final Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        return map;
     }
 }

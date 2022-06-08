@@ -15,7 +15,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = EntityConfiguration.ALBUM_TABLE_NAME)
@@ -87,9 +89,11 @@ public class Album extends AbstractEntity {
     }
 
     @Override
-    public String toString() {
-        return "name=" + name +
-                ", releasedOn=" + releasedOn +
-                ", artist=" + getArtist().getName();
+    public Map<String, Object> createFieldValueMap() {
+        final Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("releasedOn", releasedOn);
+        map.put("artist", getArtist().getName());
+        return map;
     }
 }

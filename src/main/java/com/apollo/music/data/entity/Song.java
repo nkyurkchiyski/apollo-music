@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @DynamicInsert
@@ -163,10 +165,12 @@ public class Song extends AbstractEntity {
     }
 
     @Override
-    public String toString() {
-        return "name=" + name +
-                ", releasedOn=" + releasedOn +
-                ", trackNumber=" + trackNumber +
-                ", ontoDescriptor=" + ontoDescriptor;
+    public Map<String, Object> createFieldValueMap() {
+        final Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("releasedOn", releasedOn);
+        map.put("trackNumber", trackNumber);
+        map.put("ontoDescriptor", ontoDescriptor);
+        return map;
     }
 }

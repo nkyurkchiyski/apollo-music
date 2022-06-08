@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @DynamicInsert
@@ -29,8 +31,11 @@ public class Genre extends AbstractEntity {
         this.name = name;
     }
 
+
     @Override
-    public String toString() {
-        return "name=" + name;
+    public Map<String, Object> createFieldValueMap() {
+        final Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        return map;
     }
 }

@@ -6,13 +6,17 @@ import com.apollo.music.jade.entityexecutor.IEntityExecutor;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 
+import java.util.Map;
+
 public abstract class EntityEditorAgent<T extends EntityWithId> extends Agent {
     private static final String ADD = "add";
     private static final String REMOVE = "remove";
+    private Map<String, Object> fieldValuesMap;
 
     @Override
     protected void setup() {
         final String operation = (String) getArguments()[0];
+        fieldValuesMap = (Map<String, Object>) getArguments()[1];
         final T entity = createEntity();
         final OntologyConfigurator configurator = new OntologyConfigurator();
         final IEntityExecutor<T> executor = createNewExecutor(configurator);
@@ -22,6 +26,10 @@ public abstract class EntityEditorAgent<T extends EntityWithId> extends Agent {
         } else if (operation.equals(REMOVE)) {
             addBehaviour(new DeleteContentBehaviour<>(executor, entity));
         }
+    }
+
+    protected Object getFieldValue(final String fieldName) {
+        return fieldValuesMap.get(fieldName);
     }
 
     protected abstract T createEntity();

@@ -73,7 +73,7 @@ public abstract class EntityManagerGrid<T extends EntityWithId, S extends Abstra
             entityService.delete(entity.getId());
             AgentManager.createNewAgent(entity.getClass().getSimpleName() + "Remover",
                     getEditorAgentClassType(),
-                    new Object[]{"remove", entity.toString()});
+                    new Object[]{"remove", entity.createFieldValueMap()});
             getDataProvider().refreshAll();
         });
         final Button edit = new Button(new Icon(VaadinIcon.EDIT), l -> edit(entity));

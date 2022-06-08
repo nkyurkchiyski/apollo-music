@@ -10,6 +10,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @MappedSuperclass
 public abstract class AbstractEntity implements EntityWithId, Serializable {
@@ -63,6 +65,11 @@ public abstract class AbstractEntity implements EntityWithId, Serializable {
     @PreUpdate
     protected void beforeUpdate() {
         // do nothing
+    }
+
+    @Override
+    public Map<String, Object> createFieldValueMap() {
+        return new HashMap<>();
     }
 
 
