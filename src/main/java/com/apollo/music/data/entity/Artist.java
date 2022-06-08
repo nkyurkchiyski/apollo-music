@@ -33,7 +33,7 @@ public class Artist extends AbstractEntity {
     @Column(name = EntityConfiguration.IMAGE_URL_COLUMN_NAME)
     private String imageUrl;
 
-    @OneToMany(mappedBy = EntityConfiguration.ARTIST_FIELD_NAME, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = EntityConfiguration.ARTIST_FIELD_NAME, fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
     private Set<Album> albums = new LinkedHashSet<>();
 
     public String getName() {
@@ -63,7 +63,6 @@ public class Artist extends AbstractEntity {
     public void removeAlbum(final Album album) {
         getAlbums().remove(album);
     }
-
 
     @Override
     public Map<String, Object> createFieldValueMap() {

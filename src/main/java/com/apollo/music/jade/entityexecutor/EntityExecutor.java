@@ -7,6 +7,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 
@@ -38,5 +39,9 @@ public abstract class EntityExecutor<T extends EntityWithId> implements IEntityE
 
     protected void applyAndSaveChanges(final Collection<? extends OWLOntologyChange> changes) {
         applyAndSaveChanges(changes.toArray(new OWLOntologyChange[0]));
+    }
+
+    protected String removeWhitespaces(final String arg) {
+        return StringUtils.trimAllWhitespace(arg);
     }
 }

@@ -13,6 +13,25 @@
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:datetime -->
+
+
+    <rdfs:Datatype rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:datetime"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
     // Object Properties
     //
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -595,12 +614,36 @@
     
 
 
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#SHouldbefixed -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#SHouldbefixed">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Performer"/>
+        <hasName>SHould be fixed</hasName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#TESTSDEL -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#TESTSDEL"/>
+    
+
+
     <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Trap -->
 
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Trap">
         <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#HipHop"/>
     </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#TravisScott -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#TravisScott"/>
     
 
 

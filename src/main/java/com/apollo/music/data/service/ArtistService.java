@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -23,9 +22,14 @@ public class ArtistService extends AbstractEntityService<Artist> {
 
     private final ArtistRepository repo;
 
+
+    private final AlbumService albumService;
+
     @Autowired
-    public ArtistService(final ArtistRepository repo) {
+    public ArtistService(final ArtistRepository repo,
+                         final AlbumService albumService) {
         this.repo = repo;
+        this.albumService = albumService;
     }
 
     @Override
@@ -63,12 +67,14 @@ public class ArtistService extends AbstractEntityService<Artist> {
 
     @Override
     public Artist update(final Artist entity) {
-        if (Strings.isBlank(entity.getId())) {
+        final boolean isCreateNew = Strings.isBlank(entity.getId());
+        final Artist mergedEntity = super.update(entity);
+        if (isCreateNew) {
             final Album album = new Album();
             album.setName("Singles");
-            album.setArtist(entity);
-            entity.setAlbums(Collections.singleton(album));
+            album.setArtist(mergedEntity);
+            albumService.update(album);
         }
-        return super.update(entity);
+        return mergedEntity;
     }
 }
