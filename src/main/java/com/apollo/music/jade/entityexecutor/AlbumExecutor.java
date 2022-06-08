@@ -13,6 +13,10 @@ import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLOntologyChange;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class AlbumExecutor extends EntityExecutor<Album> {
     public AlbumExecutor(final OntologyConfigurator ontologyConfigurator) {
@@ -26,23 +30,26 @@ public class AlbumExecutor extends EntityExecutor<Album> {
 
         final OWLClass albumClass = dataFactory.getOWLClass(IRI.create(ontologyIRIStr + "Album"));
 
+        final Collection<OWLOntologyChange> changes = new ArrayList<>();
+
         final OWLNamedIndividual albumIndividual = dataFactory.getOWLNamedIndividual(ontologyIRIStr + albumName);
         final OWLClassAssertionAxiom classAssertion = dataFactory.getOWLClassAssertionAxiom(albumClass, albumIndividual);
-        final AddAxiom classAssertAxiom = new AddAxiom(musicOntology, classAssertion);
+        changes.add(new AddAxiom(musicOntology, classAssertion));
 
-        final AddAxiom isAlbumOfAssertionAxiom = createObjPropertyAddAxiom(albumIndividual, "isMadeAlbumBy", artistName);
+        changes.add(createObjPropertyAddAxiom(albumIndividual, "isMadeAlbumBy", artistName));
 
-        final OWLDataProperty hasReleaseDate = dataFactory.getOWLDataProperty(ontologyIRIStr + "hasPublishDate");
-        final OWLDatatype datatype = dataFactory.getOWLDatatype(ontologyIRIStr + "xsd:dateTime");
-        final OWLLiteral literal = dataFactory.getOWLLiteral(ViewConstants.DATE_FORMAT.format(entity.getReleasedOn()), datatype);
-        final OWLDataPropertyAssertionAxiom releaseDateAssertion = dataFactory.getOWLDataPropertyAssertionAxiom(hasReleaseDate, albumIndividual, literal);
-        final AddAxiom releaseDateAssertionAxiom = new AddAxiom(musicOntology, releaseDateAssertion);
-
+        if (entity.getReleasedOn() != null) {
+            final OWLDataProperty hasReleaseDate = dataFactory.getOWLDataProperty(ontologyIRIStr + "hasPublishDate");
+            final OWLDatatype datatype = dataFactory.getOWLDatatype(ontologyIRIStr + "xsd:dateTime");
+            final OWLLiteral literal = dataFactory.getOWLLiteral(ViewConstants.DATE_FORMAT.format(entity.getReleasedOn()), datatype);
+            final OWLDataPropertyAssertionAxiom releaseDateAssertion = dataFactory.getOWLDataPropertyAssertionAxiom(hasReleaseDate, albumIndividual, literal);
+            changes.add(new AddAxiom(musicOntology, releaseDateAssertion));
+        }
         final OWLDataProperty hasTitle = dataFactory.getOWLDataProperty(ontologyIRIStr + "hasFullTitle");
         final OWLDataPropertyAssertionAxiom titleAssertion = dataFactory.getOWLDataPropertyAssertionAxiom(hasTitle, albumIndividual, entity.getName());
-        final AddAxiom titleAssertionAxiom = new AddAxiom(musicOntology, titleAssertion);
+        changes.add(new AddAxiom(musicOntology, titleAssertion));
 
-        applyAndSaveChanges(classAssertAxiom, isAlbumOfAssertionAxiom, releaseDateAssertionAxiom, titleAssertionAxiom);
+        applyAndSaveChanges(changes);
 
     }
 

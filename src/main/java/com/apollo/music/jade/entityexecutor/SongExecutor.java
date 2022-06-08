@@ -14,9 +14,12 @@ import org.semanticweb.owlapi.model.OWLDatatype;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -39,25 +42,28 @@ public class SongExecutor extends EntityExecutor<Song> {
 
         final OWLClass songClass = dataFactory.getOWLClass(IRI.create(ontologyIRIStr + "Song"));
 
+        final Collection<OWLOntologyChange> changes = new ArrayList<>();
+
         final OWLNamedIndividual songIndividual = dataFactory.getOWLNamedIndividual(ontologyIRIStr + songIndividualName);
         final OWLClassAssertionAxiom classAssertion = dataFactory.getOWLClassAssertionAxiom(songClass, songIndividual);
-        final AddAxiom classAssertAxiom = new AddAxiom(musicOntology, classAssertion);
+        changes.add(new AddAxiom(musicOntology, classAssertion));
 
-        final AddAxiom performerAxiom = createObjPropertyAddAxiom(songIndividual, "hasPerformer", artistName);
-        final AddAxiom albumAxiom = createObjPropertyAddAxiom(songIndividual, "hasAlbum", albumName + artistName);
-        final AddAxiom genreAxiom = createObjPropertyAddAxiom(songIndividual, "hasGenre", genreName);
+        changes.add(createObjPropertyAddAxiom(songIndividual, "hasPerformer", artistName));
+        changes.add(createObjPropertyAddAxiom(songIndividual, "hasAlbum", albumName + artistName));
+        changes.add(createObjPropertyAddAxiom(songIndividual, "hasGenre", genreName));
 
         final OWLDataProperty hasTitle = dataFactory.getOWLDataProperty(ontologyIRIStr + "hasTitle");
         final OWLDataPropertyAssertionAxiom titleAssertion = dataFactory.getOWLDataPropertyAssertionAxiom(hasTitle, songIndividual, entity.getName());
-        final AddAxiom titleAssertionAxiom = new AddAxiom(musicOntology, titleAssertion);
+        changes.add(new AddAxiom(musicOntology, titleAssertion));
 
-        final OWLDataProperty hasReleaseDate = dataFactory.getOWLDataProperty(ontologyIRIStr + "hasReleaseDate");
-        final OWLDatatype datatype = dataFactory.getOWLDatatype(ontologyIRIStr + "xsd:dateTime");
-        final OWLLiteral literal = dataFactory.getOWLLiteral(ViewConstants.DATE_FORMAT.format(entity.getReleasedOn()), datatype);
-        final OWLDataPropertyAssertionAxiom releaseDateAssertion = dataFactory.getOWLDataPropertyAssertionAxiom(hasReleaseDate, songIndividual, literal);
-        final AddAxiom releaseDateAssertionAxiom = new AddAxiom(musicOntology, releaseDateAssertion);
-
-        applyAndSaveChanges(classAssertAxiom, performerAxiom, albumAxiom, genreAxiom, titleAssertionAxiom, releaseDateAssertionAxiom);
+        if (entity.getReleasedOn() != null) {
+            final OWLDataProperty hasReleaseDate = dataFactory.getOWLDataProperty(ontologyIRIStr + "hasReleaseDate");
+            final OWLDatatype datatype = dataFactory.getOWLDatatype(ontologyIRIStr + "xsd:dateTime");
+            final OWLLiteral literal = dataFactory.getOWLLiteral(ViewConstants.DATE_FORMAT.format(entity.getReleasedOn()), datatype);
+            final OWLDataPropertyAssertionAxiom releaseDateAssertion = dataFactory.getOWLDataPropertyAssertionAxiom(hasReleaseDate, songIndividual, literal);
+            changes.add(new AddAxiom(musicOntology, releaseDateAssertion));
+        }
+        applyAndSaveChanges(changes);
     }
 
 

@@ -1,5 +1,6 @@
 package com.apollo.music.jade.behaviour;
 
+import com.apollo.music.jade.OntologyConfigurator;
 import com.apollo.music.jade.commons.AgentConstants;
 import com.apollo.music.jade.entityexecutor.SongExecutor;
 import jade.core.behaviours.CyclicBehaviour;
@@ -9,11 +10,6 @@ import jade.lang.acl.MessageTemplate;
 import java.util.Set;
 
 public class SearchSongsBehaviour extends CyclicBehaviour {
-    private final SongExecutor songExecutor;
-
-    public SearchSongsBehaviour(final SongExecutor songExecutor) {
-        this.songExecutor = songExecutor;
-    }
 
     @Override
     public void action() {
@@ -23,6 +19,10 @@ public class SearchSongsBehaviour extends CyclicBehaviour {
         if (msg != null) {
             final String msgContent = msg.getContent();
             final String[] requestedSongsOntoDesc = msgContent.split(AgentConstants.SONG_ONTO_DESC_SPLITTER);
+
+            final OntologyConfigurator ontologyConfigurator = new OntologyConfigurator();
+            final SongExecutor songExecutor = new SongExecutor(ontologyConfigurator);
+
             final Set<String> recommendations = songExecutor.findWithOntoDesc(requestedSongsOntoDesc);
 
             final ACLMessage reply = msg.createReply();

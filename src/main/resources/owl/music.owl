@@ -710,6 +710,20 @@
     
 
 
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#GuwopJefferyYoungThugRap -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#GuwopJefferyYoungThugRap">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Song"/>
+        <hasAlbum rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#JefferyYoungThug"/>
+        <hasGenre rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Rap"/>
+        <hasPerformer rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#YoungThug"/>
+        <hasReleaseDate rdf:datatype="http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:dateTime">08/04/2016</hasReleaseDate>
+        <hasTitle>Guwop</hasTitle>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#HarambeJefferyYoungThugRap -->
 
 
@@ -856,6 +870,20 @@
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#TravisScott">
         <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Performer"/>
         <hasName>Travis Scott</hasName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#WebbieJefferyYoungThugHipHop -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#WebbieJefferyYoungThugHipHop">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Song"/>
+        <hasAlbum rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#JefferyYoungThug"/>
+        <hasGenre rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#HipHop"/>
+        <hasPerformer rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#YoungThug"/>
+        <hasReleaseDate rdf:datatype="http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:dateTime">11/02/2016</hasReleaseDate>
+        <hasTitle>Webbie</hasTitle>
     </owl:NamedIndividual>
     
 
