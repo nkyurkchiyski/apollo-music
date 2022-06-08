@@ -1,5 +1,7 @@
 package com.apollo.music.data.commons;
 
+import org.springframework.util.StringUtils;
+
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -9,5 +11,9 @@ public class GeneralUtils {
         if (predicate.test(subject)) {
             consumer.accept(subject);
         }
+    }
+
+    public static String stripWhitespaces(final String arg) {
+        return StringUtils.trimAllWhitespace(arg);
     }
 }

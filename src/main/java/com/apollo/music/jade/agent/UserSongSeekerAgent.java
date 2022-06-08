@@ -1,6 +1,6 @@
 package com.apollo.music.jade.agent;
 
-import com.apollo.music.jade.behaviour.SearchSongsBehaviour;
+import com.apollo.music.jade.behaviour.RequestSongsBehaviour;
 import com.apollo.music.jade.commons.AgentConstants;
 import jade.core.Agent;
 import jade.domain.DFService;
@@ -32,7 +32,7 @@ public class UserSongSeekerAgent extends Agent {
         } catch (final FIPAException e) {
             LOGGER.error(e.getMessage());
         }
-        addBehaviour(new SearchSongsBehaviour());
+        addBehaviour(new RequestSongsBehaviour());
     }
 
 }

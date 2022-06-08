@@ -2,7 +2,7 @@ package com.apollo.music.jade;
 
 import com.apollo.music.jade.behaviour.CreateAgentBehaviour;
 import com.apollo.music.jade.behaviour.KillAgentBehaviour;
-import com.apollo.music.jade.behaviour.RequestSongsBehaviour;
+import com.apollo.music.jade.behaviour.RequestSeekerBehaviour;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.util.leap.Properties;
@@ -57,9 +57,9 @@ public class AgentManager {
                                                   final String songOntoHash,
                                                   final Consumer<List<String>> onSuccessConsumer) {
         try {
-            final RequestSongsBehaviour requestSongsBehaviour = new RequestSongsBehaviour(agentName, songOntoHash);
-            JadeGateway.execute(requestSongsBehaviour);
-            onSuccessConsumer.accept(requestSongsBehaviour.getSongs());
+            final RequestSeekerBehaviour retrieveSongsBehaviour = new RequestSeekerBehaviour(agentName, songOntoHash);
+            JadeGateway.execute(retrieveSongsBehaviour);
+            onSuccessConsumer.accept(retrieveSongsBehaviour.getSongs());
 
         } catch (final ControllerException | InterruptedException e) {
             e.printStackTrace();
@@ -71,9 +71,9 @@ public class AgentManager {
                                                   final String[] songsOntoHash,
                                                   final Consumer<List<String>> onSuccessConsumer) {
         try {
-            final RequestSongsBehaviour requestSongsBehaviour = new RequestSongsBehaviour(agentName, songsOntoHash);
-            JadeGateway.execute(requestSongsBehaviour);
-            onSuccessConsumer.accept(requestSongsBehaviour.getSongs());
+            final RequestSeekerBehaviour retrieveSongsBehaviour = new RequestSeekerBehaviour(agentName, songsOntoHash);
+            JadeGateway.execute(retrieveSongsBehaviour);
+            onSuccessConsumer.accept(retrieveSongsBehaviour.getSongs());
 
         } catch (final ControllerException | InterruptedException e) {
             e.printStackTrace();

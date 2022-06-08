@@ -2,12 +2,20 @@ package com.apollo.music.jade.entityexecutor;
 
 import com.apollo.music.data.entity.EntityWithId;
 import com.apollo.music.jade.OntologyConfigurator;
+import org.semanticweb.HermiT.Reasoner;
+import org.semanticweb.HermiT.ReasonerFactory;
+import org.semanticweb.owlapi.model.AddAxiom;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
-import org.springframework.util.StringUtils;
+import org.semanticweb.owlapi.util.OWLEntityRemover;
 
 import java.util.Collection;
 
@@ -17,12 +25,16 @@ public abstract class EntityExecutor<T extends EntityWithId> implements IEntityE
     protected final OWLOntology musicOntology;
     protected final OWLDataFactory dataFactory;
     protected final String ontologyIRIStr;
+    protected final Reasoner reasoner;
 
     public EntityExecutor(final OntologyConfigurator ontologyConfigurator) {
         ontoManager = ontologyConfigurator.getOntoManager();
         musicOntology = ontologyConfigurator.getMusicOntology();
         dataFactory = ontologyConfigurator.getDataFactory();
         ontologyIRIStr = ontologyConfigurator.getOntologyIRIStr();
+
+        final ReasonerFactory factory = new ReasonerFactory();
+        reasoner = (Reasoner) factory.createReasoner(musicOntology);
     }
 
 
@@ -41,7 +53,24 @@ public abstract class EntityExecutor<T extends EntityWithId> implements IEntityE
         applyAndSaveChanges(changes.toArray(new OWLOntologyChange[0]));
     }
 
-    protected String removeWhitespaces(final String arg) {
-        return StringUtils.trimAllWhitespace(arg);
+    protected AddAxiom createObjPropertyAddAxiom(final OWLNamedIndividual songIndividual,
+                                                 final String objPropName,
+                                                 final String refIndividualName) {
+        final OWLNamedIndividual refIndividual = dataFactory.getOWLNamedIndividual(ontologyIRIStr + refIndividualName);
+        final OWLObjectProperty objProp = dataFactory.getOWLObjectProperty(ontologyIRIStr + objPropName);
+        final OWLObjectPropertyAssertionAxiom objPropAssertion = dataFactory.getOWLObjectPropertyAssertionAxiom(objProp, songIndividual, refIndividual);
+        return new AddAxiom(musicOntology, objPropAssertion);
     }
+
+
+    protected void removeInstances(final String className, final String individualName) {
+        final OWLClass entityClass = dataFactory.getOWLClass(IRI.create(ontologyIRIStr + className));
+        final OWLEntityRemover remover = new OWLEntityRemover(musicOntology);
+
+        reasoner.instances(entityClass)
+                .filter(x -> x.getIRI().toString().contains(individualName))
+                .forEach(x -> x.accept(remover));
+        applyAndSaveChanges(remover.getChanges());
+    }
+
 }

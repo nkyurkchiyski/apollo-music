@@ -1,6 +1,7 @@
 package com.apollo.music.data.entity;
 
 import com.apollo.music.data.commons.EntityConfiguration;
+import com.apollo.music.data.commons.GeneralUtils;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.Column;
@@ -68,11 +69,20 @@ public class Song extends AbstractEntity {
 
 
     public static String createOntoDescriptor(final Song song) {
-        return String.format(EntityConfiguration.ONTO_DESC_FORMAT,
-                song.getName(),
-                song.getGenre().getName(),
-                song.getAlbum().getArtist().getName(),
-                song.getAlbum().getName());
+        return GeneralUtils.stripWhitespaces(
+                String.format(EntityConfiguration.ONTO_DESC_FORMAT,
+                        song.getName(),
+                        song.getGenre().getName(),
+                        song.getAlbum().getArtist().getName(),
+                        song.getAlbum().getName())
+        );
+    }
+
+
+    public static String createOntoDescriptor(final String songName, final String albumName, final String artistName, final String genreName) {
+        return GeneralUtils.stripWhitespaces(
+                String.format(EntityConfiguration.ONTO_DESC_FORMAT, songName, genreName, artistName, albumName)
+        );
     }
 
     public String getName() {

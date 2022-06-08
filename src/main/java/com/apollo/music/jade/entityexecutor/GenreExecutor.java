@@ -1,5 +1,6 @@
 package com.apollo.music.jade.entityexecutor;
 
+import com.apollo.music.data.commons.GeneralUtils;
 import com.apollo.music.data.entity.Genre;
 import com.apollo.music.jade.OntologyConfigurator;
 import org.semanticweb.owlapi.model.AddAxiom;
@@ -8,7 +9,6 @@ import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
-import org.semanticweb.owlapi.util.OWLEntityRemover;
 
 public class GenreExecutor extends EntityExecutor<Genre> {
     public GenreExecutor(final OntologyConfigurator ontologyConfigurator) {
@@ -17,7 +17,7 @@ public class GenreExecutor extends EntityExecutor<Genre> {
 
     @Override
     public void insert(final Genre entity) {
-        final String genreName = entity.getName().replace(" ", "");
+        final String genreName = GeneralUtils.stripWhitespaces(entity.getName());
         final OWLClass genreClass = dataFactory.getOWLClass(IRI.create(ontologyIRIStr + "Genre"));
         final OWLClass newClass = dataFactory.getOWLClass(IRI.create(ontologyIRIStr + genreName));
         final OWLNamedIndividual individual = dataFactory.getOWLNamedIndividual(ontologyIRIStr + genreName);
@@ -32,11 +32,8 @@ public class GenreExecutor extends EntityExecutor<Genre> {
 
     @Override
     public void delete(final Genre entity) {
-        final String genreName = entity.getName().replace(" ", "");
-        final OWLClass myCLass = dataFactory.getOWLClass(IRI.create(ontologyIRIStr + genreName));
-        final OWLEntityRemover remover = new OWLEntityRemover(musicOntology);
-        myCLass.accept(remover);
-        applyAndSaveChanges(remover.getChanges());
+        final String genreName = GeneralUtils.stripWhitespaces(entity.getName());
+        removeInstances("Genre", genreName);
     }
 
 }

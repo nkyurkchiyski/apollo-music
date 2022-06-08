@@ -2,6 +2,7 @@ package com.apollo.music;
 
 import com.apollo.music.jade.AgentManager;
 import com.apollo.music.jade.agent.CuratorAgent;
+import com.apollo.music.jade.commons.AgentConstants;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
@@ -28,7 +29,7 @@ public class Application extends SpringBootServletInitializer implements AppShel
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
         AgentManager.initGateway();
-        AgentManager.createNewAgent("curator", CuratorAgent.class);
+        AgentManager.createNewAgent(AgentConstants.CURATOR_AGENT_NAME, CuratorAgent.class);
     }
 
 }
