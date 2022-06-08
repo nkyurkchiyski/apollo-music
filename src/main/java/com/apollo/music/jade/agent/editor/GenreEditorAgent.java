@@ -2,7 +2,7 @@ package com.apollo.music.jade.agent.editor;
 
 import com.apollo.music.data.entity.Genre;
 import com.apollo.music.jade.OntologyConfigurator;
-import com.apollo.music.jade.entityexecutor.GenreEntityExecutor;
+import com.apollo.music.jade.entityexecutor.GenreExecutor;
 import com.apollo.music.jade.entityexecutor.IEntityExecutor;
 
 public class GenreEditorAgent extends EntityEditorAgent<Genre> {
@@ -15,6 +15,6 @@ public class GenreEditorAgent extends EntityEditorAgent<Genre> {
 
     @Override
     protected IEntityExecutor<Genre> createNewExecutor(final OntologyConfigurator configurator) {
-        return new GenreEntityExecutor(configurator);
+        return new GenreExecutor(configurator);
     }
 }

@@ -7,12 +7,11 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
 
-public class GenreEntityExecutor extends EntityExecutor<Genre> {
-    public GenreEntityExecutor(final OntologyConfigurator ontologyConfigurator) {
+public class GenreExecutor extends EntityExecutor<Genre> {
+    public GenreExecutor(final OntologyConfigurator ontologyConfigurator) {
         super(ontologyConfigurator);
     }
 
@@ -28,13 +27,7 @@ public class GenreEntityExecutor extends EntityExecutor<Genre> {
         final AddAxiom subClassAxiom = new AddAxiom(musicOntology, subClassOf);
         final AddAxiom classAssertAxiom = new AddAxiom(musicOntology, classAssertion);
 
-        ontoManager.applyChanges(subClassAxiom, classAssertAxiom);
-
-        try {
-            ontoManager.saveOntology(musicOntology);
-        } catch (final OWLOntologyStorageException e) {
-            e.printStackTrace();
-        }
+        applyAndSaveChanges(subClassAxiom, classAssertAxiom);
     }
 
     @Override
@@ -43,13 +36,7 @@ public class GenreEntityExecutor extends EntityExecutor<Genre> {
         final OWLClass myCLass = dataFactory.getOWLClass(IRI.create(ontologyIRIStr + genreName));
         final OWLEntityRemover remover = new OWLEntityRemover(musicOntology);
         myCLass.accept(remover);
-
-        ontoManager.applyChanges(remover.getChanges());
-        try {
-            ontoManager.saveOntology(musicOntology);
-        } catch (final OWLOntologyStorageException e) {
-            e.printStackTrace();
-        }
+        applyAndSaveChanges(remover.getChanges());
     }
 
 }

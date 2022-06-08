@@ -4,7 +4,11 @@ import com.apollo.music.data.entity.EntityWithId;
 import com.apollo.music.jade.OntologyConfigurator;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+
+import java.util.Collection;
 
 public abstract class EntityExecutor<T extends EntityWithId> implements IEntityExecutor<T> {
 
@@ -18,5 +22,21 @@ public abstract class EntityExecutor<T extends EntityWithId> implements IEntityE
         musicOntology = ontologyConfigurator.getMusicOntology();
         dataFactory = ontologyConfigurator.getDataFactory();
         ontologyIRIStr = ontologyConfigurator.getOntologyIRIStr();
+    }
+
+
+    protected void applyAndSaveChanges(final OWLOntologyChange... changes) {
+        ontoManager.applyChanges(changes);
+
+        try {
+            ontoManager.saveOntology(musicOntology);
+        } catch (final OWLOntologyStorageException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    protected void applyAndSaveChanges(final Collection<? extends OWLOntologyChange> changes) {
+        applyAndSaveChanges(changes.toArray(new OWLOntologyChange[0]));
     }
 }
