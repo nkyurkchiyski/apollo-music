@@ -62,6 +62,15 @@ public class SongForm extends EntityForm<Song> {
         binder.forField(genreCombo).withValidator(Objects::nonNull, String.format(ViewConstants.Validation.EMPTY_FIELD_FORMAT, "genre"))
                 .bind(Song::getGenre, Song::setGenre);
 
+        albumCombo = new ComboBox<>("Album");
+        albumCombo.setItems(
+                (query) -> albumService.fetchByName(PageRequest.of(query.getPage(), query.getPageSize()), query.getFilter()),
+                (query) -> albumService.countByName(query.getFilter()));
+        albumCombo.setItemLabelGenerator(Album::getName);
+        binder.forField(albumCombo)
+                .withValidator(Objects::nonNull, String.format(ViewConstants.Validation.EMPTY_FIELD_FORMAT, "album"))
+                .bind(Song::getAlbum, Song::setAlbum);
+
         artistCombo = new ComboBox<>("Artist");
         artistCombo.setItems(
                 (query) -> artistService.fetchByName(PageRequest.of(query.getPage(), query.getPageSize()),
@@ -69,24 +78,13 @@ public class SongForm extends EntityForm<Song> {
                 (query) -> artistService.countByName(query.getFilter())
         );
 
-        //TODO: issue with VCL
         artistCombo.addValueChangeListener(event -> albumCombo.setItems(event.getValue().getAlbums()));
-        artistCombo.setItemLabelGenerator(Artist::getName);
 
-        albumCombo = new ComboBox<>("Album");
-        albumCombo.setItems(
-                (query) -> albumService.fetchByName(PageRequest.of(query.getPage(), query.getPageSize()), query.getFilter()),
-                (query) -> albumService.countByName(query.getFilter()));
-        albumCombo.setItemLabelGenerator(Album::getName);
-        //TODO: issue with VCL
-//        albumCombo.addValueChangeListener(event -> GeneralUtils.performConditionalConsumer(
-//                event,
-//                e -> e != null && e.getValue() != null,
-//                e -> artistCombo.setValue(e.getValue().getArtist()))
-//        );
-        binder.forField(albumCombo)
-                .withValidator(Objects::nonNull, String.format(ViewConstants.Validation.EMPTY_FIELD_FORMAT, "album"))
-                .bind(Song::getAlbum, Song::setAlbum);
+        if (bean.getId() != null) {
+            artistCombo.setValue(bean.getAlbum().getArtist());
+        }
+
+        artistCombo.setItemLabelGenerator(Artist::getName);
 
         trackNumber = new IntegerField("Track Number");
         return new Component[]{name, sourceUrl, genreCombo, artistCombo, albumCombo, trackNumber, releasedOn};
