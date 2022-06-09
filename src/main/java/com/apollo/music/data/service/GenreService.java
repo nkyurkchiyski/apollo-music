@@ -56,4 +56,8 @@ public class GenreService extends AbstractEntityService<Genre> {
         final ContentManagerFilter filterToUse = new ContentManagerFilter(null, filter.orElse(null));
         return (int) countByFilter(filterToUse);
     }
+
+    public boolean hasAnySongs(final Genre entity) {
+        return repo.hasAnySongs(entity.getId());
+    }
 }

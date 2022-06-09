@@ -70,11 +70,13 @@ public abstract class EntityManagerGrid<T extends EntityWithId, S extends Abstra
     private Component createActions(final T entity) {
         final Button remove = new Button(new Icon(VaadinIcon.TRASH), x ->
         {
-            entityService.delete(entity.getId());
-            getDataProvider().refreshAll();
-            AgentManager.createNewAgent(entity.getClass().getSimpleName() + "Remover",
-                    getEditorAgentClassType(),
-                    new Object[]{"remove", entity.createFieldValueMap()});
+            if (beforeDeleteValidate(entity)) {
+                entityService.delete(entity.getId());
+                getDataProvider().refreshAll();
+                AgentManager.createNewAgent(entity.getClass().getSimpleName() + "Remover",
+                        getEditorAgentClassType(),
+                        new Object[]{"remove", entity.createFieldValueMap()});
+            }
         });
         final Button edit = new Button(new Icon(VaadinIcon.EDIT), l -> edit(entity));
 
@@ -106,5 +108,10 @@ public abstract class EntityManagerGrid<T extends EntityWithId, S extends Abstra
         final Image img = new Image(imgToUse, "img");
         img.setClassName("img-grid");
         return img;
+    }
+
+    protected boolean beforeDeleteValidate(final T entity) {
+        // by default do nothing
+        return true;
     }
 }

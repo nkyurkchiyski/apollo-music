@@ -5,8 +5,10 @@ import com.apollo.music.data.filter.ContentManagerFilter;
 import com.apollo.music.data.service.GenreService;
 import com.apollo.music.jade.agent.editor.EntityEditorAgent;
 import com.apollo.music.jade.agent.editor.GenreEditorAgent;
+import com.apollo.music.views.commons.ViewConstants;
 import com.apollo.music.views.commons.components.EntityManagerGrid;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import org.vaadin.artur.spring.dataprovider.SpringDataProviderBuilder;
@@ -34,5 +36,12 @@ public class GenreManagerGrid extends EntityManagerGrid<Genre, GenreService, Con
     @Override
     protected Class<? extends EntityEditorAgent<Genre>> getEditorAgentClassType() {
         return GenreEditorAgent.class;
+    }
+
+    @Override
+    protected boolean beforeDeleteValidate(final Genre entity) {
+        final boolean songsWithGenreExist = entityService.hasAnySongs(entity);
+        Notification.show(ViewConstants.Validation.SONG_WITH_GENRE_EXIST);
+        return !songsWithGenreExist;
     }
 }

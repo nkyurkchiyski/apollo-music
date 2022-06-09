@@ -49,6 +49,7 @@ public class ViewConstants {
         public static final String USER_ALREADY_EXISTS = "User with the specified %s already exist!";
         public static final String PASSWORDS_NOT_MATCH = "The confirm password does not match!";
         public static final String SONG_WITH_ONTO_DESC_EXISTS = "Song with the same name, artist, album and genre already exists!";
+        public static final String SONG_WITH_GENRE_EXIST = "There are songs with the specified genre!";
     }
 
     public static final class Notification {
