@@ -1,8 +1,7 @@
-package com.apollo.music.jade.commons;
+package com.apollo.music.agent.commons;
 
 public class AgentConstants {
     public static final String SONG_SEEKER_AGENT_NAME_FORMAT = "%s#songSeeker";
-    public static final String SONG_CURATOR_AGENT_NAME_FORMAT = "%s#songCurator";
     public static final String CURATOR_AGENT_NAME = "curator";
     public static final String CFP = "cfp";
     public static final String SONG_ONTO_DESC_SPLITTER = "#";

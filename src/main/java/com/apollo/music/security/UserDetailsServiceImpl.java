@@ -1,9 +1,9 @@
 package com.apollo.music.security;
 
+import com.apollo.music.agent.AgentManager;
+import com.apollo.music.agent.impl.UserSongSeekerAgent;
 import com.apollo.music.data.entity.User;
 import com.apollo.music.data.repository.UserRepository;
-import com.apollo.music.jade.AgentManager;
-import com.apollo.music.jade.agent.UserSongSeekerAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

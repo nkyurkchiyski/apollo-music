@@ -1,5 +1,6 @@
 package com.apollo.music.views.details;
 
+import com.apollo.music.agent.AgentManager;
 import com.apollo.music.data.commons.EntityConfiguration;
 import com.apollo.music.data.commons.GeneralServiceException;
 import com.apollo.music.data.commons.GeneralUtils;
@@ -13,7 +14,6 @@ import com.apollo.music.data.service.LikeActionResult;
 import com.apollo.music.data.service.PlaylistService;
 import com.apollo.music.data.service.SongPlaylistService;
 import com.apollo.music.data.service.SongService;
-import com.apollo.music.jade.AgentManager;
 import com.apollo.music.security.AuthenticatedUser;
 import com.apollo.music.views.MainLayout;
 import com.apollo.music.views.commons.ComponentFactory;

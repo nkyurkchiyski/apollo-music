@@ -1,8 +1,8 @@
 package com.apollo.music.security;
 
+import com.apollo.music.agent.AgentManager;
 import com.apollo.music.data.entity.User;
 import com.apollo.music.data.repository.UserRepository;
-import com.apollo.music.jade.AgentManager;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.server.VaadinServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

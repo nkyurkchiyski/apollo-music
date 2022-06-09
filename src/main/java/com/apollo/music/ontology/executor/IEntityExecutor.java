@@ -1,4 +1,4 @@
-package com.apollo.music.jade.entityexecutor;
+package com.apollo.music.ontology.executor;
 
 import com.apollo.music.data.entity.EntityWithId;
 

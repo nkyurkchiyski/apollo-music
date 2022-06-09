@@ -1,9 +1,9 @@
-package com.apollo.music.jade.agent.editor;
+package com.apollo.music.agent.impl.editor;
 
 import com.apollo.music.data.entity.Genre;
-import com.apollo.music.jade.OntologyConfigurator;
-import com.apollo.music.jade.entityexecutor.GenreExecutor;
-import com.apollo.music.jade.entityexecutor.IEntityExecutor;
+import com.apollo.music.ontology.OntologyConfigurator;
+import com.apollo.music.ontology.executor.GenreExecutor;
+import com.apollo.music.ontology.executor.IEntityExecutor;
 
 public class GenreEditorAgent extends EntityEditorAgent<Genre> {
     @Override

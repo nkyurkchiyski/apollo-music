@@ -1,8 +1,8 @@
 package com.apollo.music;
 
-import com.apollo.music.jade.AgentManager;
-import com.apollo.music.jade.agent.CuratorAgent;
-import com.apollo.music.jade.commons.AgentConstants;
+import com.apollo.music.agent.AgentManager;
+import com.apollo.music.agent.commons.AgentConstants;
+import com.apollo.music.agent.impl.CuratorAgent;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;

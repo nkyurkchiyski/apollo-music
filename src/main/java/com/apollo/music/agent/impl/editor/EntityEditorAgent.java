@@ -1,8 +1,8 @@
-package com.apollo.music.jade.agent.editor;
+package com.apollo.music.agent.impl.editor;
 
 import com.apollo.music.data.entity.EntityWithId;
-import com.apollo.music.jade.OntologyConfigurator;
-import com.apollo.music.jade.entityexecutor.IEntityExecutor;
+import com.apollo.music.ontology.OntologyConfigurator;
+import com.apollo.music.ontology.executor.IEntityExecutor;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 

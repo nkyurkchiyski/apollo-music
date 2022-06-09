@@ -650,6 +650,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Trap -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Trap">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Genre"/>
+    </owl:Class>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -861,6 +870,16 @@
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Soul">
         <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Soul"/>
     </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Trap -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Trap">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Trap"/>
+    </owl:Class>
     
 
 

@@ -1,10 +1,10 @@
-package com.apollo.music.jade.agent.editor;
+package com.apollo.music.agent.impl.editor;
 
 import com.apollo.music.data.entity.Album;
 import com.apollo.music.data.entity.Artist;
-import com.apollo.music.jade.OntologyConfigurator;
-import com.apollo.music.jade.entityexecutor.AlbumExecutor;
-import com.apollo.music.jade.entityexecutor.IEntityExecutor;
+import com.apollo.music.ontology.OntologyConfigurator;
+import com.apollo.music.ontology.executor.AlbumExecutor;
+import com.apollo.music.ontology.executor.IEntityExecutor;
 
 import java.util.Date;
 

@@ -1,7 +1,7 @@
-package com.apollo.music.jade.entityexecutor;
+package com.apollo.music.ontology.executor;
 
 import com.apollo.music.data.entity.EntityWithId;
-import com.apollo.music.jade.OntologyConfigurator;
+import com.apollo.music.ontology.OntologyConfigurator;
 import org.semanticweb.HermiT.Reasoner;
 import org.semanticweb.HermiT.ReasonerFactory;
 import org.semanticweb.owlapi.model.AddAxiom;

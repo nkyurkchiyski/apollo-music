@@ -1,4 +1,4 @@
-package com.apollo.music.jade.behaviour;
+package com.apollo.music.agent.behaviour;
 
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;

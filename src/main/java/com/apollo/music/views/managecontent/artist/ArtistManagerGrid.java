@@ -1,10 +1,10 @@
 package com.apollo.music.views.managecontent.artist;
 
+import com.apollo.music.agent.impl.editor.ArtistEditorAgent;
+import com.apollo.music.agent.impl.editor.EntityEditorAgent;
 import com.apollo.music.data.entity.Artist;
 import com.apollo.music.data.filter.ContentManagerFilter;
 import com.apollo.music.data.service.ArtistService;
-import com.apollo.music.jade.agent.editor.ArtistEditorAgent;
-import com.apollo.music.jade.agent.editor.EntityEditorAgent;
 import com.apollo.music.views.commons.components.EntityManagerGrid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.data.provider.ConfigurableFilterDataProvider;

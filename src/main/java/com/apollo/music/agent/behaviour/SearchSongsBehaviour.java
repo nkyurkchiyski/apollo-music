@@ -1,8 +1,8 @@
-package com.apollo.music.jade.behaviour;
+package com.apollo.music.agent.behaviour;
 
-import com.apollo.music.jade.OntologyConfigurator;
-import com.apollo.music.jade.commons.AgentConstants;
-import com.apollo.music.jade.entityexecutor.SongExecutor;
+import com.apollo.music.agent.commons.AgentConstants;
+import com.apollo.music.ontology.OntologyConfigurator;
+import com.apollo.music.ontology.executor.SongExecutor;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;

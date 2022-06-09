@@ -1,8 +1,8 @@
-package com.apollo.music.jade.entityexecutor;
+package com.apollo.music.ontology.executor;
 
 import com.apollo.music.data.commons.GeneralUtils;
 import com.apollo.music.data.entity.Genre;
-import com.apollo.music.jade.OntologyConfigurator;
+import com.apollo.music.ontology.OntologyConfigurator;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;

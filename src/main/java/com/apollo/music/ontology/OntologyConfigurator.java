@@ -1,6 +1,6 @@
-package com.apollo.music.jade;
+package com.apollo.music.ontology;
 
-import com.apollo.music.jade.commons.AgentConstants;
+import com.apollo.music.agent.commons.AgentConstants;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;

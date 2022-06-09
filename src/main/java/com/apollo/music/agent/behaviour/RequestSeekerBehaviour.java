@@ -1,6 +1,6 @@
-package com.apollo.music.jade.behaviour;
+package com.apollo.music.agent.behaviour;
 
-import com.apollo.music.jade.commons.AgentConstants;
+import com.apollo.music.agent.commons.AgentConstants;
 import jade.core.AID;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.DFService;

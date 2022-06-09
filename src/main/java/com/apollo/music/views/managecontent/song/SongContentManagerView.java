@@ -1,5 +1,7 @@
 package com.apollo.music.views.managecontent.song;
 
+import com.apollo.music.agent.impl.editor.EntityEditorAgent;
+import com.apollo.music.agent.impl.editor.SongEditorAgent;
 import com.apollo.music.data.commons.EntityConfiguration;
 import com.apollo.music.data.entity.Song;
 import com.apollo.music.data.filter.ContentManagerFilter;
@@ -7,8 +9,6 @@ import com.apollo.music.data.service.AlbumService;
 import com.apollo.music.data.service.ArtistService;
 import com.apollo.music.data.service.GenreService;
 import com.apollo.music.data.service.SongService;
-import com.apollo.music.jade.agent.editor.EntityEditorAgent;
-import com.apollo.music.jade.agent.editor.SongEditorAgent;
 import com.apollo.music.views.MainLayout;
 import com.apollo.music.views.commons.ViewConstants;
 import com.apollo.music.views.commons.components.EntityForm;

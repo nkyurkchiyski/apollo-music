@@ -1,9 +1,9 @@
 package com.apollo.music.views.explore;
 
+import com.apollo.music.agent.AgentManager;
 import com.apollo.music.data.entity.Song;
 import com.apollo.music.data.service.SongPlaylistService;
 import com.apollo.music.data.service.SongService;
-import com.apollo.music.jade.AgentManager;
 import com.apollo.music.security.AuthenticatedUser;
 import com.apollo.music.views.MainLayout;
 import com.apollo.music.views.commons.ViewConstants;

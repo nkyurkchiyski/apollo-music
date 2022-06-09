@@ -1,8 +1,8 @@
-package com.apollo.music.jade;
+package com.apollo.music.agent;
 
-import com.apollo.music.jade.behaviour.CreateAgentBehaviour;
-import com.apollo.music.jade.behaviour.KillAgentBehaviour;
-import com.apollo.music.jade.behaviour.RequestSeekerBehaviour;
+import com.apollo.music.agent.behaviour.CreateAgentBehaviour;
+import com.apollo.music.agent.behaviour.KillAgentBehaviour;
+import com.apollo.music.agent.behaviour.RequestSeekerBehaviour;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.util.leap.Properties;
