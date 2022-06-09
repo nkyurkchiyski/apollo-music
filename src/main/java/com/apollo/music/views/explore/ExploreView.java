@@ -59,7 +59,7 @@ public class ExploreView extends Main implements HasComponents, HasStyle {
         final VerticalLayout layout = new VerticalLayout();
         final H3 header = new H3(title);
         header.addClassNames("mb-2");
-        final CarouselList carouselList = new CarouselList(5, components);
+        final CarouselList carouselList = new CarouselList(4, components);
         layout.add(header, carouselList);
         add(layout);
     }
