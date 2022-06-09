@@ -48,7 +48,7 @@ public class SongLikesView extends Main implements HasComponents, HasStyle {
 
         if (authenticatedUser.get().isPresent()) {
             final User currentUser = authenticatedUser.get().get();
-            final List<Song> likedSongs = playlistService.getAllLikedSongs(currentUser);
+            final List<Song> likedSongs = playlistService.getLikedSongsByUser(currentUser);
             if (likedSongs.isEmpty()) {
                 add(new H4("There are currently no liked songs :("));
             } else {

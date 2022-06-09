@@ -20,7 +20,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,7 +30,6 @@ import java.util.stream.Collectors;
 
 @PageTitle(ViewConstants.Title.SEARCH)
 @Route(value = ViewConstants.Route.SEARCH, layout = MainLayout.class)
-@RouteAlias(value = "", layout = MainLayout.class)
 @AnonymousAllowed
 @Uses(Icon.class)
 public class SearchView extends Div {

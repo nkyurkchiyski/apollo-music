@@ -874,6 +874,20 @@
     
 
 
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#WAKEUPAstroworldTravisScottElectronic -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#WAKEUPAstroworldTravisScottElectronic">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Song"/>
+        <hasAlbum rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#AstroworldTravisScott"/>
+        <hasGenre rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Electronic"/>
+        <hasPerformer rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#TravisScott"/>
+        <hasReleaseDate rdf:datatype="http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:dateTime">19/07/2018</hasReleaseDate>
+        <hasTitle>WAKE UP</hasTitle>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#WebbieJefferyYoungThugHipHop -->
 
 

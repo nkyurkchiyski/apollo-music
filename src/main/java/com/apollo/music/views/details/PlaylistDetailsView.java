@@ -136,6 +136,7 @@ public class PlaylistDetailsView extends EntityDetailsView<Playlist, PlaylistSer
                 entityService.update(form.getBean());
             }
             dialog.close();
+            mainLayoutBus.getMainLayout().refreshPlaylistSideMenu();
             UI.getCurrent().navigate(String.format(ViewConstants.Route.ROUTE_FORMAT, ViewConstants.Route.PLAYLIST, form.getBean().getId()));
             Notification.show(ViewConstants.Notification.PLAYLIST_SAVED);
         });

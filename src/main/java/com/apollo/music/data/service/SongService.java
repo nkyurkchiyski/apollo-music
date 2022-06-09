@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 public class SongService extends AbstractEntityService<Song> {
@@ -38,8 +37,8 @@ public class SongService extends AbstractEntityService<Song> {
         return repo;
     }
 
-    public Stream<Song> getAllByOntoDesc(final Pageable pageable, final List<String> songsOntoDesc) {
-        return repo.findAllByOntoDesc(pageable, songsOntoDesc).stream();
+    public Page<Song> getAllByOntoDesc(final Pageable pageable, final List<String> songsOntoDesc) {
+        return repo.findAllByOntoDesc(pageable, songsOntoDesc);
     }
 
     public Page<Song> fetch(final Pageable pageable, final ContentManagerFilter filter) {

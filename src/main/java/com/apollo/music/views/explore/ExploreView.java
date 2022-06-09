@@ -1,7 +1,10 @@
 package com.apollo.music.views.explore;
 
 import com.apollo.music.data.entity.Song;
+import com.apollo.music.data.service.SongPlaylistService;
 import com.apollo.music.data.service.SongService;
+import com.apollo.music.jade.AgentManager;
+import com.apollo.music.security.AuthenticatedUser;
 import com.apollo.music.views.MainLayout;
 import com.apollo.music.views.commons.ViewConstants;
 import com.apollo.music.views.commons.components.card.SongCardListItem;
@@ -16,20 +19,31 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 
 @PageTitle(ViewConstants.Title.EXPLORE)
 @Route(value = ViewConstants.Route.EXPLORE, layout = MainLayout.class)
+@RouteAlias(value = "", layout = MainLayout.class)
 @AnonymousAllowed
 public class ExploreView extends Main implements HasComponents, HasStyle {
+    private final AuthenticatedUser authenticatedUser;
+    private final SongPlaylistService songPlaylistService;
     private final SongService songService;
 
-    public ExploreView(final SongService songService) {
+    @Autowired
+    public ExploreView(final AuthenticatedUser authenticatedUser,
+                       final SongPlaylistService songPlaylistService,
+                       final SongService songService) {
+        this.authenticatedUser = authenticatedUser;
+        this.songPlaylistService = songPlaylistService;
         this.songService = songService;
         constructUI();
     }
@@ -42,13 +56,22 @@ public class ExploreView extends Main implements HasComponents, HasStyle {
         final SongCardListItem[] likedSongsListItem = getSongListItems(() -> songService.getAllByLikes(pageRequest));
         final SongCardListItem[] releasedSongsListItem = getSongListItems(() -> songService.getAllByReleaseDate(pageRequest));
 
-        //TODO add recommendation from agent
-//        final List<SongCardListItem> releasedSongsListItem = getSongs(() -> songService.getAllByOntoHash(pageRequest));
-//        createCarouselList("Recommended for you", );
-
+        if (authenticatedUser.get().isPresent()) {
+            final String[] likedSongsOntoDesc = songPlaylistService.getLikedSongsOntoDescByUser(pageRequest, authenticatedUser.get().get())
+                    .stream()
+                    .toArray(String[]::new);
+            AgentManager.retrieveSongRecommendation(authenticatedUser.get().get().getEmail(),
+                    recommendations -> afterRecommendationRetrieved(recommendations, pageRequest),
+                    likedSongsOntoDesc);
+        }
         createCarouselList("Most liked", likedSongsListItem);
         createCarouselList("New releases", releasedSongsListItem);
 
+    }
+
+    private void afterRecommendationRetrieved(final List<String> recommendedSongs, final PageRequest pageRequest) {
+        final SongCardListItem[] songs = getSongListItems(() -> songService.getAllByOntoDesc(pageRequest, recommendedSongs));
+        createCarouselList("Recommended for you", songs);
     }
 
     private SongCardListItem[] getSongListItems(final Supplier<Page<Song>> songs) {

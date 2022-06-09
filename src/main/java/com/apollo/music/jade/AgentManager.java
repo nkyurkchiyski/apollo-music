@@ -54,24 +54,10 @@ public class AgentManager {
 
 
     public static void retrieveSongRecommendation(final String agentName,
-                                                  final String songOntoHash,
-                                                  final Consumer<List<String>> onSuccessConsumer) {
+                                                  final Consumer<List<String>> onSuccessConsumer,
+                                                  final String... songsOntoDesc) {
         try {
-            final RequestSeekerBehaviour retrieveSongsBehaviour = new RequestSeekerBehaviour(agentName, songOntoHash);
-            JadeGateway.execute(retrieveSongsBehaviour);
-            onSuccessConsumer.accept(retrieveSongsBehaviour.getSongs());
-
-        } catch (final ControllerException | InterruptedException e) {
-            e.printStackTrace();
-            JadeGateway.shutdown();
-        }
-    }
-
-    public static void retrieveSongRecommendation(final String agentName,
-                                                  final String[] songsOntoHash,
-                                                  final Consumer<List<String>> onSuccessConsumer) {
-        try {
-            final RequestSeekerBehaviour retrieveSongsBehaviour = new RequestSeekerBehaviour(agentName, songsOntoHash);
+            final RequestSeekerBehaviour retrieveSongsBehaviour = new RequestSeekerBehaviour(agentName, songsOntoDesc);
             JadeGateway.execute(retrieveSongsBehaviour);
             onSuccessConsumer.accept(retrieveSongsBehaviour.getSongs());
 

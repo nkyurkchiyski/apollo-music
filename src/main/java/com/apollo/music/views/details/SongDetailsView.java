@@ -11,6 +11,7 @@ import com.apollo.music.data.entity.Song;
 import com.apollo.music.data.entity.User;
 import com.apollo.music.data.service.LikeActionResult;
 import com.apollo.music.data.service.PlaylistService;
+import com.apollo.music.data.service.SongPlaylistService;
 import com.apollo.music.data.service.SongService;
 import com.apollo.music.jade.AgentManager;
 import com.apollo.music.security.AuthenticatedUser;
@@ -36,11 +37,14 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @PageTitle(ViewConstants.Title.SONG_DETAILS)
 @Route(value = ViewConstants.Route.SONG, layout = MainLayout.class)
@@ -48,14 +52,16 @@ import java.util.function.Consumer;
 public class SongDetailsView extends EntityDetailsView<Song, SongService> {
     private final AuthenticatedUser authenticatedUser;
     private final PlaylistService playlistService;
+    private final SongPlaylistService songPlaylistService;
 
     @Autowired
     public SongDetailsView(final SongService songService,
                            final AuthenticatedUser authenticatedUser,
-                           final PlaylistService playlistService) {
+                           final PlaylistService playlistService, final SongPlaylistService songPlaylistService) {
         super(songService);
         this.authenticatedUser = authenticatedUser;
         this.playlistService = playlistService;
+        this.songPlaylistService = songPlaylistService;
     }
 
     @Override
@@ -67,19 +73,22 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
     protected Component createSubMainComponent(final Song entity) {
         final OrderedList imageContainer = new OrderedList();
         imageContainer.addClassNames("gap-m", "grid", "list-none", "m-0", "p-0");
+        final Pageable pageable = PageRequest.of(0, 10);
 
         if (authenticatedUser.get().isPresent()) {
+            final Set<String> likedSongs = songPlaylistService.getLikedSongsOntoDescByUser(pageable, authenticatedUser.get().get()).stream().collect(Collectors.toSet());
+            likedSongs.add(entity.getOntoDescriptor());
             AgentManager.retrieveSongRecommendation(authenticatedUser.get().get().getEmail(),
-                    entity.getOntoDescriptor(),
-                    songs -> showRecommendations(songs, imageContainer));
+                    songs -> showRecommendations(songs, pageable, imageContainer),
+                    likedSongs.toArray(new String[0]));
         } else {
-            entityService.list(PageRequest.of(0, 10)).stream().forEach(song -> imageContainer.add(new SongCardListItem(song)));
+            entityService.list(pageable).stream().forEach(song -> imageContainer.add(new SongCardListItem(song)));
         }
         return imageContainer;
     }
 
-    private void showRecommendations(final List<String> songsOntoDesc, final OrderedList imageContainer) {
-        entityService.getAllByOntoDesc(PageRequest.of(0, 10), songsOntoDesc).forEach(song -> imageContainer.add(new SongCardListItem(song)));
+    private void showRecommendations(final List<String> songsOntoDesc, final Pageable pageable, final OrderedList imageContainer) {
+        entityService.getAllByOntoDesc(pageable, songsOntoDesc).forEach(song -> imageContainer.add(new SongCardListItem(song)));
     }
 
     @Override

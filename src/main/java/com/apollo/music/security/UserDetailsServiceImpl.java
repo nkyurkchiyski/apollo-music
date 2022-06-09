@@ -2,7 +2,6 @@ package com.apollo.music.security;
 
 import com.apollo.music.data.entity.User;
 import com.apollo.music.data.repository.UserRepository;
-import com.apollo.music.data.service.SongService;
 import com.apollo.music.jade.AgentManager;
 import com.apollo.music.jade.agent.UserSongSeekerAgent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +18,10 @@ import java.util.stream.Collectors;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
-    private final SongService songService;
 
     @Autowired
-    public UserDetailsServiceImpl(final UserRepository userRepository,
-                                  final SongService songService) {
+    public UserDetailsServiceImpl(final UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.songService = songService;
     }
 
     @Override

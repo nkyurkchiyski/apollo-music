@@ -116,7 +116,7 @@ public class PlaylistService extends AbstractEntityService<Playlist> {
         return (int) playlistRepository.countByUserId(user.getId(), filterToUse);
     }
 
-    public List<Song> getAllLikedSongs(final User user) {
+    public List<Song> getLikedSongsByUser(final User user) {
         final Optional<Playlist> playlistOpt = playlistRepository.getLikedSongsPlaylist(user.getId());
         if (playlistOpt.isEmpty()) {
             return Collections.emptyList();
