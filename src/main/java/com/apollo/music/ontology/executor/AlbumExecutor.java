@@ -36,7 +36,7 @@ public class AlbumExecutor extends EntityExecutor<Album> {
         final OWLClassAssertionAxiom classAssertion = dataFactory.getOWLClassAssertionAxiom(albumClass, albumIndividual);
         changes.add(new AddAxiom(musicOntology, classAssertion));
 
-        changes.add(createObjPropertyAddAxiom(albumIndividual, "isMadeAlbumBy", artistName));
+        changes.add(createObjPropertyAddAxiom(albumIndividual, "isAlbumMadeBy", artistName));
 
         if (entity.getReleasedOn() != null) {
             final OWLDataProperty hasReleaseDate = dataFactory.getOWLDataProperty(ontologyIRIStr + "hasPublishDate");

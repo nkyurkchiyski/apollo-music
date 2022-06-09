@@ -5,6 +5,7 @@ import com.apollo.music.agent.impl.editor.EntityEditorAgent;
 import com.apollo.music.data.entity.EntityWithId;
 import com.apollo.music.data.service.AbstractEntityService;
 import com.apollo.music.views.commons.ComponentFactory;
+import com.apollo.music.views.commons.ViewConstants;
 import com.apollo.music.views.commons.components.EntityForm;
 import com.apollo.music.views.commons.components.EntityManagerGrid;
 import com.vaadin.flow.component.Component;
@@ -15,6 +16,7 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -90,6 +92,7 @@ public abstract class AbstractContentManagerView<T extends EntityWithId, S exten
                             getEditorAgentClassType(),
                             new Object[]{"add", bean.createFieldValueMap()});
                 }
+                Notification.show(String.format(ViewConstants.Notification.ENTITY_SAVED, getEntityClass().getSimpleName()));
             }
         });
         dialog.add(form);

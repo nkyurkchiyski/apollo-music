@@ -13,7 +13,6 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -80,8 +79,8 @@ public class ExploreView extends Main implements HasComponents, HasStyle {
 
     private void createCarouselList(final String title, final Component... components) {
         final VerticalLayout layout = new VerticalLayout();
-        final H3 header = new H3(title);
-        header.addClassNames("mb-2");
+        final H2 header = new H2(title);
+        header.addClassNames("mb-m", "mt-m", "text-2xl");
         final CarouselList carouselList = new CarouselList(4, components);
         layout.add(header, carouselList);
         add(layout);

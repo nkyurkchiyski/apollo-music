@@ -41,7 +41,9 @@ public class GenreManagerGrid extends EntityManagerGrid<Genre, GenreService, Con
     @Override
     protected boolean beforeDeleteValidate(final Genre entity) {
         final boolean songsWithGenreExist = entityService.hasAnySongs(entity);
-        Notification.show(ViewConstants.Validation.SONG_WITH_GENRE_EXIST);
+        if (songsWithGenreExist) {
+            Notification.show(ViewConstants.Validation.SONG_WITH_GENRE_EXIST);
+        }
         return !songsWithGenreExist;
     }
 }

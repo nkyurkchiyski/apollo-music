@@ -16,7 +16,7 @@ public class CarouselList extends Div {
         this.pageSize = pageSize;
         componentsList.addAll(Arrays.asList(components));
         setWidthFull();
-        setHeight("250px");
+        setHeight("290px");
         initContent();
     }
 

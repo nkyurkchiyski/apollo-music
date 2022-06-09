@@ -79,7 +79,9 @@ public class AlbumDetailsView extends EntityDetailsView<Album, AlbumService> {
     @Override
     protected Component createSubTitle(final Album entity) {
         final Artist artist = entity.getArtist();
-        return new Anchor(String.format(ViewConstants.Route.ROUTE_FORMAT, ViewConstants.Route.ARTIST, artist.getId()), artist.getName());
+        final Anchor anchor = new Anchor(String.format(ViewConstants.Route.ROUTE_FORMAT, ViewConstants.Route.ARTIST, artist.getId()), artist.getName());
+        anchor.addClassName("text-l");
+        return anchor;
     }
 
     @Override

@@ -187,7 +187,7 @@ public class MainLayout extends AppLayout {
                 playlistService.update(bean);
                 form.clearForm();
                 refreshPlaylistSideMenu();
-                Notification.show(ViewConstants.Notification.PLAYLIST_SAVED);
+                Notification.show(String.format(ViewConstants.Notification.ENTITY_SAVED, bean.getClass().getSimpleName()));
             }
             dialog.close();
         });

@@ -557,6 +557,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Phonk -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Phonk">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Genre"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Pop -->
 
 
@@ -777,11 +786,56 @@
     
 
 
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#MasterofPuppetsMasterofPuppetsMetallicaMetal -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#MasterofPuppetsMasterofPuppetsMetallicaMetal">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Song"/>
+        <hasAlbum rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#MasterofPuppetsMetallica"/>
+        <hasGenre rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Metal"/>
+        <hasPerformer rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Metallica"/>
+        <hasReleaseDate rdf:datatype="http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:dateTime">19/02/1986</hasReleaseDate>
+        <hasTitle>Master of Puppets</hasTitle>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#MasterofPuppetsMetallica -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#MasterofPuppetsMetallica">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Album"/>
+        <isAlbumMadeBy rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Metallica"/>
+        <hasFullTitle>Master of Puppets</hasFullTitle>
+        <hasPublishDate rdf:datatype="http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:dateTime">03/03/1986</hasPublishDate>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Metal -->
 
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Metal">
         <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Metal"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Metallica -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Metallica">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Performer"/>
+        <hasName>Metallica</hasName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Phonk -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Phonk">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Phonk"/>
     </owl:NamedIndividual>
     
 
@@ -876,10 +930,9 @@
     <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Trap -->
 
 
-    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Trap">
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Trap">
         <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Trap"/>
-    </owl:Class>
+    </owl:NamedIndividual>
     
 
 

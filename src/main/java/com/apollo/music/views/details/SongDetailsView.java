@@ -82,7 +82,9 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
                     songs -> showRecommendations(songs, pageable, imageContainer),
                     likedSongs.toArray(new String[0]));
         } else {
-            entityService.list(pageable).stream().forEach(song -> imageContainer.add(new SongCardListItem(song)));
+            entityService.list(pageable).stream()
+                    .filter(s -> !Objects.equals(entity, s))
+                    .forEach(song -> imageContainer.add(new SongCardListItem(song)));
         }
         return imageContainer;
     }
@@ -111,7 +113,9 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
     @Override
     protected Component createSubTitle(final Song entity) {
         final Artist artist = entity.getAlbum().getArtist();
-        return new Anchor(String.format(ViewConstants.Route.ROUTE_FORMAT, ViewConstants.Route.ARTIST, artist.getId()), artist.getName());
+        final Anchor anchor = new Anchor(String.format(ViewConstants.Route.ROUTE_FORMAT, ViewConstants.Route.ARTIST, artist.getId()), artist.getName());
+        anchor.addClassName("text-l");
+        return anchor;
     }
 
     @Override
@@ -200,5 +204,6 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
     @Override
     protected void onPlayButtonClicked(final Song entity) {
         entityService.play(entity);
+        Notification.show(String.format(ViewConstants.Notification.SONG_IS_PLAYING, entity.getName()));
     }
 }

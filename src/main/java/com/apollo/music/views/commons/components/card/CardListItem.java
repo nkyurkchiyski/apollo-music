@@ -22,16 +22,25 @@ public class CardListItem extends ListItem {
         verticalLayout.setAlignItems(FlexComponent.Alignment.CENTER);
         final Span titleSpan = new Span();
         titleSpan.addClassNames("text-xl", "font-semibold");
-        titleSpan.setText(mainTitle);
+
+        titleSpan.setText(formatTitle(mainTitle));
         verticalLayout.add(titleSpan);
 
         if (StringUtils.isNotBlank(subTitle)) {
             final Span subTitleSpan = new Span();
-            subTitleSpan.addClassNames("text-s", "text-secondary");
+            subTitleSpan.addClassNames("text-m", "text-secondary");
             subTitleSpan.setText(subTitle);
             verticalLayout.add(subTitleSpan);
         }
         add(image, verticalLayout);
+    }
+
+    private String formatTitle(final String mainTitle) {
+        String formattedTitle = mainTitle;
+        if (mainTitle.length() > 9) {
+            formattedTitle = mainTitle.substring(0, 8) + "...";
+        }
+        return formattedTitle;
     }
 
 }

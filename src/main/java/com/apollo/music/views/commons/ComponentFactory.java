@@ -43,7 +43,7 @@ public class ComponentFactory {
 
     public static H2 createH2Title(final String text) {
         final H2 subTitle = new H2(text);
-        subTitle.addClassNames("mb-0", "mt-0", "text-l");
+        subTitle.addClassNames("mb-0", "mt-0", "text-xl");
         return subTitle;
     }
 }

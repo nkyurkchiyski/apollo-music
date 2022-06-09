@@ -125,7 +125,7 @@ public class PlaylistDetailsView extends EntityDetailsView<Playlist, PlaylistSer
         entityService.delete(entity.getId());
         mainLayoutBus.getMainLayout().refreshPlaylistSideMenu();
         UI.getCurrent().navigate(ViewConstants.Route.EXPLORE);
-        Notification.show(ViewConstants.Notification.PLAYLIST_DELETED);
+        Notification.show(String.format(ViewConstants.Notification.ENTITY_DELETED, entity.getClass().getSimpleName()));
     }
 
     private void openPlaylistEditDialog(final Playlist entity) {
@@ -138,7 +138,7 @@ public class PlaylistDetailsView extends EntityDetailsView<Playlist, PlaylistSer
             dialog.close();
             mainLayoutBus.getMainLayout().refreshPlaylistSideMenu();
             UI.getCurrent().navigate(String.format(ViewConstants.Route.ROUTE_FORMAT, ViewConstants.Route.PLAYLIST, form.getBean().getId()));
-            Notification.show(ViewConstants.Notification.PLAYLIST_SAVED);
+            Notification.show(String.format(ViewConstants.Notification.ENTITY_SAVED, entity.getClass().getSimpleName()));
         });
 
         form.addCancelClickListener(e -> dialog.close());
