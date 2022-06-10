@@ -17,6 +17,7 @@ import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.reasoner.NodeSet;
+import org.semanticweb.owlapi.reasoner.OWLReasonerRuntimeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,21 +86,27 @@ public class SongExecutor extends EntityExecutor<Song> {
 
         final Set<String> foundOntoDescriptors = new HashSet<>();
 
-        for (final String genre : genres) {
-            final OWLNamedIndividual genreIndividual = dataFactory.getOWLNamedIndividual(ontologyIRIStr + genre);
-            final OWLObjectProperty isGenreOf = dataFactory.getOWLObjectProperty(ontologyIRIStr + "isGenreOf");
+        try {
+
+            for (final String genre : genres) {
+                final OWLNamedIndividual genreIndividual = dataFactory.getOWLNamedIndividual(ontologyIRIStr + genre);
+                final OWLObjectProperty isGenreOf = dataFactory.getOWLObjectProperty(ontologyIRIStr + "isGenreOf");
 
 
-            final Set<OWLNamedIndividual> songsFound = reasoner.objectPropertyValues(genreIndividual, isGenreOf).collect(Collectors.toSet());
-            songsFound.forEach(song -> {
-                final String songName = getDataPropertyValue(song, "hasTitle");
-                final OWLNamedIndividual artist = getFirstObjPropertyValue(song, "hasPerformer");
-                final String artistName = getDataPropertyValue(artist, "hasName");
-                final OWLNamedIndividual album = getFirstObjPropertyValue(song, "hasAlbum");
-                final String albumName = getDataPropertyValue(album, "hasFullTitle");
-                final String ontoDesc = Song.createOntoDescriptor(songName, albumName, artistName, genre);
-                foundOntoDescriptors.add(ontoDesc);
-            });
+                final Set<OWLNamedIndividual> songsFound = reasoner.objectPropertyValues(genreIndividual, isGenreOf).collect(Collectors.toSet());
+                songsFound.forEach(song -> {
+                    final String songName = getDataPropertyValue(song, "hasTitle");
+                    final OWLNamedIndividual artist = getFirstObjPropertyValue(song, "hasPerformer");
+                    final String artistName = getDataPropertyValue(artist, "hasName");
+                    final OWLNamedIndividual album = getFirstObjPropertyValue(song, "hasAlbum");
+                    final String albumName = getDataPropertyValue(album, "hasFullTitle");
+                    final String ontoDesc = Song.createOntoDescriptor(songName, albumName, artistName, genre);
+                    foundOntoDescriptors.add(ontoDesc);
+                });
+            }
+        } catch (final OWLReasonerRuntimeException e) {
+            LOGGER.error(e.getMessage());
+            foundOntoDescriptors.clear();
         }
 
         Arrays.asList(ontoDescriptors).forEach(foundOntoDescriptors::remove);

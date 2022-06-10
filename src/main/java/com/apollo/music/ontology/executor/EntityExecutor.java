@@ -15,11 +15,15 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import org.semanticweb.owlapi.reasoner.OWLReasonerRuntimeException;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 
 public abstract class EntityExecutor<T extends EntityWithId> implements IEntityExecutor<T> {
+    protected static final Logger LOGGER = LoggerFactory.getLogger(EntityExecutor.class);
 
     protected final OWLOntologyManager ontoManager;
     protected final OWLOntology musicOntology;
@@ -67,10 +71,14 @@ public abstract class EntityExecutor<T extends EntityWithId> implements IEntityE
         final OWLClass entityClass = dataFactory.getOWLClass(IRI.create(ontologyIRIStr + className));
         final OWLEntityRemover remover = new OWLEntityRemover(musicOntology);
 
-        reasoner.instances(entityClass)
-                .filter(x -> x.getIRI().toString().contains(individualName))
-                .forEach(x -> x.accept(remover));
-        applyAndSaveChanges(remover.getChanges());
+        try {
+            reasoner.instances(entityClass)
+                    .filter(x -> x.getIRI().toString().contains(individualName))
+                    .forEach(x -> x.accept(remover));
+            applyAndSaveChanges(remover.getChanges());
+        } catch (final OWLReasonerRuntimeException e) {
+            LOGGER.error(e.getMessage());
+        }
     }
 
 }
