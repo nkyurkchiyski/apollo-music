@@ -45,7 +45,14 @@ public class PlaylistService extends AbstractEntityService<Playlist> {
         probe.setName(EntityConfiguration.LIKED_SONGS);
         probe.setCreatedBy(Role.SYSTEM);
         probe.setUser(user);
-        final Playlist likedSongsPlaylist = playlistRepository.getLikedSongsPlaylist(user.getId()).orElse(probe);
+        final Optional<Playlist> likedSongsPlaylistOpt = playlistRepository.getLikedSongsPlaylist(user.getId());
+
+        final Playlist likedSongsPlaylist;
+        if (likedSongsPlaylistOpt.isEmpty()) {
+            likedSongsPlaylist = update(probe);
+        } else {
+            likedSongsPlaylist = likedSongsPlaylistOpt.get();
+        }
         addSongToPlaylist(likedSongsPlaylist, song, sp -> {
             removeSongFromPlaylist(likedSongsPlaylist, sp);
             result.set(LikeActionResult.DISLIKED);

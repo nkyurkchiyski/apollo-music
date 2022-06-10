@@ -4,6 +4,7 @@ import com.apollo.music.data.commons.GeneralUtils;
 import com.apollo.music.data.entity.Song;
 import com.apollo.music.ontology.OntologyConfigurator;
 import com.apollo.music.views.commons.ViewConstants;
+import org.apache.commons.lang3.StringUtils;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -77,7 +78,7 @@ public class SongExecutor extends EntityExecutor<Song> {
     public Set<String> findWithOntoDesc(final String... ontoDescriptors) {
         final Set<String> genres = new HashSet<>();
 
-        Arrays.stream(ontoDescriptors).forEach(ontoDesc -> {
+        Arrays.stream(ontoDescriptors).filter(StringUtils::isNotBlank).forEach(ontoDesc -> {
             final Map<String, String> keyValues = createOntoDescMap(ontoDesc);
             genres.add(keyValues.get("Genre"));
         });

@@ -67,6 +67,12 @@ public class MyAccountView extends Div {
             Notification.show(binder.getBean().getClass().getSimpleName() + " details stored.");
             clearForm();
         });
+
+        delete.addClickListener(e -> {
+            final String userId = authenticatedUser.get().get().getId();
+            authenticatedUser.logout();
+            userService.delete(userId);
+        });
     }
 
     private void clearForm() {

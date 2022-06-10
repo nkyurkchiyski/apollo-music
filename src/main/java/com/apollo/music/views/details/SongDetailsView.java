@@ -76,10 +76,11 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
         final Pageable pageable = PageRequest.of(0, 10);
 
         if (authenticatedUser.get().isPresent()) {
-            final Set<String> likedSongs = songPlaylistService.getLikedSongsOntoDescByUser(pageable, authenticatedUser.get().get()).stream().collect(Collectors.toSet());
+            final Set<String> likedSongs = songPlaylistService.getLikedSongsOntoDescByUser(pageable, authenticatedUser.get().get()).stream()
+                    .collect(Collectors.toSet());
             likedSongs.add(entity.getOntoDescriptor());
             AgentManager.retrieveSongRecommendation(authenticatedUser.get().get().getEmail(),
-                    songs -> showRecommendations(songs, pageable, imageContainer),
+                    songs -> showRecommendations(entity, songs, pageable, imageContainer),
                     likedSongs.toArray(new String[0]));
         } else {
             entityService.list(pageable).stream()
@@ -89,8 +90,13 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
         return imageContainer;
     }
 
-    private void showRecommendations(final List<String> songsOntoDesc, final Pageable pageable, final OrderedList imageContainer) {
-        entityService.getAllByOntoDesc(pageable, songsOntoDesc).forEach(song -> imageContainer.add(new SongCardListItem(song)));
+    private void showRecommendations(final Song entity,
+                                     final List<String> songsOntoDesc,
+                                     final Pageable pageable,
+                                     final OrderedList imageContainer) {
+        entityService.getAllByOntoDesc(pageable, songsOntoDesc).stream()
+                .filter(s -> !Objects.equals(entity, s))
+                .forEach(song -> imageContainer.add(new SongCardListItem(song)));
     }
 
     @Override

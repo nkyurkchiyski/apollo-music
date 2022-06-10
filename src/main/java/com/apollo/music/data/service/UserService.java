@@ -2,7 +2,6 @@ package com.apollo.music.data.service;
 
 import com.apollo.music.data.commons.EntityConfiguration;
 import com.apollo.music.data.commons.ExampleUtils;
-import com.apollo.music.data.entity.Playlist;
 import com.apollo.music.data.entity.Role;
 import com.apollo.music.data.entity.User;
 import com.apollo.music.data.repository.UserRepository;
@@ -52,10 +51,6 @@ public class UserService extends AbstractEntityService<User> {
         if (entity.getId() == null) {
             final String encodedPass = passwordEncoder.encode(entity.getPassword());
             entity.setPassword(encodedPass);
-            final Playlist likedSongsPlaylist = new Playlist();
-            likedSongsPlaylist.setName(EntityConfiguration.LIKED_SONGS);
-            likedSongsPlaylist.setCreatedBy(Role.SYSTEM);
-            entity.setPlaylists(Collections.singleton(likedSongsPlaylist));
             entity.setRoles(Collections.singleton(Role.USER));
         }
         return super.update(entity);

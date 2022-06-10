@@ -1,6 +1,7 @@
 package com.apollo.music.data.service;
 
 import com.apollo.music.data.commons.ExampleUtils;
+import com.apollo.music.data.entity.AbstractEntity;
 import com.apollo.music.data.entity.Song;
 import com.apollo.music.data.filter.ContentManagerFilter;
 import com.apollo.music.data.repository.SongRepository;
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SongService extends AbstractEntityService<Song> {
@@ -38,7 +41,20 @@ public class SongService extends AbstractEntityService<Song> {
     }
 
     public Page<Song> getAllByOntoDesc(final Pageable pageable, final List<String> songsOntoDesc) {
-        return repo.findAllByOntoDesc(pageable, songsOntoDesc);
+        final Page<Song> result = repo.findAllByOntoDesc(pageable, songsOntoDesc);
+        if (result.getTotalElements() == pageable.getPageSize()) {
+            return result;
+        }
+
+        if (result.isEmpty()) {
+            return repo.findAllByPlays(pageable);
+        }
+
+        final List<Song> recommendedSongs = result.stream().collect(Collectors.toList());
+        final int additionalSongsCount = pageable.getPageSize() - recommendedSongs.size();
+        final List<String> recommendedSongIds = recommendedSongs.stream().map(AbstractEntity::getId).collect(Collectors.toList());
+        repo.findAllNotWithId(PageRequest.of(0, additionalSongsCount), recommendedSongIds).forEach(recommendedSongs::add);
+        return new PageImpl<>(recommendedSongs);
     }
 
     public Page<Song> fetch(final Pageable pageable, final ContentManagerFilter filter) {

@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -59,9 +60,13 @@ public class ExploreView extends Main implements HasComponents, HasStyle {
             final String[] likedSongsOntoDesc = songPlaylistService.getLikedSongsOntoDescByUser(pageRequest, authenticatedUser.get().get())
                     .stream()
                     .toArray(String[]::new);
-            AgentManager.retrieveSongRecommendation(authenticatedUser.get().get().getEmail(),
-                    recommendations -> afterRecommendationRetrieved(recommendations, pageRequest),
-                    likedSongsOntoDesc);
+            if (likedSongsOntoDesc.length > 0) {
+                AgentManager.retrieveSongRecommendation(authenticatedUser.get().get().getEmail(),
+                        recommendations -> afterRecommendationRetrieved(recommendations, pageRequest),
+                        likedSongsOntoDesc);
+            } else {
+                afterRecommendationRetrieved(Collections.emptyList(), pageRequest);
+            }
         }
         createCarouselList("Most liked", likedSongsListItem);
         createCarouselList("New releases", releasedSongsListItem);
