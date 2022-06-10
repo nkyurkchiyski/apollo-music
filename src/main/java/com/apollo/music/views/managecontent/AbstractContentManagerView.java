@@ -80,18 +80,16 @@ public abstract class AbstractContentManagerView<T extends EntityWithId, S exten
         {
             if (form.isSaved() && validate(form.getBean())) {
                 final T bean = form.getBean();
-                final boolean isCreate = bean.getId() == null;
                 updateEntity(bean);
 
                 form.clearForm();
                 dialog.close();
                 refreshGrid();
 
-                if (isCreate) {
-                    AgentManager.createNewAgent(bean.getClass().getSimpleName() + "Creator",
-                            getEditorAgentClassType(),
-                            new Object[]{"add", bean.createFieldValueMap()});
-                }
+                AgentManager.createNewAgent(bean.getClass().getSimpleName() + "Creator",
+                        getEditorAgentClassType(),
+                        new Object[]{"add", bean.createFieldValueMap()});
+
                 Notification.show(String.format(ViewConstants.Notification.ENTITY_SAVED, getEntityClass().getSimpleName()));
             }
         });
