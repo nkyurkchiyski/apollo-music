@@ -7,6 +7,7 @@ import com.apollo.music.views.commons.ViewConstants;
 import com.apollo.music.views.commons.components.card.AlbumCardListItem;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.OrderedList;
 import com.vaadin.flow.router.PageTitle;
@@ -25,8 +26,10 @@ public class ArtistDetailsView extends EntityDetailsView<Artist, ArtistService> 
     }
 
     @Override
-    protected String getSubMainComponentTitle(final Artist entity) {
-        return "Albums by " + entity.getName();
+    protected Component getSubMainComponentTitle(final Artist entity) {
+        final H2 title = new H2("Albums by " + entity.getName());
+        title.addClassNames("mb-m", "mt-m", "text-2xl");
+        return title;
     }
 
     @Override

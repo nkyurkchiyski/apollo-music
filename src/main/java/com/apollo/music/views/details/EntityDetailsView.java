@@ -78,9 +78,7 @@ public abstract class EntityDetailsView<T extends EntityWithId, S extends Abstra
         }
         container.add(songInfo, div);
 
-        final H2 similarSongsTitle = new H2(getSubMainComponentTitle(entity));
-        similarSongsTitle.addClassNames("mb-m", "mt-m", "text-2xl");
-
+        final Component similarSongsTitle = getSubMainComponentTitle(entity);
         final Component subMainComponent = createSubMainComponent(entity);
         add(container, similarSongsTitle, subMainComponent);
 
@@ -91,7 +89,7 @@ public abstract class EntityDetailsView<T extends EntityWithId, S extends Abstra
         return new Component[0];
     }
 
-    protected abstract String getSubMainComponentTitle(final T entity);
+    protected abstract Component getSubMainComponentTitle(final T entity);
 
     protected void onPlayButtonClicked(final T entity) {
         //do nothing

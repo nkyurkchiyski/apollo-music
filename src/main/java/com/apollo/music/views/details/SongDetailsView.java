@@ -26,6 +26,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.OrderedList;
 import com.vaadin.flow.component.html.Span;
@@ -65,8 +66,11 @@ public class SongDetailsView extends EntityDetailsView<Song, SongService> {
     }
 
     @Override
-    protected String getSubMainComponentTitle(final Song entity) {
-        return authenticatedUser.get().isPresent() ? "Recommended for you" : "Check out also";
+    protected Component getSubMainComponentTitle(final Song entity) {
+        final String titleText = authenticatedUser.get().isPresent() ? "Recommended for you" : "Check out also";
+        final H2 title = new H2(titleText);
+        title.addClassNames("mb-m", "mt-m", "text-2xl");
+        return title;
     }
 
     @Override

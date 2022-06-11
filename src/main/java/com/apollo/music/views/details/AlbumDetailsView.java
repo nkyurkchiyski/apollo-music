@@ -11,6 +11,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -31,8 +32,10 @@ public class AlbumDetailsView extends EntityDetailsView<Album, AlbumService> {
     }
 
     @Override
-    protected String getSubMainComponentTitle(final Album entity) {
-        return "Songs in " + entity.getName();
+    protected Component getSubMainComponentTitle(final Album entity) {
+        final H2 title = new H2("Songs in " + entity.getName());
+        title.addClassNames("mb-m", "mt-m", "text-2xl");
+        return title;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.apollo.music.data.commons.EntityConfiguration;
 import com.apollo.music.data.entity.Playlist;
 import com.apollo.music.data.entity.SongPlaylist;
 import com.apollo.music.data.service.PlaylistService;
+import com.apollo.music.data.service.SongPlaylistService;
 import com.apollo.music.security.AuthenticatedUser;
 import com.apollo.music.security.MainLayoutBus;
 import com.apollo.music.views.MainLayout;
@@ -16,10 +17,15 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.dataview.GridListDataView;
+import com.vaadin.flow.component.grid.dnd.GridDropLocation;
+import com.vaadin.flow.component.grid.dnd.GridDropMode;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.PageTitle;
@@ -29,6 +35,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.security.RolesAllowed;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @PageTitle(ViewConstants.Title.PLAYLIST_DETAILS)
 @Route(value = ViewConstants.Route.PLAYLIST, layout = MainLayout.class)
@@ -36,26 +44,48 @@ import java.util.Date;
 @Uses(Icon.class)
 public class PlaylistDetailsView extends EntityDetailsView<Playlist, PlaylistService> {
     private Grid<SongPlaylist> songGrid;
+    private GridListDataView<SongPlaylist> dataView;
+
+    private final SongPlaylistService songPlaylistService;
     private final AuthenticatedUser authenticatedUser;
     private final MainLayoutBus mainLayoutBus;
 
     @Autowired
     protected PlaylistDetailsView(final PlaylistService entityService,
-                                  final AuthenticatedUser authenticatedUser, final MainLayoutBus mainLayoutBus) {
+                                  final SongPlaylistService songPlaylistService,
+                                  final AuthenticatedUser authenticatedUser,
+                                  final MainLayoutBus mainLayoutBus) {
         super(entityService);
+        this.songPlaylistService = songPlaylistService;
         this.authenticatedUser = authenticatedUser;
         this.mainLayoutBus = mainLayoutBus;
     }
 
     @Override
-    protected String getSubMainComponentTitle(final Playlist entity) {
-        return "Songs in playlist " + entity.getName();
+    protected Component getSubMainComponentTitle(final Playlist entity) {
+        final H2 title = new H2("Songs in playlist " + entity.getName());
+        title.addClassNames("mb-m", "mt-m", "text-2xl");
+        final HorizontalLayout layout = new HorizontalLayout();
+
+        final Button saveButton = new Button(new Icon(VaadinIcon.EDIT));
+        saveButton.addClickListener(e -> {
+            dataView.getItems().forEach(songPlaylistService::update);
+            Notification.show(String.format(ViewConstants.Notification.ENTITY_UPDATED, entity.getClass().getSimpleName()));
+        });
+        layout.setWidthFull();
+        layout.setAlignItems(FlexComponent.Alignment.BASELINE);
+        layout.add(title, saveButton);
+        return layout;
     }
 
     @Override
     protected Component createSubMainComponent(final Playlist entity) {
         songGrid = new Grid<>();
-        refreshGrid(entity);
+        dataView = refreshGrid(entity);
+        if (isOwnerOfPlaylist(entity)) {
+            configurePlaylistSongReordering(dataView);
+        }
+
         songGrid.removeAllColumns();
         songGrid.addColumn(new ComponentRenderer<>(e -> new Label(e.getTrackNumber().toString())))
                 .setWidth("5em")
@@ -69,8 +99,45 @@ public class PlaylistDetailsView extends EntityDetailsView<Playlist, PlaylistSer
         return songGrid;
     }
 
-    private void refreshGrid(final Playlist entity) {
-        songGrid.setItems(entity.getSongs().stream().sorted(Comparator.comparing(SongPlaylist::getTrackNumber)).toArray(SongPlaylist[]::new));
+    private void configurePlaylistSongReordering(final GridListDataView<SongPlaylist> dataView) {
+        songGrid.setDropMode(GridDropMode.BETWEEN);
+        songGrid.setRowsDraggable(true);
+
+        final AtomicReference<SongPlaylist> draggedItemAtomic = new AtomicReference<>();
+        songGrid.addDragStartListener(
+                e -> draggedItemAtomic.set(e.getDraggedItems().get(0)));
+
+        songGrid.addDropListener(e -> {
+            final SongPlaylist draggedItem = draggedItemAtomic.get();
+            final SongPlaylist targetSong = e.getDropTargetItem().orElse(null);
+            final GridDropLocation dropLocation = e.getDropLocation();
+
+            boolean songWasDroppedOntoItself = draggedItem
+                    .equals(targetSong);
+
+            if (targetSong == null || songWasDroppedOntoItself)
+                return;
+
+            dataView.removeItem(draggedItem);
+
+            if (dropLocation == GridDropLocation.BELOW) {
+                dataView.addItemAfter(draggedItem, targetSong);
+            } else {
+                dataView.addItemBefore(draggedItem, targetSong);
+            }
+            refreshSongNumbers(dataView);
+        });
+
+        songGrid.addDragEndListener(e -> draggedItemAtomic.set(null));
+    }
+
+    private void refreshSongNumbers(final GridListDataView<SongPlaylist> dataView) {
+        final AtomicInteger trackNumberAtomic = new AtomicInteger(1);
+        dataView.getItems().forEach(song -> song.setTrackNumber(trackNumberAtomic.getAndIncrement()));
+    }
+
+    private GridListDataView<SongPlaylist> refreshGrid(final Playlist entity) {
+        return songGrid.setItems(entity.getSongs().stream().sorted(Comparator.comparing(SongPlaylist::getTrackNumber)).toArray(SongPlaylist[]::new));
     }
 
     private Component createActions(final SongPlaylist songPlaylist) {
@@ -88,7 +155,7 @@ public class PlaylistDetailsView extends EntityDetailsView<Playlist, PlaylistSer
 
     private void performRemoveSongFromPlaylist(final SongPlaylist songPlaylist) {
         entityService.removeSongFromPlaylist(songPlaylist.getPlaylist(), songPlaylist.getSong());
-        refreshGrid(songPlaylist.getPlaylist());
+        dataView = refreshGrid(songPlaylist.getPlaylist());
     }
 
     @Override
