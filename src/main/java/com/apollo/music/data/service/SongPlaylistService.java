@@ -32,6 +32,10 @@ public class SongPlaylistService extends CrudService<SongPlaylist, SongPlaylistK
         repo.removeAllWithSongIds(songIds);
     }
 
+    public void deleteAllWithPlaylistId(final String playlistId) {
+        repo.removeAllWithPlaylistId(playlistId);
+    }
+
 
     public Page<String> getLikedSongsOntoDescByUser(final Pageable pageable, final User user) {
         return repo.findLikedSongsOntoDescByUser(pageable, user.getId());

@@ -388,6 +388,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Dubstep -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Dubstep">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Genre"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Electronic -->
 
 
@@ -659,6 +668,15 @@
     
 
 
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Test -->
+
+
+    <owl:Class rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Test">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Genre"/>
+    </owl:Class>
+    
+
+
     <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Trap -->
 
 
@@ -706,6 +724,15 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Country">
         <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Country"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Dubstep -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#Dubstep">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Dubstep"/>
     </owl:NamedIndividual>
     
 
@@ -831,6 +858,16 @@
     
 
 
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#MichaelJackson -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#MichaelJackson">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Performer"/>
+        <hasName>Michael Jackson</hasName>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Phonk -->
 
 
@@ -927,6 +964,42 @@
     
 
 
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#TheBeatles -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#TheBeatles">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Performer"/>
+        <hasName>The Beatles</hasName>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#ThrillerMichaelJackson -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#ThrillerMichaelJackson">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Album"/>
+        <isAlbumMadeBy rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#MichaelJackson"/>
+        <hasFullTitle>Thriller</hasFullTitle>
+        <hasPublishDate rdf:datatype="http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:dateTime">03/03/1982</hasPublishDate>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#ThrillerThrillerMichaelJacksonPop -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#ThrillerThrillerMichaelJacksonPop">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Song"/>
+        <hasAlbum rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#ThrillerMichaelJackson"/>
+        <hasGenre rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Pop"/>
+        <hasPerformer rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#MichaelJackson"/>
+        <hasReleaseDate rdf:datatype="http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:dateTime">24/02/1982</hasReleaseDate>
+        <hasTitle>Thriller</hasTitle>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Trap -->
 
 
@@ -970,6 +1043,32 @@
         <hasPerformer rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#YoungThug"/>
         <hasReleaseDate rdf:datatype="http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:dateTime">11/02/2016</hasReleaseDate>
         <hasTitle>Webbie</hasTitle>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#YellowSubmarineTheBeatles -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#YellowSubmarineTheBeatles">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Album"/>
+        <isAlbumMadeBy rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#TheBeatles"/>
+        <hasFullTitle>Yellow Submarine</hasFullTitle>
+        <hasPublishDate rdf:datatype="http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:dateTime">11/03/1966</hasPublishDate>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#YellowSubmarineYellowSubmarineTheBeatlesPop -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#YellowSubmarineYellowSubmarineTheBeatlesPop">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Song"/>
+        <hasAlbum rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#YellowSubmarineTheBeatles"/>
+        <hasGenre rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Pop"/>
+        <hasPerformer rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#TheBeatles"/>
+        <hasReleaseDate rdf:datatype="http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:dateTime">17/07/1958</hasReleaseDate>
+        <hasTitle>Yellow Submarine</hasTitle>
     </owl:NamedIndividual>
     
 

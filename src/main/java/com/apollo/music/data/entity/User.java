@@ -61,7 +61,7 @@ public class User extends AbstractEntity {
     @Column(name = EntityConfiguration.IMAGE_URL_COLUMN_NAME)
     private String imageUrl;
 
-    @OneToMany(mappedBy = EntityConfiguration.USER_FIELD_NAME, fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = EntityConfiguration.USER_FIELD_NAME, fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
     private Set<Playlist> playlists = new LinkedHashSet<>();
 
     public String getUsername() {

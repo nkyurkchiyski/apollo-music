@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,11 +27,15 @@ import java.util.stream.Stream;
 @Service
 public class PlaylistService extends AbstractEntityService<Playlist> {
     private final PlaylistRepository playlistRepository;
+    private final SongPlaylistService songPlaylistService;
     private final SongService songService;
 
     @Autowired
-    public PlaylistService(final PlaylistRepository playlistRepository, final SongService songService) {
+    public PlaylistService(final PlaylistRepository playlistRepository,
+                           final SongPlaylistService songPlaylistService,
+                           final SongService songService) {
         this.playlistRepository = playlistRepository;
+        this.songPlaylistService = songPlaylistService;
         this.songService = songService;
     }
 
@@ -134,5 +139,12 @@ public class PlaylistService extends AbstractEntityService<Playlist> {
 
     public List<Playlist> findByUser(final User user) {
         return playlistRepository.findAllByUserId(user.getId());
+    }
+
+    @Transactional
+    @Override
+    public void delete(final String s) {
+        songPlaylistService.deleteAllWithPlaylistId(s);
+        super.delete(s);
     }
 }
