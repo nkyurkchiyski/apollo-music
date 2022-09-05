@@ -78,21 +78,17 @@ public class SongExecutor extends EntityExecutor<Song> {
 
     public Set<String> findWithOntoDesc(final String... ontoDescriptors) {
         final Set<String> genres = new HashSet<>();
-
+        final Set<String> ontoDescriptorsSet = new HashSet<>(Arrays.asList(ontoDescriptors));
         Arrays.stream(ontoDescriptors).filter(StringUtils::isNotBlank).forEach(ontoDesc -> {
             final Map<String, String> keyValues = createOntoDescMap(ontoDesc);
             genres.add(keyValues.get("Genre"));
         });
 
         final Set<String> foundOntoDescriptors = new HashSet<>();
-
         try {
-
             for (final String genre : genres) {
                 final OWLNamedIndividual genreIndividual = dataFactory.getOWLNamedIndividual(ontologyIRIStr + genre);
                 final OWLObjectProperty isGenreOf = dataFactory.getOWLObjectProperty(ontologyIRIStr + "isGenreOf");
-
-
                 final Set<OWLNamedIndividual> songsFound = reasoner.objectPropertyValues(genreIndividual, isGenreOf).collect(Collectors.toSet());
                 songsFound.forEach(song -> {
                     final String songName = getDataPropertyValue(song, "hasTitle");
@@ -101,15 +97,15 @@ public class SongExecutor extends EntityExecutor<Song> {
                     final OWLNamedIndividual album = getFirstObjPropertyValue(song, "hasAlbum");
                     final String albumName = getDataPropertyValue(album, "hasFullTitle");
                     final String ontoDesc = Song.createOntoDescriptor(songName, albumName, artistName, genre);
-                    foundOntoDescriptors.add(ontoDesc);
+                    if (!ontoDescriptorsSet.contains(ontoDesc)) {
+                        foundOntoDescriptors.add(ontoDesc);
+                    }
                 });
             }
         } catch (final OWLReasonerRuntimeException e) {
             LOGGER.error(e.getMessage());
             foundOntoDescriptors.clear();
         }
-
-        Arrays.asList(ontoDescriptors).forEach(foundOntoDescriptors::remove);
         return foundOntoDescriptors;
     }
 

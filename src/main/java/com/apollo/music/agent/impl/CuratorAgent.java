@@ -17,21 +17,16 @@ public class CuratorAgent extends Agent {
     protected void setup() {
         final DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
-
         final ServiceDescription sd = new ServiceDescription();
-
         final String serviceDescName = AgentConstants.CURATOR_AGENT_NAME;
         sd.setName(serviceDescName);
         sd.setType(serviceDescName);
-
         dfd.addServices(sd);
-
         try {
             DFService.register(this, dfd);
         } catch (final FIPAException e) {
             LOGGER.error(e.getMessage());
         }
-
         addBehaviour(new SearchSongsBehaviour());
     }
 }

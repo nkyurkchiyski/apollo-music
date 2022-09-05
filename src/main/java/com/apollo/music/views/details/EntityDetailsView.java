@@ -22,7 +22,8 @@ import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import org.apache.commons.lang3.StringUtils;
 
-public abstract class EntityDetailsView<T extends EntityWithId, S extends AbstractEntityService<T>> extends Main implements HasComponents, HasStyle, HasUrlParameter<String> {
+public abstract class EntityDetailsView<T extends EntityWithId, S extends AbstractEntityService<T>>
+        extends Main implements HasComponents, HasStyle, HasUrlParameter<String> {
 
     protected final S entityService;
 
@@ -55,14 +56,7 @@ public abstract class EntityDetailsView<T extends EntityWithId, S extends Abstra
         moreInfoTitle.addClassNames("mb-0", "mt-0", "text-m");
 
         final Component[] moreInfoComponents = createMoreInfoComponents(entity);
-
-        final Div div = new Div();
-        final Image coverImg = new Image(StringUtils.firstNonBlank(getImageUrl(entity), ViewConstants.DEFAULT_COVER), "details-img");
-        coverImg.addClassNames("bg-contrast", "flex items-center", "justify-center", "mt-m", "mb-m", "overflow-hidden",
-                "rounded-m w-full");
-        coverImg.setMaxHeight("350px");
-        div.add(coverImg);
-        div.addClassName("pos-r");
+        final Div coverImg = createCoverImg(entity);
 
         songInfo.add(titleLayout, subTitle, moreInfoTitle);
         songInfo.add(moreInfoComponents);
@@ -70,18 +64,33 @@ public abstract class EntityDetailsView<T extends EntityWithId, S extends Abstra
         container.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
 
         if (isPlayButtonVisible()) {
-            final Button playButton = new Button(new Icon(VaadinIcon.PLAY));
-            playButton.addClassNames("play-button-big", "pos-abr");
-            playButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-            playButton.addClickListener(e -> onPlayButtonClicked(entity));
-            div.add(playButton);
+            final Button playButton = createPlayButton(entity);
+            coverImg.add(playButton);
         }
-        container.add(songInfo, div);
+        container.add(songInfo, coverImg);
 
-        final Component similarSongsTitle = getSubMainComponentTitle(entity);
+        final Component subMainTitle = getSubMainComponentTitle(entity);
         final Component subMainComponent = createSubMainComponent(entity);
-        add(container, similarSongsTitle, subMainComponent);
+        add(container, subMainTitle, subMainComponent);
+    }
 
+    private Button createPlayButton(final T entity) {
+        final Button playButton = new Button(new Icon(VaadinIcon.PLAY));
+        playButton.addClassNames("play-button-big", "pos-abr");
+        playButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+        playButton.addClickListener(e -> onPlayButtonClicked(entity));
+        return playButton;
+    }
+
+    private Div createCoverImg(final T entity) {
+        final Div div = new Div();
+        final Image coverImg = new Image(StringUtils.firstNonBlank(getImageUrl(entity), ViewConstants.DEFAULT_COVER), "details-img");
+        coverImg.addClassNames("bg-contrast", "flex items-center", "justify-center", "mt-m", "mb-m", "overflow-hidden",
+                "rounded-m w-full");
+        coverImg.setMaxHeight("350px");
+        div.add(coverImg);
+        div.addClassName("pos-r");
+        return div;
     }
 
     protected Component[] createTitleComponents(final T entity) {

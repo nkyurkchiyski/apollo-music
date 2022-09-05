@@ -710,6 +710,20 @@
     
 
 
+    <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#BatteryMasterofPuppetsMetallicaMetal -->
+
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/user/ontologies/2022/2/music#BatteryMasterofPuppetsMetallicaMetal">
+        <rdf:type rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Song"/>
+        <hasAlbum rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#MasterofPuppetsMetallica"/>
+        <hasGenre rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Metal"/>
+        <hasPerformer rdf:resource="http://www.semanticweb.org/user/ontologies/2022/2/music#Metallica"/>
+        <hasReleaseDate rdf:datatype="http://www.semanticweb.org/user/ontologies/2022/2/music#xsd:dateTime">04/03/1986</hasReleaseDate>
+        <hasTitle>Battery</hasTitle>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/user/ontologies/2022/2/music#Blues -->
 
 

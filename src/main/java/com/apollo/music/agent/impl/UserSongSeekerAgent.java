@@ -17,14 +17,12 @@ public class UserSongSeekerAgent extends Agent {
     protected void setup() {
         final DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
-
         final String agentName = getAID().getLocalName();
         final ServiceDescription sd = new ServiceDescription();
-
-        final String serviceDescName = String.format(AgentConstants.SONG_SEEKER_AGENT_NAME_FORMAT, agentName);
+        final String serviceDescName = String.format(AgentConstants.SONG_SEEKER_AGENT_NAME_FORMAT,
+                agentName);
         sd.setName(serviceDescName);
         sd.setType(serviceDescName);
-
         dfd.addServices(sd);
 
         try {
@@ -34,5 +32,4 @@ public class UserSongSeekerAgent extends Agent {
         }
         addBehaviour(new RequestSongsBehaviour());
     }
-
 }

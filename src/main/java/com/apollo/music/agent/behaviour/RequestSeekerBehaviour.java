@@ -37,7 +37,7 @@ public class RequestSeekerBehaviour extends SimpleBehaviour {
         try {
             switch (currentStep) {
                 case 0:
-                    requestForSeeker();
+                    requestSeeker();
                     currentStep++;
                     break;
                 case 1:
@@ -49,7 +49,7 @@ public class RequestSeekerBehaviour extends SimpleBehaviour {
         }
     }
 
-    private void requestForSeeker() throws FIPAException {
+    private void requestSeeker() throws FIPAException {
         final DFAgentDescription searchedDesc = new DFAgentDescription();
         final ServiceDescription sd = new ServiceDescription();
 
@@ -82,10 +82,16 @@ public class RequestSeekerBehaviour extends SimpleBehaviour {
         if (msg != null) {
             if (msg.getPerformative() == ACLMessage.PROPOSE) {
                 final String receivedSongs = msg.getContent();
-                songs.addAll(Arrays.asList(receivedSongs.split(AgentConstants.SONG_ONTO_DESC_SPLITTER)));
+                songs.addAll(Arrays.asList(
+                        receivedSongs.split(
+                                AgentConstants.SONG_ONTO_DESC_SPLITTER)));
             }
             currentStep++;
         }
+    }
+
+    public List<String> getSongs() {
+        return songs;
     }
 
     @Override
@@ -93,8 +99,4 @@ public class RequestSeekerBehaviour extends SimpleBehaviour {
         return songs.size() != 0 || currentStep > 1;
     }
 
-
-    public List<String> getSongs() {
-        return songs;
-    }
 }
